@@ -1,0 +1,20 @@
+{
+    "name": "priority-plus-nav-block",
+    "version": "0.1.0",
+    "description": "A responsive navigation block implementing the Priority+ pattern that automatically moves overflow items to a 'More' dropdown.",
+    "author": "Troy Chaplin",
+    "license": "GPL-2.0-or-later",
+    "main": "build/index.js",
+    "scripts": {
+        "build": "wp-scripts build --webpack-copy-php",
+        "format": "wp-scripts format",
+        "lint:css": "wp-scripts lint-style",
+        "lint:js": "wp-scripts lint-js",
+        "packages-update": "wp-scripts packages-update",
+        "plugin-zip": "wp-scripts plugin-zip",
+        "start": "wp-scripts start --blocks-manifest"
+    },
+    "devDependencies": {
+        "@wordpress/scripts": "^30.15.0"
+    }
+}
