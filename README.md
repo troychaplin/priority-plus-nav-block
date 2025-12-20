@@ -13,8 +13,12 @@ Priority+ navigation is a responsive design pattern that keeps all navigation it
 - ✅ **Bidirectional Transforms** - Easy conversion between standard navigation and priority navigation
 - ✅ **Customizable "More" Button** - Choose label text and icon style
 - ✅ **Responsive by Design** - Uses ResizeObserver for smooth, performant resizing
+- ✅ **Core Navigation Integration** - Automatically detects and respects "Open submenus on click" setting
+- ✅ **Smart Mobile Detection** - Automatically disables on mobile/hamburger mode to avoid conflicts
+- ✅ **Submenu Accordions** - Items with submenus in the dropdown become accessible accordions
 - ✅ **Accessible** - Proper ARIA attributes and keyboard support (Escape to close)
 - ✅ **Block Theme Ready** - Full support for block themes with alignment, spacing, and color controls
+- ✅ **Multiple Blocks** - Use multiple Priority+ Navigation blocks on the same page
 - ✅ **Future-Proof** - Since it wraps core navigation, it benefits from WordPress core updates
 
 ## Installation
@@ -80,6 +84,12 @@ There are three ways to use the Priority+ Navigation block:
 - Plus (+)
 - Menu (≡)
 
+### Core Navigation Settings
+
+The plugin automatically detects and respects settings from the wrapped Core Navigation block:
+
+- **Open submenus on click** - When enabled in Core Navigation, submenus in the "More" dropdown become clickable accordions. When disabled, the link remains functional with a separate arrow button to toggle the submenu.
+
 ### Block Supports
 
 The block supports all standard WordPress block features:
@@ -109,13 +119,15 @@ The plugin creates a lightweight wrapper around the core navigation block:
 ### Frontend Behavior
 
 1. **On page load**: The script measures all navigation items
-2. **Overflow detection**: Calculates how many items fit in available space
-3. **Item distribution**: 
+2. **Mobile detection**: Automatically detects if WordPress is in hamburger/responsive mode and disables Priority Nav to avoid conflicts
+3. **Overflow detection**: Calculates how many items fit in available space
+4. **Item distribution**: 
    - Visible items stay in the main navigation
    - Overflow items move to the "More" dropdown
    - At least one item always remains visible
-4. **Responsive updates**: ResizeObserver automatically recalculates on viewport changes
-5. **Smooth transitions**: Uses `requestAnimationFrame` for optimal performance
+5. **Submenu handling**: Items with submenus in the dropdown are converted to accessible accordions that respect the Core Navigation "Open on click" setting
+6. **Responsive updates**: ResizeObserver automatically recalculates on viewport changes
+7. **Smooth transitions**: Uses `requestAnimationFrame` for optimal performance
 
 ## Development
 
@@ -176,10 +188,11 @@ priority-nav/
 
 ## Accessibility
 
-- **ARIA attributes**: `aria-expanded`, `aria-haspopup`, `aria-label`
-- **Keyboard navigation**: Escape key closes dropdown
-- **Screen reader support**: Proper semantic markup
+- **ARIA attributes**: `aria-expanded`, `aria-haspopup`, `aria-label`, `aria-controls`, `aria-hidden`
+- **Keyboard navigation**: Escape key closes dropdown and accordions
+- **Screen reader support**: Proper semantic markup and ARIA relationships
 - **Focus management**: Standard browser focus behavior
+- **Submenu accordions**: Accessible accordion pattern for nested menus in dropdown
 
 ## Performance
 
@@ -187,6 +200,11 @@ priority-nav/
 - **requestAnimationFrame**: Smooth, jank-free calculations
 - **Width caching**: Minimizes layout recalculations
 - **Debounced recalculation**: Prevents excessive computation
+
+## Known Limitations
+
+- When using multiple Priority+ Navigation blocks on the same page with "Open submenus on click" enabled, ensure each block has unique navigation content to avoid potential ID conflicts
+- The plugin automatically disables on mobile/hamburger mode - this is intentional to work seamlessly with WordPress responsive navigation
 
 ## Changelog
 
@@ -196,7 +214,9 @@ priority-nav/
 - Customizable "More" button label and icon
 - Full block theme support
 - Responsive overflow detection
-- Accessible implementation
+- Core Navigation "Open on click" integration
+- Automatic hamburger mode detection
+- Accessible accordion submenus in dropdown
 
 ## Credits
 
