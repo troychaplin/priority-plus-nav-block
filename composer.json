@@ -1,0 +1,23 @@
+{
+	"name": "troychaplin/priority-plus-nav-block",
+	"description": "A WordPress block plugin that adds Priority+ pattern functionality to core WordPress navigation block. It automatically moves navigation items that don't fit into a responsive 'More' dropdown menu as the viewport narrows.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"autoload": {
+		"classmap": [
+			"classes/"
+		]
+	},
+	"require-dev": {
+		"wp-coding-standards/wpcs": "^3.2"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"scripts": {
+		"format": "phpcbf",
+		"lint": "phpcs"
+	}
+}
