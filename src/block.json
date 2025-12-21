@@ -9,17 +9,6 @@
 	"icon": "menu-alt",
 	"description": "A responsive navigation wrapper that implements the Priority+ pattern, automatically moving items to a More dropdown.",
 	"keywords": ["navigation", "menu", "priority", "responsive"],
-	"supports": {
-		"html": false,
-		"align": ["wide", "full"],
-		"spacing": {
-			"margin": true,
-			"padding": true
-		},
-		"color": {
-			"background": true
-		}
-	},
 	"attributes": {
 		"moreLabel": {
 			"type": "string",

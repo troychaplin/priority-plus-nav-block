@@ -124,10 +124,14 @@ class Enqueues extends Plugin_Module {
 				return $block_content;
 			}
 
-			$this->enqueue_frontend_assets_once();
+		$this->enqueue_frontend_assets_once();
 
-			$more_label = isset( $block['attrs']['priorityNavMoreLabel'] ) ? $block['attrs']['priorityNavMoreLabel'] : 'More';
-			$more_icon  = isset( $block['attrs']['priorityNavMoreIcon'] ) ? $block['attrs']['priorityNavMoreIcon'] : 'dots';
+		$more_label = isset( $block['attrs']['priorityNavMoreLabel'] ) && '' !== $block['attrs']['priorityNavMoreLabel'] 
+			? $block['attrs']['priorityNavMoreLabel'] 
+			: 'Browse';
+		$more_icon = isset( $block['attrs']['priorityNavMoreIcon'] ) && '' !== $block['attrs']['priorityNavMoreIcon'] 
+			? $block['attrs']['priorityNavMoreIcon'] 
+			: 'none';
 
 			// Inject data attributes on the .wp-block-navigation element.
 			if ( '' !== $block_content ) {

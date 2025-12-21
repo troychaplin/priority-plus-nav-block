@@ -1,2 +1,2 @@
-import './extend-core-navigation';
+import './extend';
 import './style.scss';

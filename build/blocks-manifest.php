@@ -16,20 +16,6 @@ return array(
 			'priority',
 			'responsive'
 		),
-		'supports' => array(
-			'html' => false,
-			'align' => array(
-				'wide',
-				'full'
-			),
-			'spacing' => array(
-				'margin' => true,
-				'padding' => true
-			),
-			'color' => array(
-				'background' => true
-			)
-		),
 		'attributes' => array(
 			'moreLabel' => array(
 				'type' => 'string',

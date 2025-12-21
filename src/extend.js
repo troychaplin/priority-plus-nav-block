@@ -1,13 +1,11 @@
 /**
- * Extends core/navigation block with Priority+ Navigation attributes and controls
+ * WordPress dependencies
  */
-
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, TextControl, SelectControl } from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
-import { Fragment } from '@wordpress/element';
 import { registerBlockVariation } from '@wordpress/blocks';
 import { plusCircle } from '@wordpress/icons';
 
@@ -16,7 +14,7 @@ import { plusCircle } from '@wordpress/icons';
  */
 addFilter(
 	'blocks.registerBlockType',
-	'priority-nav/extend-core-navigation-attributes',
+	'priority-nav/extend-core-navigation',
 	( settings, name ) => {
 		if ( name !== 'core/navigation' ) {
 			return settings;
@@ -32,11 +30,11 @@ addFilter(
 				},
 				priorityNavMoreLabel: {
 					type: 'string',
-					default: 'More',
+					default: 'Browse',
 				},
 				priorityNavMoreIcon: {
 					type: 'string',
-					default: 'dots',
+					default: 'none',
 				},
 			},
 		};
@@ -66,7 +64,7 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 		}
 
 		return (
-			<Fragment>
+			<>
 				<BlockEdit { ...props } />
 				<InspectorControls>
 					<PanelBody
@@ -88,11 +86,8 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 							value={ priorityNavMoreIcon }
 							options={ [
 								{
-									label: __(
-										'Horizontal Dots (•••)',
-										'priority-nav'
-									),
-									value: 'dots',
+									label: __( 'None', 'priority-nav' ),
+									value: 'none',
 								},
 								{
 									label: __(
@@ -116,7 +111,7 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 						/>
 					</PanelBody>
 				</InspectorControls>
-			</Fragment>
+			</>
 		);
 	};
 }, 'withPriorityNavControls' );
@@ -140,8 +135,8 @@ registerBlockVariation( 'core/navigation', {
 	icon: plusCircle,
 	attributes: {
 		priorityNavEnabled: true,
-		priorityNavMoreLabel: 'More',
-		priorityNavMoreIcon: 'dots',
+		priorityNavMoreLabel: 'Browse',
+		priorityNavMoreIcon: 'none',
 	},
 	scope: [ 'inserter', 'block' ],
 	isActive: ( blockAttributes ) => {

@@ -1,53 +1,33 @@
+:root {
+	--priority-nav--background: transparent;
+	--priority-nav--background-hover: rgba(0, 0, 0, 0.05);
+	--priority-nav--border: none;
+	--priority-nav--border-radius: 4px;
+	--priority-nav--color: inherit;
+	--priority-nav--font-family: inherit;
+	--priority-nav--font-size: inherit;
+	--priority-nav--padding: 0.5rem 0.75rem;
+}
 
-// Support both wrapper mode (.wp-block-lumen-priority-nav) and direct mode (.wp-block-navigation[data-priority-nav])
-.wp-block-lumen-priority-nav,
 .wp-block-navigation[data-priority-nav] {
 	position: relative;
 
-	.priority-nav-container {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		width: 100%;
-	}
-
-	.priority-nav-list {
-		display: flex;
-		flex-wrap: nowrap;
-		align-items: center;
-		gap: 0.5rem;
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		flex: 1;
-		min-width: 0;
-
-		> * {
-			flex-shrink: 0;
-		}
-	}
-
-	.priority-nav-more {
-		position: relative;
-		flex-shrink: 0;
-	}
-
 	.priority-nav-more-button {
 		display: flex;
-		align-items: center;
 		gap: 0.5rem;
-		padding: 0.5rem 1rem;
-		background: transparent;
-		border: 1px solid currentcolor;
-		border-radius: 4px;
-		cursor: pointer;
-		font-size: inherit;
-		font-family: inherit;
-		color: inherit;
+		align-items: center;
+		font-family: var(--priority-nav--font-family);
+		font-size: var(--priority-nav--font-size);
+		color: var(--priority-nav--color);
+		padding: var(--priority-nav--padding);
+		background: var(--priority-nav--background);
+		border: var(--priority-nav--border);
+		border-radius: var(--priority-nav--border-radius);
 		transition: all 0.2s ease;
+		cursor: pointer;
 
 		&:hover {
-			background: rgba(0, 0, 0, 0.05);
+			background: var(--priority-nav--background-hover);
 		}
 
 		.icon {
@@ -56,7 +36,6 @@
 		}
 
 		&[aria-expanded="true"] {
-			background: rgba(0, 0, 0, 0.1);
 
 			.icon {
 				transform: rotate(180deg);
