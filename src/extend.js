@@ -30,11 +30,11 @@ addFilter(
 				},
 				priorityNavMoreLabel: {
 					type: 'string',
-					default: 'More',
+					default: 'Browse',
 				},
 				priorityNavMoreIcon: {
 					type: 'string',
-					default: 'dots',
+					default: 'none',
 				},
 			},
 		};
@@ -88,13 +88,6 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 								{
 									label: __( 'None', 'priority-nav' ),
 									value: 'none',
-								},
-								{
-									label: __(
-										'Horizontal Dots (•••)',
-										'priority-nav'
-									),
-									value: 'dots',
 								},
 								{
 									label: __(

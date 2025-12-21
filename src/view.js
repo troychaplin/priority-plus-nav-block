@@ -5,8 +5,8 @@ class PriorityNav {
 	static instanceCounter = 0;
 
 	// Class constants
-	static DEFAULT_MORE_LABEL = 'More';
-	static DEFAULT_MORE_ICON = 'dots';
+	static DEFAULT_MORE_LABEL = 'Browse';
+	static DEFAULT_MORE_ICON = 'none';
 	static DEFAULT_GAP = 8;
 	static RETRY_INTERVAL = 100;
 	static MAX_RETRY_ATTEMPTS = 20;
@@ -196,11 +196,17 @@ class PriorityNav {
 			menu: '≡',
 		};
 
+		// Build icon HTML only if icon is not 'none'
+		const iconHTML =
+			this.moreIcon !== 'none' && iconMap[ this.moreIcon ]
+				? `<span class="priority-nav-icon">${
+						iconMap[ this.moreIcon ]
+				  }</span>`
+				: '';
+
 		this.moreButton.innerHTML = `
 			<span class="wp-block-navigation-item__label">${ this.moreLabel }</span>
-			<span class="priority-nav-icon">${
-				iconMap[ this.moreIcon ] || iconMap.dots
-			}</span>
+			${ iconHTML }
 		`;
 
 		// Create dropdown
