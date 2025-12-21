@@ -77,11 +77,11 @@ The Priority+ Navigation is available as a variation of the core Navigation bloc
 ### Block Settings (Inspector Sidebar)
 
 **More Button Label**
-- Default: "More"
+- Default: "Browse"
 - Customize the text displayed on the overflow button
 
 **More Button Icon**
-- Horizontal Dots (•••) - Default
+- None (no icon) - Default
 - Chevron Down (▼)
 - Plus (+)
 - Menu (≡)
@@ -173,10 +173,10 @@ priority-nav/
 ├── build/                  # Compiled assets (generated)
 ├── src/
 │   ├── index.js           # Editor extension entry point
-│   ├── extend-core-navigation.js  # Variation registration & block extension
+│   ├── extend.js          # Variation registration & block extension
 │   ├── view.js            # Frontend JavaScript
 │   ├── style.scss         # Frontend styles
-│   └── editor.scss        # Editor-only styles
+│   └── block.json         # Block configuration
 ├── priority-nav.php       # Main plugin file
 ├── package.json           # Node dependencies & scripts
 └── README.md             # Documentation

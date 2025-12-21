@@ -3,16 +3,16 @@
 
 Contributors:      areziaal
 Tags:              block, navigation, responsive, priority-plus
-Tested up to:      6.8
-Stable tag:        0.1.0
+Tested up to:      6.9
+Stable tag:        1.0.0
 License:           GPLv2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-A responsive navigation block that implements the Priority+ pattern, automatically moving items to a "More" dropdown when space is limited.
+A WordPress block plugin that adds Priority+ pattern functionality to core WordPress navigation block. It automatically moves navigation items that don't fit into a responsive "More" dropdown menu (default label: "Browse") as the viewport narrows.
 
 == Description ==
 
-Priority Nav is a smart navigation block that follows the Priority+ design pattern. It displays the most important navigation items in the main menu bar and automatically moves overflow items into a "More" dropdown menu when horizontal space is limited.
+Priority Nav extends the core WordPress Navigation block as a variation, implementing the Priority+ design pattern. It displays the most important navigation items in the main menu bar and automatically moves overflow items into a "More" dropdown menu (default label: "Browse") when horizontal space is limited.
 
 Key Features:
 
@@ -29,8 +29,8 @@ Perfect for sites with many navigation items that need to work across all device
 
 1. Upload the plugin files to the `/wp-content/plugins/priority-nav` directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the 'Plugins' screen in WordPress
-3. Add the Priority Nav block to your page or template
-4. Add navigation links as inner blocks
+3. Add a Navigation block and select the "Priority+ Nav" variation, or search for "Priority+ Nav" in the block inserter
+4. Configure your navigation using the familiar WordPress navigation tools
 
 == Frequently Asked Questions ==
 
@@ -40,11 +40,11 @@ The Priority+ pattern prioritizes the most important navigation items by keeping
 
 = Can I customize the "More" button text? =
 
-Yes! In the block inspector panel, you can customize both the "More" button label and choose from different icons including dots, chevron, and plus symbols.
+Yes! In the block inspector panel, you can customize both the "More" button label (default: "Browse") and choose from different icons: none (default), chevron down, plus, or menu symbols.
 
 = Does it work with nested navigation items? =
 
-The block works best with flat navigation structures. For complex multi-level menus, consider using the standard WordPress Navigation block.
+Yes! Items with submenus in the dropdown are converted to accessible accordions that respect the Core Navigation "Open submenus on click" setting.
 
 = Is it accessible? =
 
@@ -64,13 +64,3 @@ Yes, the block is built with accessibility in mind, supporting keyboard navigati
 * Automatic overflow detection and management
 * Customizable "More" button
 * Full keyboard and screen reader support
-
-== Technical Details ==
-
-The block uses modern web APIs:
-* **ResizeObserver**: For efficient layout monitoring
-* **IntersectionObserver**: For visibility detection
-* **CSS Flexbox**: For flexible layout
-* **JavaScript**: For dynamic item management
-
-The algorithm calculates available space and item widths in real-time, moving items between the visible navigation and the "More" dropdown as needed. This ensures optimal use of available space while maintaining a clean, professional appearance.
