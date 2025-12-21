@@ -1,5 +1,11 @@
 class PriorityNav {
+	// Static counter for generating unique instance IDs
+	static instanceCounter = 0;
+
 	constructor( element ) {
+		// Generate unique instance ID for this PriorityNav instance
+		this.instanceId = `priority-nav-${ PriorityNav.instanceCounter++ }`;
+
 		// Support both wrapper mode and direct mode
 		// Wrapper mode: element has [data-priority-nav] and contains .wp-block-navigation
 		// Direct mode: element IS .wp-block-navigation with [data-priority-nav]
@@ -426,7 +432,8 @@ class PriorityNav {
 				e.preventDefault();
 				e.stopPropagation();
 				const submenuId = toggle.getAttribute( 'aria-controls' );
-				const submenu = document.getElementById( submenuId );
+				// Use scoped lookup within this instance's dropdown to avoid cross-instance collisions
+				const submenu = this.dropdown.querySelector( `#${ submenuId }` );
 				if ( submenu ) {
 					this.toggleAccordionItem( toggle, submenu );
 				}
@@ -695,7 +702,7 @@ class PriorityNav {
 	}
 
 	buildAccordionHTML( data, level ) {
-		const submenuId = 'priority-nav-submenu-' + this.submenuCounter++;
+		const submenuId = `${ this.instanceId }-submenu-${ this.submenuCounter++ }`;
 		let html = '';
 
 		if ( data.hasSubmenu ) {
@@ -777,8 +784,10 @@ class PriorityNav {
 			nestedAccordions.forEach( ( nestedButton ) => {
 				const nestedSubmenuId =
 					nestedButton.getAttribute( 'aria-controls' );
-				const nestedSubmenu =
-					document.getElementById( nestedSubmenuId );
+				// Use scoped lookup within this instance's dropdown to avoid cross-instance collisions
+				const nestedSubmenu = this.dropdown.querySelector(
+					`#${ nestedSubmenuId }`
+				);
 				if ( nestedSubmenu ) {
 					nestedButton.setAttribute( 'aria-expanded', 'false' );
 					nestedSubmenu.style.setProperty(
