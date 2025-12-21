@@ -389,17 +389,9 @@ class PriorityNav {
 		// Force a reflow to ensure accurate measurements
 		void this.list.offsetHeight;
 
-		const getOuterWidth = ( element ) => {
-			const rect = element.getBoundingClientRect();
-			const styles = window.getComputedStyle( element );
-			const marginLeft = parseFloat( styles.marginLeft ) || 0;
-			const marginRight = parseFloat( styles.marginRight ) || 0;
-			return rect.width + marginLeft + marginRight;
-		};
-
 		this.itemWidths = this.items.map( ( item ) => {
-			const width = getOuterWidth( item );
-			return width > 0 ? width : 0;
+			const rect = item.getBoundingClientRect();
+			return rect.width > 0 ? rect.width : 0;
 		} );
 
 		// If we got zero widths, schedule a retry
@@ -465,19 +457,10 @@ class PriorityNav {
 			parseFloat( navStyles.paddingLeft ) +
 			parseFloat( navStyles.paddingRight );
 
-		const toPx = ( value ) => {
-			const num = parseFloat( value );
-			return Number.isFinite( num ) ? num : 0;
-		};
-
-		// Get gap from the container that actually has it (usually the list container).
-		// Note: Some themes use margins instead of gap; we include margins in itemWidths.
+		// Get gap from the container that actually has it (usually the list container)
 		const listStyles = window.getComputedStyle( this.list );
 		const gap =
-			toPx( listStyles.columnGap ) ||
-			toPx( listStyles.gap ) ||
-			toPx( navStyles.columnGap ) ||
-			toPx( navStyles.gap );
+			parseFloat( listStyles.gap ) || parseFloat( navStyles.gap ) || 8; // Fallback
 
 		// Use nav width if available, otherwise fall back to wrapper
 		const availableWidth =
@@ -489,12 +472,7 @@ class PriorityNav {
 		this.moreContainer.style.display = '';
 		// Force a reflow for accurate measurement
 		void this.moreButton.offsetHeight;
-		const moreButtonRect = this.moreButton.getBoundingClientRect();
-		const moreButtonStyles = window.getComputedStyle( this.moreButton );
-		const moreButtonWidth =
-			moreButtonRect.width +
-			( parseFloat( moreButtonStyles.marginLeft ) || 0 ) +
-			( parseFloat( moreButtonStyles.marginRight ) || 0 );
+		const moreButtonWidth = this.moreButton.getBoundingClientRect().width;
 
 		// Ensure we have valid item widths
 		if (

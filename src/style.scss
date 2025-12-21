@@ -4,18 +4,6 @@
 .wp-block-navigation[data-priority-nav] {
 	position: relative;
 
-	// Core Navigation markup (the element `src/view.js` measures and manipulates).
-	// Prevent flex wrapping so items never "jump" to a second line before Priority+ kicks in.
-	.wp-block-navigation__container {
-		flex-wrap: nowrap;
-		min-width: 0;
-		overflow: hidden;
-
-		> * {
-			flex-shrink: 0;
-		}
-	}
-
 	.priority-nav-container {
 		display: flex;
 		align-items: center;
