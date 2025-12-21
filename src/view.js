@@ -242,19 +242,19 @@ class PriorityNav {
 				}
 
 				if ( ! this.isCalculating ) {
-				// Check if we've transitioned between hamburger and desktop mode
-				const wasEnabled = this.isEnabled;
-				const inHamburger = this.isInHamburgerMode();
+					// Check if we've transitioned between hamburger and desktop mode
+					const wasEnabled = this.isEnabled;
+					const inHamburger = this.isInHamburgerMode();
 
-				if ( inHamburger && wasEnabled ) {
-					this.disablePriorityNav();
-				} else if ( ! inHamburger && ! wasEnabled ) {
-					this.enablePriorityNav();
-				} else if ( ! inHamburger && wasEnabled ) {
-					// Still in desktop mode, just recalculate
-					requestAnimationFrame( () => this.checkOverflow() );
+					if ( inHamburger && wasEnabled ) {
+						this.disablePriorityNav();
+					} else if ( ! inHamburger && ! wasEnabled ) {
+						this.enablePriorityNav();
+					} else if ( ! inHamburger && wasEnabled ) {
+						// Still in desktop mode, just recalculate
+						requestAnimationFrame( () => this.checkOverflow() );
+					}
 				}
-			}
 			} );
 			this.resizeObserver.observe( this.wrapper );
 		}
@@ -508,7 +508,10 @@ class PriorityNav {
 			e.stopPropagation();
 			this.toggleDropdown();
 		};
-		this.moreButton.addEventListener( 'click', this.moreButtonClickHandler );
+		this.moreButton.addEventListener(
+			'click',
+			this.moreButtonClickHandler
+		);
 
 		// Document click handler - close dropdown when clicking outside
 		this.documentClickHandler = ( e ) => {
@@ -544,7 +547,9 @@ class PriorityNav {
 				e.stopPropagation();
 				const submenuId = toggle.getAttribute( 'aria-controls' );
 				// Use scoped lookup within this instance's dropdown to avoid cross-instance collisions
-				const submenu = this.dropdown.querySelector( `#${ submenuId }` );
+				const submenu = this.dropdown.querySelector(
+					`#${ submenuId }`
+				);
 				if ( submenu ) {
 					this.toggleAccordionItem( toggle, submenu );
 				}
@@ -590,9 +595,9 @@ class PriorityNav {
 
 	/**
 	 * Calculate how many items can fit in available width
-	 * @param {number} availableWidth - Available width in pixels
+	 * @param {number} availableWidth  - Available width in pixels
 	 * @param {number} moreButtonWidth - Width of more button in pixels
-	 * @param {number} gap - Gap between items in pixels
+	 * @param {number} gap             - Gap between items in pixels
 	 * @return {number} Number of visible items
 	 */
 	calculateVisibleItems( availableWidth, moreButtonWidth, gap ) {
@@ -686,7 +691,6 @@ class PriorityNav {
 
 		// Get measurements
 		const availableWidth = this.calculateAvailableWidth();
-		const gap = this.getGap();
 		const moreButtonWidth = this.cacheMoreButtonWidth();
 
 		// Handle edge case where more button is larger than available width
@@ -696,6 +700,9 @@ class PriorityNav {
 			this.isCalculating = false;
 			return;
 		}
+
+		// Get gap after early return check
+		const gap = this.getGap();
 
 		// Calculate visible items
 		const visibleCount = this.calculateVisibleItems(
@@ -804,7 +811,7 @@ class PriorityNav {
 
 	/**
 	 * Remove child text from parent text to avoid contamination
-	 * @param {string} parentText - Parent item text
+	 * @param {string}      parentText       - Parent item text
 	 * @param {HTMLElement} submenuContainer - Submenu container element
 	 * @return {string} Cleaned parent text
 	 */
@@ -814,14 +821,12 @@ class PriorityNav {
 		}
 
 		const childTexts = [];
-		submenuContainer
-			.querySelectorAll( 'li a' )
-			.forEach( ( childLink ) => {
-				const childText = childLink.textContent.trim();
-				if ( childText && parentText.includes( childText ) ) {
-					childTexts.push( childText );
-				}
-			} );
+		submenuContainer.querySelectorAll( 'li a' ).forEach( ( childLink ) => {
+			const childText = childLink.textContent.trim();
+			if ( childText && parentText.includes( childText ) ) {
+				childTexts.push( childText );
+			}
+		} );
 
 		// Remove child texts from parent text if they're found
 		if ( childTexts.length > 0 ) {
@@ -918,7 +923,8 @@ class PriorityNav {
 	}
 
 	buildAccordionHTML( data, level ) {
-		const submenuId = `${ this.instanceId }-submenu-${ this.submenuCounter++ }`;
+		const submenuId = `${ this.instanceId }-submenu-${ this
+			.submenuCounter++ }`;
 		let html = '';
 
 		if ( data.hasSubmenu ) {

@@ -86,10 +86,7 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 							value={ priorityNavMoreIcon }
 							options={ [
 								{
-									label: __(
-										'None',
-										'priority-nav'
-									),
+									label: __( 'None', 'priority-nav' ),
 									value: 'none',
 								},
 								{
