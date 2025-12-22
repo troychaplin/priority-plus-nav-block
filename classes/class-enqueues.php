@@ -53,27 +53,27 @@ class Enqueues extends Plugin_Module {
 	 * @return void
 	 */
 	public function enqueue_editor_assets(): void {
-		$asset_meta = $this->build_dir->get_asset_meta( 'index.js' );
-		$style_path = $this->build_dir->get_path( 'index.css' );
+		$asset_script = $this->build_dir->get_asset_meta( 'ppn-editor.js' );
+		$asset_style  = $this->build_dir->get_path( 'ppn-editor.css' );
 
-		if ( ! $asset_meta ) {
+		if ( ! $asset_script ) {
 			return;
 		}
 
 		wp_enqueue_script(
 			'priority-nav-editor',
-			$this->build_dir->get_url( 'index.js' ),
-			$asset_meta['dependencies'],
-			$asset_meta['version'],
+			$this->build_dir->get_url( 'ppn-editor.js' ),
+			$asset_script['dependencies'],
+			$asset_script['version'],
 			true
 		);
 
-		if ( file_exists( $style_path ) ) {
+		if ( file_exists( $asset_style ) ) {
 			wp_enqueue_style(
 				'priority-nav-editor-style',
-				$this->build_dir->get_url( 'index.css' ),
+				$this->build_dir->get_url( 'priority-plus-nav-editor.css' ),
 				array(),
-				$asset_meta['version']
+				$asset_script['version']
 			);
 		}
 	}
@@ -89,7 +89,7 @@ class Enqueues extends Plugin_Module {
 			return;
 		}
 
-		$asset_meta = $this->build_dir->get_asset_meta( 'view.js' );
+		$asset_meta = $this->build_dir->get_asset_meta( 'priority-plus-nav.js' );
 		if ( ! $asset_meta ) {
 			return;
 		}
@@ -97,18 +97,18 @@ class Enqueues extends Plugin_Module {
 		$this->frontend_assets_enqueued = true;
 
 		wp_enqueue_script(
-			'priority-nav-view',
-			$this->build_dir->get_url( 'view.js' ),
+			'priority-plus-nav',
+			$this->build_dir->get_url( 'priority-plus-nav.js' ),
 			$asset_meta['dependencies'],
 			$asset_meta['version'],
 			true
 		);
 
-		$style_path = $this->build_dir->get_path( 'style-index.css' );
+		$style_path = $this->build_dir->get_path( 'style-priority-plus-nav.css' );
 		if ( file_exists( $style_path ) ) {
 			wp_enqueue_style(
-				'priority-nav-style',
-				$this->build_dir->get_url( 'style-index.css' ),
+				'priority-plus-nav',
+				$this->build_dir->get_url( 'style-priority-plus-nav.css' ),
 				array(),
 				$asset_meta['version']
 			);
@@ -117,7 +117,6 @@ class Enqueues extends Plugin_Module {
 
 	/**
 	 * Filter block rendering to inject Priority+ data attributes and enqueue frontend assets when needed.
-	 * Handles both core/navigation with Priority+ enabled and legacy wrapper blocks.
 	 *
 	 * @param string $block_content The block content.
 	 * @param array  $block         The full block, including name and attributes.
@@ -130,38 +129,34 @@ class Enqueues extends Plugin_Module {
 		if ( 'core/navigation' === $block_name ) {
 			$priority_nav_enabled = isset( $block['attrs']['priorityNavEnabled'] ) && $block['attrs']['priorityNavEnabled'];
 
-			if ( ! $priority_nav_enabled ) {
+			// Also check for the class name (from block variation).
+			$has_priority_class = isset( $block['attrs']['className'] ) &&
+				false !== strpos( $block['attrs']['className'], 'is-style-priority-nav' );
+
+			if ( ! $priority_nav_enabled && ! $has_priority_class ) {
 				return $block_content;
 			}
 
-		$this->enqueue_frontend_assets_once();
+			$this->enqueue_frontend_assets_once();
 
-		$more_label = isset( $block['attrs']['priorityNavMoreLabel'] ) && '' !== $block['attrs']['priorityNavMoreLabel'] 
-			? $block['attrs']['priorityNavMoreLabel'] 
-			: 'Browse';
-		$more_icon = isset( $block['attrs']['priorityNavMoreIcon'] ) && '' !== $block['attrs']['priorityNavMoreIcon'] 
-			? $block['attrs']['priorityNavMoreIcon'] 
-			: 'none';
+			$more_label = isset( $block['attrs']['priorityNavMoreLabel'] ) && '' !== $block['attrs']['priorityNavMoreLabel']
+				? $block['attrs']['priorityNavMoreLabel']
+				: 'Browse';
+			$more_icon  = isset( $block['attrs']['priorityNavMoreIcon'] ) && '' !== $block['attrs']['priorityNavMoreIcon']
+				? $block['attrs']['priorityNavMoreIcon']
+				: 'none';
 
 			// Inject data attributes on the .wp-block-navigation element.
 			if ( '' !== $block_content ) {
 				$block_content = preg_replace(
-					'/(<nav[^>]*class="[^"]*wp-block-navigation[^"]*")/i',
-					'$1 data-priority-nav data-more-label="' . esc_attr( $more_label ) . '" data-more-icon="' . esc_attr( $more_icon ) . '"',
+					'/(<nav[^>]*\bclass="[^"]*wp-block-navigation[^"]*")/i',
+					'$1 data-more-label="' . esc_attr( $more_label ) . '" data-more-icon="' . esc_attr( $more_icon ) . '"',
 					$block_content,
 					1
 				);
 			}
 
 			return $block_content;
-		}
-
-		// Handle legacy wrapper blocks (frontend compatibility).
-		if (
-			'lumen/priority-nav' === $block_name ||
-			( '' !== $block_content && false !== strpos( $block_content, 'data-priority-nav' ) )
-		) {
-			$this->enqueue_frontend_assets_once();
 		}
 
 		return $block_content;

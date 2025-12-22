@@ -1,4 +1,5 @@
 /* global ResizeObserver, requestAnimationFrame, MutationObserver, Node */
+import './styles/style.scss';
 
 class PriorityNav {
 	// Static counter for generating unique instance IDs
@@ -12,31 +13,34 @@ class PriorityNav {
 	static MAX_RETRY_ATTEMPTS = 20;
 
 	constructor( element ) {
+		// Prevent double initialization
+		if ( element.dataset.priorityNavInitialized === 'true' ) {
+			return;
+		}
+
 		// Generate unique instance ID for this PriorityNav instance
 		this.instanceId = `priority-nav-${ PriorityNav.instanceCounter++ }`;
 
-		// Support both wrapper mode and direct mode
-		// Wrapper mode: element has [data-priority-nav] and contains .wp-block-navigation
-		// Direct mode: element IS .wp-block-navigation with [data-priority-nav]
+		// Element should be .wp-block-navigation.is-style-priority-nav
 		if (
-			element.classList.contains( 'wp-block-navigation' ) &&
-			element.hasAttribute( 'data-priority-nav' )
+			! element.classList.contains( 'wp-block-navigation' ) ||
+			! element.classList.contains( 'is-style-priority-nav' )
 		) {
-			// Direct mode: element is the nav itself
-			this.nav = element;
-			this.wrapper = element; // Use nav as wrapper for compatibility
-		} else {
-			// Wrapper mode: look for nav inside
-			this.wrapper = element;
-			this.nav = element.querySelector( '.wp-block-navigation' );
+			return;
 		}
+
+		// Mark as initialized to prevent double initialization
+		element.dataset.priorityNavInitialized = 'true';
+
+		this.nav = element;
+		this.wrapper = element;
 
 		if ( ! this.nav ) {
 			return;
 		}
 
 		this.list = this.nav.querySelector( '.wp-block-navigation__container' );
-		// Get attributes from nav element (works for both modes since we inject on nav)
+		// Get attributes from nav element
 		this.moreLabel =
 			this.nav.getAttribute( 'data-more-label' ) ||
 			PriorityNav.DEFAULT_MORE_LABEL;
@@ -197,7 +201,9 @@ class PriorityNav {
 
 		// Build icon HTML only if icon exists in map
 		const iconHTML = iconMap[ this.moreIcon ]
-			? `<span class="priority-nav-icon">${ iconMap[ this.moreIcon ] }</span>`
+			? `<span class="priority-nav-icon">${
+					iconMap[ this.moreIcon ]
+			  }</span>`
 			: '';
 
 		this.moreButton.innerHTML = `
@@ -1112,19 +1118,9 @@ class PriorityNav {
 
 // Initialize on DOM ready
 document.addEventListener( 'DOMContentLoaded', () => {
-	// Support both wrapper mode and direct mode
-	// Wrapper mode: [data-priority-nav] containing .wp-block-navigation
-	// Direct mode: .wp-block-navigation[data-priority-nav]
-	const wrapperElements = document.querySelectorAll(
-		'[data-priority-nav]:not(.wp-block-navigation)'
-	);
-	const directNavElements = document.querySelectorAll(
-		'.wp-block-navigation[data-priority-nav]'
+	const navElements = document.querySelectorAll(
+		'.wp-block-navigation.is-style-priority-nav'
 	);
 
-	// Initialize wrapper mode (backward compatibility)
-	wrapperElements.forEach( ( element ) => new PriorityNav( element ) );
-
-	// Initialize direct mode (new variation approach)
-	directNavElements.forEach( ( element ) => new PriorityNav( element ) );
+	navElements.forEach( ( element ) => new PriorityNav( element ) );
 } );

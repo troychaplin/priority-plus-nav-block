@@ -1,6 +1,6 @@
-@use 'variables';
+@use "variables";
 
-.wp-block-navigation[data-priority-nav] {
+.is-style-priority-nav {
 	position: relative;
 
 	.priority-nav-more-button {
@@ -27,7 +27,6 @@
 		}
 
 		&[aria-expanded="true"] {
-
 			.icon {
 				transform: rotate(180deg);
 			}
