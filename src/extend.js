@@ -58,14 +58,16 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 			priorityNavMoreIcon,
 		} = attributes;
 
-		// Only show controls if Priority Nav is enabled
+		// Only show controls and wrap if Priority Nav is enabled
 		if ( ! priorityNavEnabled ) {
 			return <BlockEdit { ...props } />;
 		}
 
 		return (
 			<>
-				<BlockEdit { ...props } />
+				<div className="priority-nav-editor-wrapper">
+					<BlockEdit { ...props } />
+				</div>
 				<InspectorControls>
 					<PanelBody
 						title={ __( 'Priority+ Settings', 'priority-nav' ) }

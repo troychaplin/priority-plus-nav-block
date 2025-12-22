@@ -54,6 +54,7 @@ class Enqueues extends Plugin_Module {
 	 */
 	public function enqueue_editor_assets(): void {
 		$asset_meta = $this->build_dir->get_asset_meta( 'index.js' );
+		$style_path = $this->build_dir->get_path( 'index.css' );
 
 		if ( ! $asset_meta ) {
 			return;
@@ -66,6 +67,15 @@ class Enqueues extends Plugin_Module {
 			$asset_meta['version'],
 			true
 		);
+
+		if ( file_exists( $style_path ) ) {
+			wp_enqueue_style(
+				'priority-nav-editor-style',
+				$this->build_dir->get_url( 'index.css' ),
+				array(),
+				$asset_meta['version']
+			);
+		}
 	}
 
 	/**
