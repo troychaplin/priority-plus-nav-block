@@ -53,8 +53,8 @@ class Enqueues extends Plugin_Module {
 	 * @return void
 	 */
 	public function enqueue_editor_assets(): void {
-		$asset_script = $this->build_dir->get_asset_meta( 'ppn-editor.js' );
-		$asset_style  = $this->build_dir->get_path( 'ppn-editor.css' );
+		$asset_script = $this->build_dir->get_asset_meta( 'priority-editor.js' );
+		$asset_style  = $this->build_dir->get_path( 'priority-editor.css' );
 
 		if ( ! $asset_script ) {
 			return;
@@ -62,7 +62,7 @@ class Enqueues extends Plugin_Module {
 
 		wp_enqueue_script(
 			'priority-nav-editor',
-			$this->build_dir->get_url( 'ppn-editor.js' ),
+			$this->build_dir->get_url( 'priority-editor.js' ),
 			$asset_script['dependencies'],
 			$asset_script['version'],
 			true
@@ -71,7 +71,7 @@ class Enqueues extends Plugin_Module {
 		if ( file_exists( $asset_style ) ) {
 			wp_enqueue_style(
 				'priority-nav-editor-style',
-				$this->build_dir->get_url( 'priority-plus-nav-editor.css' ),
+				$this->build_dir->get_url( 'priority-editor.css' ),
 				array(),
 				$asset_script['version']
 			);
