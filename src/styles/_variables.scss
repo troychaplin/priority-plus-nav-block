@@ -1,10 +1,17 @@
-:root {
+// CSS custom properties for Priority Nav
+.is-style-priority-nav {
 	--priority-nav--background: transparent;
-	--priority-nav--background-hover: rgba(0, 0, 0, 0.05);
+	--priority-nav--background-hover: transparent;
 	--priority-nav--border: none;
-	--priority-nav--border-radius: 4px;
+	--priority-nav--border-radius: 0;
 	--priority-nav--color: inherit;
 	--priority-nav--font-family: inherit;
 	--priority-nav--font-size: inherit;
-	--priority-nav--padding: 0.5rem 0.75rem;
+	--priority-nav--padding: 0;
 }
+
+// These can be easily overridden in theme stylesheets by targeting .is-style-priority-nav, for example:
+// .is-style-priority-nav {
+//   --priority-nav--background: #ff0000;
+//   --priority-nav--color: #ffffff;
+// }

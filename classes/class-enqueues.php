@@ -199,19 +199,46 @@ class Enqueues extends Plugin_Module {
 		// Match the opening <nav> tag with wp-block-navigation class.
 		$pattern = '/(<nav[^>]*\bclass="[^"]*wp-block-navigation[^"]*")/i';
 
+		// Extract existing style attribute if present.
+		$existing_style = '';
+		if ( preg_match( '/<nav[^>]*\bclass="[^"]*wp-block-navigation[^"]*"[^>]*style="([^"]*)"/i', $block_content, $style_matches ) ) {
+			$existing_style = $style_matches[1];
+		}
+
+		// Build style attribute with CSS custom properties for colors.
+		$style_parts = array();
+		if ( ! empty( $existing_style ) ) {
+			$style_parts[] = $existing_style;
+		}
+
+		// Add our CSS custom properties.
+		if ( ! empty( $more_background_color ) ) {
+			$style_parts[] = sprintf(
+				'--priority-nav--background: %s',
+				esc_attr( $more_background_color )
+			);
+		}
+		if ( ! empty( $more_text_color ) ) {
+			$style_parts[] = sprintf(
+				'--priority-nav--color: %s',
+				esc_attr( $more_text_color )
+			);
+		}
+
+		// Build attributes string.
 		$attributes = sprintf(
 			'$1 data-more-label="%s" data-more-icon="%s"',
 			esc_attr( $more_label ),
 			esc_attr( $more_icon )
 		);
 
-		if ( ! empty( $more_background_color ) ) {
-			$attributes .= sprintf( ' data-more-background-color="%s"', esc_attr( $more_background_color ) );
+		// Add style attribute if we have any styles.
+		if ( ! empty( $style_parts ) ) {
+			$attributes .= ' style="' . esc_attr( implode( '; ', $style_parts ) ) . '"';
 		}
 
-		if ( ! empty( $more_text_color ) ) {
-			$attributes .= sprintf( ' data-more-text-color="%s"', esc_attr( $more_text_color ) );
-		}
+		// Remove existing style attribute from the nav tag if it exists, since we're adding it back.
+		$block_content = preg_replace( '/(<nav[^>]*\bclass="[^"]*wp-block-navigation[^"]*"[^>]*)\s*style="[^"]*"/i', '$1', $block_content, 1 );
 
 		$replacement = $attributes;
 

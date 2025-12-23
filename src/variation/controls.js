@@ -41,9 +41,9 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 					<BlockEdit { ...props } />
 				) }
 
-				<InspectorControls group="styles">
+				<InspectorControls>
 					<ToolsPanel
-						label={ __( 'Priority Plus Nav', 'priority-nav' ) }
+						label={ __( 'Priority Plus Settings', 'priority-nav' ) }
 						resetAll={ () =>
 							setAttributes( {
 								priorityNavMoreLabel: 'Browse',
@@ -123,12 +123,17 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 							/>
 						</ToolsPanelItem>
 					</ToolsPanel>
+				</InspectorControls>
 
+				<InspectorControls group="styles">
 					<PanelColorSettings
-						title={ __( 'Priority Plus Button', 'priority-nav' ) }
+						title={ __( 'Priority Plus Styles', 'priority-nav' ) }
 						colorSettings={ [
 							{
-								label: __( 'Text Color', 'priority-nav' ),
+								label: __(
+									'Button Text Color',
+									'priority-nav'
+								),
 								value: priorityNavMoreTextColor,
 								onChange: ( color ) =>
 									setAttributes( {
@@ -138,7 +143,10 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 								clearable: true,
 							},
 							{
-								label: __( 'Background Color', 'priority-nav' ),
+								label: __(
+									'Button Background Color',
+									'priority-nav'
+								),
 								value: priorityNavMoreBackgroundColor,
 								onChange: ( color ) =>
 									setAttributes( {

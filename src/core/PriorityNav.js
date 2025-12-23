@@ -58,24 +58,6 @@ class PriorityNav {
 			this.nav.getAttribute( 'data-more-label' ) || DEFAULT_MORE_LABEL;
 		this.moreIcon =
 			this.nav.getAttribute( 'data-more-icon' ) || DEFAULT_MORE_ICON;
-		this.moreBackgroundColor =
-			this.nav.getAttribute( 'data-more-background-color' ) || null;
-		this.moreTextColor =
-			this.nav.getAttribute( 'data-more-text-color' ) || null;
-
-		// Set CSS custom properties if colors are provided
-		if ( this.moreBackgroundColor ) {
-			this.nav.style.setProperty(
-				'--priority-nav--background',
-				this.moreBackgroundColor
-			);
-		}
-		if ( this.moreTextColor ) {
-			this.nav.style.setProperty(
-				'--priority-nav--color',
-				this.moreTextColor
-			);
-		}
 
 		// Detect if navigation has openSubmenusOnClick setting
 		this.openSubmenusOnClick = this.detectOpenSubmenusOnClick();
