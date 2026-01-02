@@ -22,8 +22,7 @@ registerBlockVariation( 'core/navigation', {
 		className: 'is-style-priority-nav',
 		overlayMenu: 'never',
 		priorityNavEnabled: true,
-		priorityNavMoreLabel: 'Browse',
-		priorityNavMoreIcon: 'none',
+		priorityNavMoreLabel: 'More',
 		priorityNavMoreBackgroundColor: undefined,
 		priorityNavMoreBackgroundColorHover: undefined,
 		priorityNavMoreTextColor: undefined,
@@ -57,7 +56,7 @@ addFilter(
 				},
 				priorityNavMoreLabel: {
 					type: 'string',
-					default: 'Browse',
+					default: 'More',
 				},
 				priorityNavMoreIcon: {
 					type: 'string',

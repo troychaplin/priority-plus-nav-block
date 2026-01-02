@@ -1,7 +1,10 @@
 /**
  * DOM building utilities for PriorityNav
  */
-import { DEFAULT_MORE_LABEL, DEFAULT_MORE_ICON } from '../utils/constants.js';
+import {
+	DEFAULT_MORE_LABEL,
+	CHEVRON_ICON_SVG,
+} from '../utils/constants.js';
 import { escapeHtml } from '../utils/html-utils.js';
 import { extractNavItemData } from './dom-extractor.js';
 
@@ -9,14 +12,9 @@ import { extractNavItemData } from './dom-extractor.js';
  * Create the More button and dropdown container
  * @param {HTMLElement} list      - Navigation list container
  * @param {string}      moreLabel - Label for the More button
- * @param {string}      moreIcon  - Icon type for the More button
  * @return {Object} Object containing moreContainer, moreButton, and dropdown elements
  */
-export function createMoreButton(
-	list,
-	moreLabel = DEFAULT_MORE_LABEL,
-	moreIcon = DEFAULT_MORE_ICON
-) {
+export function createMoreButton( list, moreLabel = DEFAULT_MORE_LABEL ) {
 	// Create the more container
 	const moreContainer = document.createElement( 'div' );
 	moreContainer.className = 'priority-nav-more';
@@ -29,20 +27,9 @@ export function createMoreButton(
 	moreButton.setAttribute( 'aria-haspopup', 'true' );
 	moreButton.setAttribute( 'aria-label', moreLabel );
 
-	const iconMap = {
-		chevron: '▼',
-		plus: '+',
-		menu: '≡',
-	};
-
-	// Build icon HTML only if icon exists in map
-	const iconHTML = iconMap[ moreIcon ]
-		? `<span class="priority-nav-icon">${ iconMap[ moreIcon ] }</span>`
-		: '';
-
 	moreButton.innerHTML = `
 		<span class="wp-block-navigation-item__label">${ moreLabel }</span>
-		${ iconHTML }
+		<span class="priority-nav-icon">${ CHEVRON_ICON_SVG }</span>
 	`;
 
 	// Create dropdown

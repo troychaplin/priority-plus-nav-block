@@ -56,8 +56,6 @@ class PriorityNav {
 		// Get attributes from nav element
 		this.moreLabel =
 			this.nav.getAttribute( 'data-more-label' ) || DEFAULT_MORE_LABEL;
-		this.moreIcon =
-			this.nav.getAttribute( 'data-more-icon' ) || DEFAULT_MORE_ICON;
 
 		// Detect if navigation has openSubmenusOnClick setting
 		this.openSubmenusOnClick = this.detectOpenSubmenusOnClick();
@@ -65,8 +63,7 @@ class PriorityNav {
 		// Create More button and dropdown
 		const { moreContainer, moreButton, dropdown } = createMoreButton(
 			this.list,
-			this.moreLabel,
-			this.moreIcon
+			this.moreLabel
 		);
 		this.moreContainer = moreContainer;
 		this.moreButton = moreButton;

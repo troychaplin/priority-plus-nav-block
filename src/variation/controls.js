@@ -44,7 +44,6 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 		const {
 			priorityNavEnabled,
 			priorityNavMoreLabel,
-			priorityNavMoreIcon,
 			priorityNavMoreBackgroundColor,
 			priorityNavMoreBackgroundColorHover,
 			priorityNavMoreTextColor,
@@ -67,13 +66,12 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 			<>
 				<BlockEdit { ...props } />
 
-				<InspectorControls>
+				<InspectorControls group="styles">
 					<ToolsPanel
 						label={ __( 'Priority Plus Settings', 'priority-nav' ) }
 						resetAll={ () =>
 							setAttributes( {
-								priorityNavMoreLabel: 'Browse',
-								priorityNavMoreIcon: 'none',
+								priorityNavMoreLabel: 'More',
 							} )
 						}
 					>
@@ -82,7 +80,7 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 							label={ __( 'More Button Label', 'priority-nav' ) }
 							onDeselect={ () =>
 								setAttributes( {
-									priorityNavMoreLabel: 'Browse',
+									priorityNavMoreLabel: 'More',
 								} )
 							}
 							isShownByDefault
@@ -104,52 +102,7 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 								) }
 							/>
 						</ToolsPanelItem>
-						<ToolsPanelItem
-							hasValue={ () => !! priorityNavMoreIcon }
-							label={ __( 'More Button Icon', 'priority-nav' ) }
-							onDeselect={ () =>
-								setAttributes( { priorityNavMoreIcon: 'none' } )
-							}
-							isShownByDefault
-						>
-							<SelectControl
-								label={ __(
-									'More Button Icon',
-									'priority-nav'
-								) }
-								value={ priorityNavMoreIcon }
-								options={ [
-									{
-										label: __( 'None', 'priority-nav' ),
-										value: 'none',
-									},
-									{
-										label: __(
-											'Chevron Down (▼)',
-											'priority-nav'
-										),
-										value: 'chevron',
-									},
-									{
-										label: __( 'Plus (+)', 'priority-nav' ),
-										value: 'plus',
-									},
-									{
-										label: __( 'Menu (≡)', 'priority-nav' ),
-										value: 'menu',
-									},
-								] }
-								onChange={ ( value ) =>
-									setAttributes( {
-										priorityNavMoreIcon: value,
-									} )
-								}
-							/>
-						</ToolsPanelItem>
 					</ToolsPanel>
-				</InspectorControls>
-
-				<InspectorControls group="styles">
 					<PanelColorSettings
 						title={ __( 'Priority Plus Colors', 'priority-nav' ) }
 						colorSettings={ [
