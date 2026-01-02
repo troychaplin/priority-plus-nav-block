@@ -104,9 +104,40 @@
 				display: block !important;
 			}
 
-			// Nested level indentation
+			// Multi-level indentation - each nested level adds indent
+			// Applied to links and accordion toggle buttons
+			// First level - add 1x indent to the left padding
+			> li > a,
+			> li > .priority-plus-navigation-accordion-wrapper > a,
+			> li > .priority-plus-navigation-accordion-toggle-full {
+				padding-left: calc(1rem + var(--wp--custom--priority-plus-navigation--dropdown--multi-level-indent));
+			}
+
+			// Second level - add 2x indent to the left padding
 			.priority-plus-navigation-accordion-content {
-				padding-left: var(--wp--custom--priority-plus-navigation--dropdown--multi-level-indent);
+				> li > a,
+				> li > .priority-plus-navigation-accordion-wrapper > a,
+				> li > .priority-plus-navigation-accordion-toggle-full {
+					padding-left: calc(1rem + (var(--wp--custom--priority-plus-navigation--dropdown--multi-level-indent) * 2));
+				}
+
+				// Third level - add 3x indent to the left padding
+				.priority-plus-navigation-accordion-content {
+					> li > a,
+					> li > .priority-plus-navigation-accordion-wrapper > a,
+					> li > .priority-plus-navigation-accordion-toggle-full {
+						padding-left: calc(1rem + (var(--wp--custom--priority-plus-navigation--dropdown--multi-level-indent) * 3));
+					}
+
+					// Fourth level - add 4x indent to the left padding
+					.priority-plus-navigation-accordion-content {
+						> li > a,
+						> li > .priority-plus-navigation-accordion-wrapper > a,
+						> li > .priority-plus-navigation-accordion-toggle-full {
+							padding-left: calc(1rem + (var(--wp--custom--priority-plus-navigation--dropdown--multi-level-indent) * 4));
+						}
+					}
+				}
 			}
 		}
 
