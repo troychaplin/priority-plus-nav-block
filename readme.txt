@@ -18,6 +18,7 @@ Key Features:
 
 * **Automatic Overflow Detection**: Continuously monitors available space and adjusts navigation visibility
 * **Responsive by Design**: Adapts to any screen size or container width
+* **Customizable Styling**: Full theme.json support for dropdown menu styling with CSS custom properties
 * **Customizable Labels**: Change the "More" button text and icon
 * **Seamless Integration**: Works beautifully with WordPress themes
 * **Performance Optimized**: Uses ResizeObserver for efficient layout calculations
@@ -57,6 +58,34 @@ Priority Plus Navigation intelligently integrates with WordPress core navigation
 = Is it accessible? =
 
 Yes, the block is built with accessibility in mind, supporting keyboard navigation and providing proper ARIA labels for screen readers.
+
+= Can I style the dropdown menu? =
+
+Absolutely! The dropdown menu can be fully customized through your theme's `theme.json` file. You can control:
+
+* Background color and border styling
+* Item spacing and hover effects
+* Multi-level navigation indentation
+* Box shadow and border radius
+
+Example configuration in your theme's `theme.json`:
+
+`{
+  "version": 3,
+  "settings": {
+    "custom": {
+      "priorityPlusNavigation": {
+        "dropdown": {
+          "backgroundColor": "#f0f0f0",
+          "borderColor": "#999999",
+          "itemHoverBackgroundColor": "rgba(0, 0, 0, 0.08)"
+        }
+      }
+    }
+  }
+}`
+
+The plugin provides sensible defaults, and you only need to specify the properties you want to customize. For complete styling documentation, see the [GitHub repository](https://github.com/troychaplin/priority-plus-navigation/blob/main/docs/styling.md).
 
 == Screenshots ==
 
