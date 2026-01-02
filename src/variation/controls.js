@@ -46,7 +46,9 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 			priorityNavMoreLabel,
 			priorityNavMoreIcon,
 			priorityNavMoreBackgroundColor,
+			priorityNavMoreBackgroundColorHover,
 			priorityNavMoreTextColor,
+			priorityNavMoreTextColorHover,
 			priorityNavMorePadding,
 		} = attributes;
 
@@ -63,13 +65,7 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 
 		return (
 			<>
-				{ priorityNavEnabled ? (
-					<div className="priority-nav-editor-wrapper">
-						<BlockEdit { ...props } />
-					</div>
-				) : (
-					<BlockEdit { ...props } />
-				) }
+				<BlockEdit { ...props } />
 
 				<InspectorControls>
 					<ToolsPanel
@@ -78,8 +74,6 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 							setAttributes( {
 								priorityNavMoreLabel: 'Browse',
 								priorityNavMoreIcon: 'none',
-								priorityNavMoreBackgroundColor: undefined,
-								priorityNavMoreTextColor: undefined,
 							} )
 						}
 					>
@@ -174,6 +168,19 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 							},
 							{
 								label: __(
+									'Button Text Hover Color',
+									'priority-nav'
+								),
+								value: priorityNavMoreTextColorHover,
+								onChange: ( color ) =>
+									setAttributes( {
+										priorityNavMoreTextColorHover:
+											color || undefined,
+									} ),
+								clearable: true,
+							},
+							{
+								label: __(
 									'Button Background Color',
 									'priority-nav'
 								),
@@ -181,6 +188,19 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 								onChange: ( color ) =>
 									setAttributes( {
 										priorityNavMoreBackgroundColor:
+											color || undefined,
+									} ),
+								clearable: true,
+							},
+							{
+								label: __(
+									'Button Background Hover Color',
+									'priority-nav'
+								),
+								value: priorityNavMoreBackgroundColorHover,
+								onChange: ( color ) =>
+									setAttributes( {
+										priorityNavMoreBackgroundColorHover:
 											color || undefined,
 									} ),
 								clearable: true,

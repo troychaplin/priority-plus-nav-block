@@ -2,11 +2,15 @@
 .is-style-priority-nav {
 	--priority-nav--background: transparent;
 	--priority-nav--background-hover: transparent;
-	--priority-nav--border: none;
-	--priority-nav--border-radius: 0;
 	--priority-nav--color: inherit;
+	--priority-nav--color-hover: inherit;
+	--priority-nav--border-color: transparent;
+	--priority-nav--border-style: solid;
+	--priority-nav--border-width: 0;
+	--priority-nav--border-radius: 0;
 	--priority-nav--font-family: inherit;
 	--priority-nav--font-size: inherit;
+	--priority-nav--font-weight: inherit;
 	--priority-nav--padding: 0;
 }
 

@@ -13,13 +13,16 @@
 		color: var(--priority-nav--color);
 		padding: var(--priority-nav--padding);
 		background: var(--priority-nav--background);
-		border: var(--priority-nav--border);
+		border-color: var(--priority-nav--border-color);
+		border-style: var(--priority-nav--border-style);
+		border-width: var(--priority-nav--border-width);
 		border-radius: var(--priority-nav--border-radius);
 		transition: all 0.2s ease;
 		cursor: pointer;
 
 		&:hover {
 			background: var(--priority-nav--background-hover);
+			color: var(--priority-nav--color-hover);
 		}
 
 		.icon {

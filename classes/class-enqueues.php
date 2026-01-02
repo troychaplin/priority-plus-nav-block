@@ -138,14 +138,25 @@ class Enqueues extends Plugin_Module {
 		$this->enqueue_frontend_assets_once();
 
 		// Get Priority+ configuration with defaults.
-		$more_label            = $this->get_priority_attr( $block, 'priorityNavMoreLabel', 'Browse' );
-		$more_icon             = $this->get_priority_attr( $block, 'priorityNavMoreIcon', 'none' );
-		$more_background_color = $this->get_priority_attr( $block, 'priorityNavMoreBackgroundColor', '' );
-		$more_text_color       = $this->get_priority_attr( $block, 'priorityNavMoreTextColor', '' );
-		$more_padding          = $this->get_priority_attr( $block, 'priorityNavMorePadding', array() );
+		$more_label                  = $this->get_priority_attr( $block, 'priorityNavMoreLabel', 'Browse' );
+		$more_icon                   = $this->get_priority_attr( $block, 'priorityNavMoreIcon', 'none' );
+		$more_background_color       = $this->get_priority_attr( $block, 'priorityNavMoreBackgroundColor', '' );
+		$more_background_color_hover = $this->get_priority_attr( $block, 'priorityNavMoreBackgroundColorHover', '' );
+		$more_text_color             = $this->get_priority_attr( $block, 'priorityNavMoreTextColor', '' );
+		$more_text_color_hover       = $this->get_priority_attr( $block, 'priorityNavMoreTextColorHover', '' );
+		$more_padding                = $this->get_priority_attr( $block, 'priorityNavMorePadding', array() );
 
 		// Inject data attributes into the navigation element.
-		return $this->inject_priority_attributes( $block_content, $more_label, $more_icon, $more_background_color, $more_text_color, $more_padding );
+		return $this->inject_priority_attributes(
+			$block_content,
+			$more_label,
+			$more_icon,
+			$more_background_color,
+			$more_background_color_hover,
+			$more_text_color,
+			$more_text_color_hover,
+			$more_padding
+		);
 	}
 
 	/**
@@ -273,17 +284,62 @@ class Enqueues extends Plugin_Module {
 	}
 
 	/**
+	 * Convert border radius object to CSS value string.
+	 *
+	 * @param mixed $border_radius Border radius value (string or array with topLeft, topRight, bottomRight, bottomLeft).
+	 * @return string CSS border-radius value string.
+	 */
+	private function border_radius_to_css( $border_radius ): string {
+		// Handle string value.
+		if ( is_string( $border_radius ) ) {
+			return $border_radius;
+		}
+
+		// Handle array value.
+		if ( ! is_array( $border_radius ) || empty( $border_radius ) ) {
+			return '';
+		}
+
+		$top_left     = isset( $border_radius['topLeft'] ) ? (string) $border_radius['topLeft'] : '';
+		$top_right    = isset( $border_radius['topRight'] ) ? (string) $border_radius['topRight'] : '';
+		$bottom_right = isset( $border_radius['bottomRight'] ) ? (string) $border_radius['bottomRight'] : '';
+		$bottom_left  = isset( $border_radius['bottomLeft'] ) ? (string) $border_radius['bottomLeft'] : '';
+
+		// If all values are empty, return empty string.
+		if ( '' === $top_left && '' === $top_right && '' === $bottom_right && '' === $bottom_left ) {
+			return '';
+		}
+
+		// If all values are the same and not empty, use single value shorthand.
+		if ( '' !== $top_left && $top_left === $top_right && $top_right === $bottom_right && $bottom_right === $bottom_left ) {
+			return $top_left;
+		}
+
+		// For partial radius or mixed values, we need all 4 values.
+		// Use '0' for empty corners to ensure proper CSS.
+		$top_left     = '' !== $top_left ? $top_left : '0';
+		$top_right    = '' !== $top_right ? $top_right : '0';
+		$bottom_right = '' !== $bottom_right ? $bottom_right : '0';
+		$bottom_left  = '' !== $bottom_left ? $bottom_left : '0';
+
+		// CSS border-radius order: top-left, top-right, bottom-right, bottom-left.
+		return $top_left . ' ' . $top_right . ' ' . $bottom_right . ' ' . $bottom_left;
+	}
+
+	/**
 	 * Inject Priority+ data attributes into the navigation element.
 	 *
-	 * @param string $block_content        The block HTML content.
-	 * @param string $more_label           The "more" button label.
-	 * @param string $more_icon            The "more" button icon.
-	 * @param string $more_background_color The "more" button background color.
-	 * @param string $more_text_color      The "more" button text color.
-	 * @param array  $more_padding         The "more" button padding values.
+	 * @param string $block_content              The block HTML content.
+	 * @param string $more_label                 The "more" button label.
+	 * @param string $more_icon                  The "more" button icon.
+	 * @param string $more_background_color       The "more" button background color.
+	 * @param string $more_background_color_hover The "more" button background hover color.
+	 * @param string $more_text_color            The "more" button text color.
+	 * @param string $more_text_color_hover      The "more" button text hover color.
+	 * @param array  $more_padding               The "more" button padding values.
 	 * @return string Modified block content with data attributes.
 	 */
-	private function inject_priority_attributes( string $block_content, string $more_label, string $more_icon, string $more_background_color = '', string $more_text_color = '', array $more_padding = array() ): string {
+	private function inject_priority_attributes( string $block_content, string $more_label, string $more_icon, string $more_background_color = '', string $more_background_color_hover = '', string $more_text_color = '', string $more_text_color_hover = '', array $more_padding = array() ): string {
 		if ( '' === $block_content ) {
 			return $block_content;
 		}
@@ -310,10 +366,22 @@ class Enqueues extends Plugin_Module {
 				esc_attr( $more_background_color )
 			);
 		}
+		if ( ! empty( $more_background_color_hover ) ) {
+			$style_parts[] = sprintf(
+				'--priority-nav--background-hover: %s',
+				esc_attr( $more_background_color_hover )
+			);
+		}
 		if ( ! empty( $more_text_color ) ) {
 			$style_parts[] = sprintf(
 				'--priority-nav--color: %s',
 				esc_attr( $more_text_color )
+			);
+		}
+		if ( ! empty( $more_text_color_hover ) ) {
+			$style_parts[] = sprintf(
+				'--priority-nav--color-hover: %s',
+				esc_attr( $more_text_color_hover )
 			);
 		}
 
