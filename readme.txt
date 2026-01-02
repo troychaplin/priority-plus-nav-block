@@ -46,6 +46,14 @@ Yes! In the block inspector panel, you can customize both the "More" button labe
 
 Yes! Items with submenus in the dropdown are converted to accessible accordions that respect the Core Navigation "Open submenus on click" setting.
 
+= How does it work with WordPress's responsive overlay menu? =
+
+Priority+ Nav intelligently integrates with WordPress core navigation overlay menu settings:
+
+* **Never**: Priority+ is always active across all screen sizes
+* **Mobile**: Priority+ works on desktop and automatically disables when the hamburger menu activates
+* **Always**: Not compatible - Priority+ is automatically disabled and the "Always" option appears greyed out in the editor
+
 = Is it accessible? =
 
 Yes, the block is built with accessibility in mind, supporting keyboard navigation and providing proper ARIA labels for screen readers.
@@ -57,6 +65,18 @@ Yes, the block is built with accessibility in mind, supporting keyboard navigati
 3. Block inspector controls for customization
 
 == Changelog ==
+
+= 0.3.0 =
+* Added intelligent overlay menu detection and compatibility
+* Priority+ now properly disables when hamburger menu is active (overlayMenu: 'mobile')
+* "Always" overlay option is automatically prevented and visually disabled in editor
+* Improved hamburger mode detection using `is-menu-open` class
+* Enhanced documentation with overlay menu compatibility details
+
+= 0.2.0 =
+* Refactored to use block variation approach instead of wrapper block
+* Improved editor integration with isActive detection
+* Legacy wrapper blocks still supported for backward compatibility
 
 = 0.1.0 =
 * Initial release

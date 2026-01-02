@@ -2,7 +2,7 @@
 
 A WordPress block plugin that adds Priority+ pattern functionality to core WordPress navigation block. It automatically moves navigation items that don't fit into a responsive "More" dropdown menu as the viewport narrows.
 
-<img src="assets/informational.png" alt="About the priority+ navigation" style="width: 100%; height: auto;">
+<img src="assets/informational.png" alt="A graphical representation of a navigation before and after enabling the priority plus navigation functionality" style="width: 100%; height: auto;">
 
 ## What is Priority+?
 
@@ -93,6 +93,11 @@ The Priority+ Navigation is available as a variation of the core Navigation bloc
 The plugin automatically detects and respects settings from the Core Navigation block:
 
 - **Open submenus on click** - When enabled in Core Navigation, submenus in the "More" dropdown become clickable accordions. When disabled, the link remains functional with a separate arrow button to toggle the submenu.
+
+- **Overlay Menu** - Controls when the responsive overlay/hamburger menu appears:
+  - **Never**: No overlay menu (Priority+ works at all screen sizes)
+  - **Mobile**: Overlay menu appears at mobile breakpoints (Priority+ works on desktop, disables when hamburger menu activates)
+  - **Always**: Always shows overlay menu (Priority+ is automatically disabled and the "Always" option is visually disabled in the editor)
 
 ### Block Supports
 
@@ -205,13 +210,35 @@ priority-nav/
 - **Width caching**: Minimizes layout recalculations
 - **Debounced recalculation**: Prevents excessive computation
 
+## Overlay Menu Compatibility
+
+Priority+ Navigation intelligently works with WordPress core navigation overlay menu settings:
+
+### How It Works
+
+- **Never**: Priority+ is always active, providing responsive navigation through the "More" dropdown
+- **Mobile**: Priority+ works on desktop viewports and automatically disables when the hamburger menu becomes active
+- **Always**: Priority+ is completely disabled (not compatible), and the "Always" option appears greyed out and crossed out in the editor
+
+### Technical Details
+
+The plugin detects when WordPress's overlay/hamburger menu is active by checking for the `is-menu-open` class on the responsive container. When this class is present, Priority+ temporarily disables itself to avoid conflicts with the native hamburger menu.
+
 ## Known Limitations
 
 - When using multiple Priority+ Navigation blocks on the same page with "Open submenus on click" enabled, ensure each block has unique navigation content to avoid potential ID conflicts
-- The plugin automatically disables on mobile/hamburger mode - this is intentional to work seamlessly with WordPress responsive navigation
+- Priority+ Navigation is not compatible with the "Always" overlay menu setting - it will automatically prevent usage and switch to "Mobile" mode
 - Legacy wrapper blocks (from previous plugin versions) are no longer insertable in the editor, but will continue to function on the frontend for backward compatibility
 
 ## Changelog
+
+### 0.3.0 - Overlay Menu Compatibility
+- Added intelligent overlay menu detection and compatibility
+- Priority+ now properly disables when hamburger menu is active (overlayMenu: 'mobile')
+- "Always" overlay option is automatically prevented and visually disabled in editor
+- Improved hamburger mode detection using `is-menu-open` class
+- Added overlay menu data attribute for frontend detection
+- Enhanced documentation with overlay menu compatibility details
 
 ### 0.2.0 - Variation-Only Approach
 - Refactored to use block variation instead of wrapper block
