@@ -8,6 +8,17 @@
     border: 2px solid green !important;
 }
 
+// Disable the "Always" option in overlay menu settings for Priority+ nav
+// Applied when Priority+ variation is selected
+.priority-nav-disable-always-option {
+	.components-toggle-group-control-option-base:last-child {
+		opacity: 0.4;
+		pointer-events: none;
+		text-decoration: line-through;
+		cursor: not-allowed;
+	}
+}
+
 // Editor-only styles for Priority Nav
 // .editor-styles-wrapper {
 // 	.priority-nav-editor-wrapper {

@@ -145,6 +145,7 @@ class Enqueues extends Plugin_Module {
 		$more_text_color             = $this->get_priority_attr( $block, 'priorityNavMoreTextColor', '' );
 		$more_text_color_hover       = $this->get_priority_attr( $block, 'priorityNavMoreTextColorHover', '' );
 		$more_padding                = $this->get_priority_attr( $block, 'priorityNavMorePadding', array() );
+		$overlay_menu                = $this->get_priority_attr( $block, 'overlayMenu', 'never' );
 
 		// Inject data attributes into the navigation element.
 		return $this->inject_priority_attributes(
@@ -155,7 +156,8 @@ class Enqueues extends Plugin_Module {
 			$more_background_color_hover,
 			$more_text_color,
 			$more_text_color_hover,
-			$more_padding
+			$more_padding,
+			$overlay_menu
 		);
 	}
 
@@ -167,6 +169,12 @@ class Enqueues extends Plugin_Module {
 	 */
 	private function is_priority_nav_enabled( array $block ): bool {
 		$attrs = $block['attrs'] ?? array();
+
+		// Check if overlayMenu is set to 'always' - Priority+ should not run.
+		$overlay_menu = $attrs['overlayMenu'] ?? '';
+		if ( 'always' === $overlay_menu ) {
+			return false;
+		}
 
 		// Check explicit attribute.
 		if ( ! empty( $attrs['priorityNavEnabled'] ) ) {
@@ -337,9 +345,10 @@ class Enqueues extends Plugin_Module {
 	 * @param string $more_text_color            The "more" button text color.
 	 * @param string $more_text_color_hover      The "more" button text hover color.
 	 * @param array  $more_padding               The "more" button padding values.
+	 * @param string $overlay_menu               The overlay menu setting (never, mobile, always).
 	 * @return string Modified block content with data attributes.
 	 */
-	private function inject_priority_attributes( string $block_content, string $more_label, string $more_icon, string $more_background_color = '', string $more_background_color_hover = '', string $more_text_color = '', string $more_text_color_hover = '', array $more_padding = array() ): string {
+	private function inject_priority_attributes( string $block_content, string $more_label, string $more_icon, string $more_background_color = '', string $more_background_color_hover = '', string $more_text_color = '', string $more_text_color_hover = '', array $more_padding = array(), string $overlay_menu = 'never' ): string {
 		if ( '' === $block_content ) {
 			return $block_content;
 		}
@@ -400,9 +409,10 @@ class Enqueues extends Plugin_Module {
 
 		// Build attributes string.
 		$attributes = sprintf(
-			'$1 data-more-label="%s" data-more-icon="%s"',
+			'$1 data-more-label="%s" data-more-icon="%s" data-overlay-menu="%s"',
 			esc_attr( $more_label ),
-			esc_attr( $more_icon )
+			esc_attr( $more_icon ),
+			esc_attr( $overlay_menu )
 		);
 
 		// Add style attribute if we have any styles.

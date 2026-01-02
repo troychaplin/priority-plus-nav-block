@@ -56,6 +56,13 @@ class PriorityNav {
 		// Get attributes from nav element
 		this.moreLabel =
 			this.nav.getAttribute( 'data-more-label' ) || DEFAULT_MORE_LABEL;
+		this.overlayMenu =
+			this.nav.getAttribute( 'data-overlay-menu' ) || 'never';
+
+		// If overlayMenu is 'always', Priority+ should never run
+		if ( this.overlayMenu === 'always' ) {
+			return;
+		}
 
 		// Detect if navigation has openSubmenusOnClick setting
 		this.openSubmenusOnClick = this.detectOpenSubmenusOnClick();

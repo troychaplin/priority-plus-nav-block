@@ -13,10 +13,60 @@ import {
 	TextControl,
 	SelectControl,
 	BoxControl,
+	Notice,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
+import { useEffect, useRef } from '@wordpress/element';
+
+/**
+ * Add DOM manipulation to disable 'always' overlay option when Priority+ is active
+ */
+const addDisableAlwaysOption = createHigherOrderComponent( ( BlockEdit ) => {
+	return ( props ) => {
+		const { name, attributes } = props;
+
+		if ( name !== 'core/navigation' ) {
+			return <BlockEdit { ...props } />;
+		}
+
+		// Check if Priority+ variation is active
+		const className = attributes.className || '';
+		const isPriorityNavVariation =
+			className.includes( 'is-style-priority-nav' ) ||
+			attributes.priorityNavEnabled === true;
+
+		// Use effect to modify the DOM after render
+		useEffect( () => {
+			if ( ! isPriorityNavVariation ) {
+				return;
+			}
+
+			// Find all toggle group control buttons in the inspector
+			const inspector = document.querySelector(
+				'.block-editor-block-inspector'
+			);
+			if ( ! inspector ) {
+				return;
+			}
+
+			// Find the 'always' button by data-value attribute
+			const alwaysButton = inspector.querySelector(
+				'.components-toggle-group-control-option-base[data-value="always"]'
+			);
+
+			if ( alwaysButton ) {
+				alwaysButton.style.opacity = '0.4';
+				alwaysButton.style.pointerEvents = 'none';
+				alwaysButton.style.textDecoration = 'line-through';
+				alwaysButton.style.cursor = 'not-allowed';
+			}
+		}, [ isPriorityNavVariation, attributes.overlayMenu ] );
+
+		return <BlockEdit { ...props } />;
+	};
+}, 'addDisableAlwaysOption' );
 
 /**
  * Add Inspector Controls to core/navigation block
@@ -49,7 +99,15 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 			priorityNavMoreTextColor,
 			priorityNavMoreTextColorHover,
 			priorityNavMorePadding,
+			overlayMenu,
 		} = attributes;
+
+		// Automatically change overlayMenu from 'always' to 'mobile' when Priority+ is active
+		useEffect( () => {
+			if ( isPriorityNavVariation && overlayMenu === 'always' ) {
+				setAttributes( { overlayMenu: 'mobile' } );
+			}
+		}, [ isPriorityNavVariation, overlayMenu, setAttributes ] );
 
 		// Get spacing sizes from theme.
 		const spacingSizes = useSetting( 'spacing.spacingSizes' ) || [];
@@ -65,6 +123,15 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 		return (
 			<>
 				<BlockEdit { ...props } />
+
+				<InspectorControls group="settings">
+					<Notice status="info" isDismissible={ false }>
+						{ __(
+							'Priority+ Navigation is not compatible with "Always" overlay menu. The overlay menu is set to "Mobile" to allow Priority+ to work on desktop.',
+							'priority-nav'
+						) }
+					</Notice>
+				</InspectorControls>
 
 				<InspectorControls group="styles">
 					<ToolsPanel
@@ -228,8 +295,17 @@ const withPriorityNavControls = createHigherOrderComponent( ( BlockEdit ) => {
 	};
 }, 'withPriorityNavControls' );
 
+// Apply filters in order: first add DOM manipulation for styling, then our controls
+addFilter(
+	'editor.BlockEdit',
+	'priority-nav/add-disable-always-option',
+	addDisableAlwaysOption,
+	5
+);
+
 addFilter(
 	'editor.BlockEdit',
 	'priority-nav/add-priority-nav-controls',
-	withPriorityNavControls
+	withPriorityNavControls,
+	10
 );

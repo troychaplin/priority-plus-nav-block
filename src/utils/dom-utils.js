@@ -46,25 +46,41 @@ export function isMeasurable( list ) {
 
 /**
  * Check if navigation is in hamburger/responsive mode
- * Returns true if the menu container is hidden or in responsive overlay mode
+ * Returns true if the responsive overlay container exists and is active
  * @param {HTMLElement} responsiveContainer - Responsive container element
  * @param {HTMLElement} list                - Navigation list container
  * @return {boolean} True if in hamburger mode
  */
 export function isInHamburgerMode( responsiveContainer, list ) {
-	// Check if responsive container exists and is hidden
-	if (
-		responsiveContainer &&
-		( ! isElementVisible( responsiveContainer ) ||
-			responsiveContainer.getAttribute( 'aria-hidden' ) === 'true' )
-	) {
+	// No responsive container means overlayMenu is 'never' - not in hamburger mode
+	if ( ! responsiveContainer ) {
+		return false;
+	}
+
+	// WordPress uses the 'is-menu-open' class to indicate when hamburger is active
+	// Check for this class first
+	const hasMenuOpenClass =
+		responsiveContainer.classList.contains( 'is-menu-open' ) ||
+		responsiveContainer.classList.contains( 'has-modal-open' );
+
+	// Debug logging
+	console.log( '[Priority+ Debug] Hamburger mode check:', {
+		hasMenuOpenClass,
+		classList: Array.from( responsiveContainer.classList ),
+		ariaHidden: responsiveContainer.getAttribute( 'aria-hidden' ),
+		computedDisplay: window.getComputedStyle( responsiveContainer ).display,
+	} );
+
+	if ( hasMenuOpenClass ) {
+		console.log(
+			'[Priority+ Debug] Hamburger mode ACTIVE (menu open) - Priority+ should be DISABLED'
+		);
 		return true;
 	}
 
-	// Check if the main list container is hidden (fallback detection)
-	if ( list && ! isElementVisible( list ) ) {
-		return true;
-	}
-
+	// If no 'is-menu-open' class, we're in desktop mode (even if container exists)
+	console.log(
+		'[Priority+ Debug] Desktop mode (menu closed) - Priority+ should be ENABLED'
+	);
 	return false;
 }
