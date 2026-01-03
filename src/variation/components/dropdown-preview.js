@@ -121,9 +121,10 @@ function getItemSpacingCSS(spacing) {
  *
  * @param {Object} props - Component props
  * @param {Object} props.dropdownStyles - Dropdown style settings
+ * @param {Object} props.navigationAttributes - Navigation block attributes for inheriting styles
  * @return {JSX.Element} Preview component
  */
-export function DropdownPreview({ dropdownStyles }) {
+export function DropdownPreview({ dropdownStyles, navigationAttributes }) {
 	const {
 		backgroundColor = '#ffffff',
 		borderColor = '#dddddd',
@@ -139,28 +140,78 @@ export function DropdownPreview({ dropdownStyles }) {
 	// State for accordion open/closed
 	const [isAccordionOpen, setIsAccordionOpen] = useState(true);
 
+	// Extract navigation block typography/appearance styles
+	const navStyles = navigationAttributes?.style || {};
+	const navFontSizePreset = navigationAttributes?.fontSize; // Preset slug like "x-large"
+	const navFontFamilyPreset = navigationAttributes?.fontFamily; // Preset slug like "fira-code"
+	const navTextColorPreset = navigationAttributes?.textColor; // Preset slug like "accent-3"
+	const navCustomTextColor = navStyles?.color?.text;
+	const navFontStyle = navStyles?.typography?.fontStyle; // "normal" or "italic"
+	const navFontWeight = navStyles?.typography?.fontWeight;
+	const navLineHeight = navStyles?.typography?.lineHeight;
+	const navLetterSpacing = navStyles?.typography?.letterSpacing;
+	const navCustomFontSize = navStyles?.typography?.fontSize; // Custom size like "20px"
+
 	// Memoize the inline styles using the same CSS custom property names as the frontend
 	const previewStyles = useMemo(
-		() => ({
-			'--wp--custom--priority-plus-navigation--dropdown--background-color':
-				backgroundColor,
-			'--wp--custom--priority-plus-navigation--dropdown--border-color':
-				borderColor,
-			'--wp--custom--priority-plus-navigation--dropdown--border-width':
-				borderWidth,
-			'--wp--custom--priority-plus-navigation--dropdown--border-radius':
-				borderRadius,
-			'--wp--custom--priority-plus-navigation--dropdown--box-shadow':
-				boxShadow,
-			'--wp--custom--priority-plus-navigation--dropdown--item-spacing':
-				getItemSpacingCSS(itemSpacing),
-			'--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color':
-				itemHoverBackgroundColor,
-			'--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color':
-				itemHoverTextColor,
-			'--wp--custom--priority-plus-navigation--dropdown--multi-level-indent':
-				multiLevelIndent,
-		}),
+		() => {
+			const styles = {
+				'--wp--custom--priority-plus-navigation--dropdown--background-color':
+					backgroundColor,
+				'--wp--custom--priority-plus-navigation--dropdown--border-color':
+					borderColor,
+				'--wp--custom--priority-plus-navigation--dropdown--border-width':
+					borderWidth,
+				'--wp--custom--priority-plus-navigation--dropdown--border-radius':
+					borderRadius,
+				'--wp--custom--priority-plus-navigation--dropdown--box-shadow':
+					boxShadow,
+				'--wp--custom--priority-plus-navigation--dropdown--item-spacing':
+					getItemSpacingCSS(itemSpacing),
+				'--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color':
+					itemHoverBackgroundColor,
+				'--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color':
+					itemHoverTextColor,
+				'--wp--custom--priority-plus-navigation--dropdown--multi-level-indent':
+					multiLevelIndent,
+			};
+
+			// Add navigation typography styles if present
+			// Font family - convert preset slug to CSS custom property
+			if (navFontFamilyPreset) {
+				styles.fontFamily = `var(--wp--preset--font-family--${navFontFamilyPreset})`;
+			}
+
+			// Font size - use custom first, then preset
+			if (navCustomFontSize) {
+				styles.fontSize = navCustomFontSize;
+			} else if (navFontSizePreset) {
+				styles.fontSize = `var(--wp--preset--font-size--${navFontSizePreset})`;
+			}
+
+			// Font style, weight, line height, letter spacing
+			if (navFontStyle) {
+				styles.fontStyle = navFontStyle;
+			}
+			if (navFontWeight) {
+				styles.fontWeight = navFontWeight;
+			}
+			if (navLineHeight) {
+				styles.lineHeight = navLineHeight;
+			}
+			if (navLetterSpacing) {
+				styles.letterSpacing = navLetterSpacing;
+			}
+
+			// Text color - use custom first, then preset
+			if (navCustomTextColor) {
+				styles.color = navCustomTextColor;
+			} else if (navTextColorPreset) {
+				styles.color = `var(--wp--preset--color--${navTextColorPreset})`;
+			}
+
+			return styles;
+		},
 		[
 			backgroundColor,
 			borderColor,
@@ -171,16 +222,25 @@ export function DropdownPreview({ dropdownStyles }) {
 			itemHoverBackgroundColor,
 			itemHoverTextColor,
 			multiLevelIndent,
+			navFontFamilyPreset,
+			navFontSizePreset,
+			navCustomFontSize,
+			navFontStyle,
+			navFontWeight,
+			navLineHeight,
+			navLetterSpacing,
+			navTextColorPreset,
+			navCustomTextColor,
 		]
 	);
+
+	// Build class names - just use base classes, styles applied via inline styles
+	const dropdownClasses = 'priority-plus-navigation-dropdown is-open';
 
 	return (
 		<div className="dropdown-preview-wrapper">
 			{/* Use exact same classes as frontend for 100% accuracy */}
-			<ul
-				className="priority-plus-navigation-dropdown is-open"
-				style={previewStyles}
-			>
+			<ul className={dropdownClasses} style={previewStyles}>
 				<li>
 					<a href="#" onClick={(e) => e.preventDefault()}>
 						{__('Home', 'priority-plus-navigation')}

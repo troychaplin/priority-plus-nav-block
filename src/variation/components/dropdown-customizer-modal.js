@@ -399,6 +399,7 @@ export function DropdownCustomizerModal({
 				<div className="dropdown-customizer-preview">
 					<DropdownPreview
 						dropdownStyles={priorityNavDropdownStyles}
+						navigationAttributes={attributes}
 					/>
 				</div>
 			</div>

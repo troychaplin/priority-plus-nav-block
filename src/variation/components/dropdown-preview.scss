@@ -19,8 +19,15 @@
 		min-width: 280px;
 		max-width: 320px;
 		width: 100%;
-		font-size: 16px;
-		line-height: 1.5;
+
+		// Ensure buttons inherit typography from the dropdown
+		button {
+			font-family: inherit;
+			font-size: inherit;
+			font-weight: inherit;
+			line-height: inherit;
+			letter-spacing: inherit;
+		}
 	}
 
 	// Demo hover state for the "About (Hover)" item
