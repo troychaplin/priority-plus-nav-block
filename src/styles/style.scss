@@ -3,6 +3,9 @@
 .is-style-priority-plus-navigation {
 	position: relative;
 
+	// Reset any WordPress core border styles that might interfere
+	border: none !important;
+
 	.priority-plus-navigation-more-button {
 		display: flex;
 		align-items: center;
