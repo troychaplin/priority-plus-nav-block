@@ -18,10 +18,21 @@
 		border-radius: var(--priority-plus-navigation--border-radius);
 		transition: background 0.2s ease, color 0.2s ease;
 		cursor: pointer;
+		outline: none;
 
 		&:hover {
 			background: var(--priority-plus-navigation--background-hover);
 			color: var(--priority-plus-navigation--color-hover);
+		}
+
+		&:focus {
+			background: var(--priority-plus-navigation--background-hover);
+			color: var(--priority-plus-navigation--color-hover);
+		}
+
+		&:focus-visible {
+			outline: 2px solid currentColor;
+			outline-offset: -2px;
 		}
 
 		.priority-plus-navigation-icon {
@@ -164,6 +175,7 @@
 			color: inherit;
 			text-align: left;
 			transition: background 0.2s ease, color 0.2s ease;
+			outline: none;
 
 			.priority-plus-navigation-accordion-text {
 				flex: 1;
@@ -177,6 +189,16 @@
 			&:hover {
 				background: var(--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color);
 				color: var(--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color);
+			}
+
+			&:focus {
+				background: var(--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color);
+				color: var(--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color);
+			}
+
+			&:focus-visible {
+				outline: 2px solid currentColor;
+				outline-offset: -2px;
 			}
 
 			&[aria-expanded="true"] {
@@ -209,6 +231,7 @@
 			color: inherit;
 			flex-shrink: 0;
 			transition: background 0.2s ease, color 0.2s ease;
+			outline: none;
 
 			.priority-plus-navigation-accordion-arrow {
 				transition: transform 0.2s ease;
@@ -218,6 +241,16 @@
 			&:hover {
 				background: var(--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color);
 				color: var(--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color);
+			}
+
+			&:focus {
+				background: var(--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color);
+				color: var(--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color);
+			}
+
+			&:focus-visible {
+				outline: 2px solid currentColor;
+				outline-offset: -2px;
 			}
 
 			&[aria-expanded="true"] {
