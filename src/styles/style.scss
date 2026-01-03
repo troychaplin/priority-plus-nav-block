@@ -63,10 +63,10 @@
 		top: 100%;
 		right: 0;
 		min-width: 200px;
-		background: var(--wp--custom--priority-plus-navigation--dropdown--background-color);
-		border-width: var(--wp--custom--priority-plus-navigation--dropdown--border-width);
-		border-style: solid;
-		border-color: var(--wp--custom--priority-plus-navigation--dropdown--border-color);
+		background: var(--wp--custom--priority-plus-navigation--dropdown--background-color) !important;
+		border-width: var(--wp--custom--priority-plus-navigation--dropdown--border-width) !important;
+		border-style: solid !important;
+		border-color: var(--wp--custom--priority-plus-navigation--dropdown--border-color) !important;
 		border-radius: var(--wp--custom--priority-plus-navigation--dropdown--border-radius);
 		box-shadow: var(--wp--custom--priority-plus-navigation--dropdown--box-shadow);
 		list-style: none;

@@ -314,7 +314,12 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 									borderWidth: '1px',
 									borderRadius: '4px',
 									boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-									itemSpacing: undefined,
+									itemSpacing: {
+									top: '0.75rem',
+									right: '1rem',
+									bottom: '0.75rem',
+									left: '1rem',
+								},
 									itemHoverBackgroundColor:
 										'rgba(0, 0, 0, 0.05)',
 									itemHoverTextColor: 'inherit',

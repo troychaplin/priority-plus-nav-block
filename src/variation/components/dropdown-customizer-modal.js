@@ -16,6 +16,7 @@ import {
 	useSetting,
 } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
+import { useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -28,10 +29,50 @@ export function DropdownCustomizerModal({
 	setAttributes,
 	onClose,
 }) {
-	const { priorityNavDropdownStyles = {} } = attributes;
+	// Default dropdown styles
+	const defaultDropdownStyles = {
+		backgroundColor: '#ffffff',
+		borderColor: '#dddddd',
+		borderWidth: '1px',
+		borderRadius: '4px',
+		boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+		itemSpacing: {
+			top: '0.75rem',
+			right: '1rem',
+			bottom: '0.75rem',
+			left: '1rem',
+		},
+		itemHoverBackgroundColor: 'rgba(0, 0, 0, 0.05)',
+		itemHoverTextColor: 'inherit',
+		multiLevelIndent: '1.25rem',
+	};
+
+	// Merge defaults with existing attributes (deep merge for nested objects)
+	const existingStyles = attributes.priorityNavDropdownStyles || {};
+	const priorityNavDropdownStyles = {
+		...defaultDropdownStyles,
+		...existingStyles,
+		// If itemSpacing exists but is empty/undefined, use default
+		itemSpacing: existingStyles.itemSpacing || defaultDropdownStyles.itemSpacing,
+	};
 
 	// Get spacing sizes from theme
 	const spacingSizes = useSetting('spacing.spacingSizes') || [];
+
+	// Initialize defaults on mount if missing
+	useEffect(() => {
+		const existingStyles = attributes.priorityNavDropdownStyles || {};
+
+		// Check if we need to set defaults
+		if (!existingStyles.itemSpacing) {
+			setAttributes({
+				priorityNavDropdownStyles: {
+					...defaultDropdownStyles,
+					...existingStyles,
+				},
+			});
+		}
+	}, []); // Only run on mount
 
 	// Helper to update a single style property
 	const updateStyle = (key, value) => {
@@ -60,9 +101,9 @@ export function DropdownCustomizerModal({
 		}
 		// Check if it's an object (SpacingSizesControl format) or string (legacy format)
 		if (typeof priorityNavDropdownStyles.itemSpacing === 'object') {
-			return (
-				Object.keys(priorityNavDropdownStyles.itemSpacing).length > 0
-			);
+			// Check if object has any non-empty values
+			const values = Object.values(priorityNavDropdownStyles.itemSpacing);
+			return values.some((value) => value && value !== '');
 		}
 		return !!priorityNavDropdownStyles.itemSpacing;
 	};
@@ -230,7 +271,12 @@ export function DropdownCustomizerModal({
 					<ToolsPanel
 						label={__('Dropdown Items', 'priority-plus-navigation')}
 						resetAll={() => {
-							updateStyle('itemSpacing', undefined);
+							updateStyle('itemSpacing', {
+							top: '0.75rem',
+							right: '1rem',
+							bottom: '0.75rem',
+							left: '1rem',
+						});
 							updateStyle(
 								'itemHoverBackgroundColor',
 								'rgba(0, 0, 0, 0.05)'
@@ -247,7 +293,12 @@ export function DropdownCustomizerModal({
 								'priority-plus-navigation'
 							)}
 							onDeselect={() =>
-								updateStyle('itemSpacing', undefined)
+								updateStyle('itemSpacing', {
+									top: '0.75rem',
+									right: '1rem',
+									bottom: '0.75rem',
+									left: '1rem',
+								})
 							}
 							isShownByDefault
 						>
