@@ -1,0 +1,61 @@
+.priority-plus-dropdown-customizer {
+	// Override default modal content padding
+	.components-modal__content {
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		min-height: 600px;
+	}
+
+	.dropdown-customizer-layout {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2rem;
+		padding: 2rem;
+		flex: 1;
+		overflow: hidden;
+	}
+
+	.dropdown-customizer-controls {
+		overflow-y: auto;
+		padding-right: 1rem;
+
+		// Spacing between ToolsPanels
+		.components-tools-panel {
+			margin-bottom: 1.5rem;
+		}
+	}
+
+	.dropdown-customizer-preview {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #f5f5f5;
+		border-radius: 4px;
+		padding: 2rem;
+		position: sticky;
+		top: 0;
+		overflow-y: auto;
+	}
+
+	.dropdown-customizer-footer {
+		padding: 1rem 2rem;
+		border-top: 1px solid #ddd;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background: #fff;
+	}
+
+	// Responsive: stack on smaller screens
+	@media (max-width: 960px) {
+		.dropdown-customizer-layout {
+			grid-template-columns: 1fr;
+		}
+
+		.dropdown-customizer-preview {
+			position: static;
+			min-height: 300px;
+		}
+	}
+}

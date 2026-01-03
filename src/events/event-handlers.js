@@ -54,7 +54,9 @@ export function setupEventListeners(elements, instance, callbacks) {
 
 	// Event delegation for accordion toggles
 	const dropdownClickHandler = (e) => {
-		const toggle = e.target.closest('.priority-plus-navigation-accordion-toggle');
+		const toggle = e.target.closest(
+			'.priority-plus-navigation-accordion-toggle'
+		);
 		if (toggle) {
 			e.preventDefault();
 			e.stopPropagation();

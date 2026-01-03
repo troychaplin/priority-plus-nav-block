@@ -14,11 +14,17 @@ import {
 	SelectControl,
 	BoxControl,
 	Notice,
+	Button,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
-import { useEffect, useRef } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
+
+/**
+ * Internal dependencies
+ */
+import { DropdownCustomizerModal } from './components/dropdown-customizer-modal';
 
 /**
  * Add DOM manipulation to disable 'always' overlay option when Priority+ is active
@@ -102,6 +108,10 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 			overlayMenu,
 		} = attributes;
 
+		// State for dropdown customizer modal
+		const [isDropdownCustomizerOpen, setIsDropdownCustomizerOpen] =
+			useState(false);
+
 		// Automatically change overlayMenu from 'always' to 'mobile' when Priority+ is active
 		useEffect(() => {
 			if (isPriorityNavVariation && overlayMenu === 'always') {
@@ -135,7 +145,10 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 
 				<InspectorControls group="styles">
 					<ToolsPanel
-						label={__('Priority Plus Settings', 'priority-plus-navigation')}
+						label={__(
+							'Priority Plus Settings',
+							'priority-plus-navigation'
+						)}
 						resetAll={() =>
 							setAttributes({
 								priorityNavMoreLabel: 'More',
@@ -144,7 +157,10 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 					>
 						<ToolsPanelItem
 							hasValue={() => !!priorityNavMoreLabel}
-							label={__('More Button Label', 'priority-plus-navigation')}
+							label={__(
+								'More Button Label',
+								'priority-plus-navigation'
+							)}
 							onDeselect={() =>
 								setAttributes({
 									priorityNavMoreLabel: 'More',
@@ -153,7 +169,10 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 							isShownByDefault
 						>
 							<TextControl
-								label={__('More Button Label', 'priority-plus-navigation')}
+								label={__(
+									'More Button Label',
+									'priority-plus-navigation'
+								)}
 								value={priorityNavMoreLabel}
 								onChange={(value) =>
 									setAttributes({
@@ -168,10 +187,16 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 						</ToolsPanelItem>
 					</ToolsPanel>
 					<PanelColorSettings
-						title={__('Priority Plus Colors', 'priority-plus-navigation')}
+						title={__(
+							'Priority Plus Colors',
+							'priority-plus-navigation'
+						)}
 						colorSettings={[
 							{
-								label: __('Button Text Color', 'priority-plus-navigation'),
+								label: __(
+									'Button Text Color',
+									'priority-plus-navigation'
+								),
 								value: priorityNavMoreTextColor,
 								onChange: (color) =>
 									setAttributes({
@@ -222,7 +247,10 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 						]}
 					/>
 					<ToolsPanel
-						label={__('Priority Plus Button', 'priority-plus-navigation')}
+						label={__(
+							'Priority Plus Button',
+							'priority-plus-navigation'
+						)}
 						resetAll={() =>
 							setAttributes({
 								priorityNavMorePadding: undefined,
@@ -247,13 +275,19 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 											priorityNavMorePadding: value,
 										})
 									}
-									label={__('Button Padding', 'priority-plus-navigation')}
+									label={__(
+										'Button Padding',
+										'priority-plus-navigation'
+									)}
 									sides={['top', 'right', 'bottom', 'left']}
 									units={['px', 'em', 'rem', 'vh', 'vw']}
 								/>
 							) : (
 								<BoxControl
-									label={__('Button Padding', 'priority-plus-navigation')}
+									label={__(
+										'Button Padding',
+										'priority-plus-navigation'
+									)}
 									values={priorityNavMorePadding}
 									onChange={(value) =>
 										setAttributes({
@@ -267,7 +301,73 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 							)}
 						</ToolsPanelItem>
 					</ToolsPanel>
+					<ToolsPanel
+						label={__(
+							'Dropdown Styles',
+							'priority-plus-navigation'
+						)}
+						resetAll={() => {
+							setAttributes({
+								priorityNavDropdownStyles: {
+									backgroundColor: '#ffffff',
+									borderColor: '#dddddd',
+									borderWidth: '1px',
+									borderRadius: '4px',
+									boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+									itemSpacing: '0.75rem 1.25rem',
+									itemHoverBackgroundColor:
+										'rgba(0, 0, 0, 0.05)',
+									itemHoverTextColor: 'inherit',
+									multiLevelIndent: '1.25rem',
+								},
+							});
+						}}
+					>
+						<ToolsPanelItem
+							hasValue={() => {
+								const { priorityNavDropdownStyles } =
+									attributes;
+								return (
+									!!priorityNavDropdownStyles &&
+									Object.keys(priorityNavDropdownStyles)
+										.length > 0
+								);
+							}}
+							label={__(
+								'Customize Dropdown',
+								'priority-plus-navigation'
+							)}
+							onDeselect={() =>
+								setAttributes({
+									priorityNavDropdownStyles: undefined,
+								})
+							}
+							isShownByDefault
+						>
+							<Button
+								variant="secondary"
+								onClick={() =>
+									setIsDropdownCustomizerOpen(true)
+								}
+								style={{ width: '100%' }}
+							>
+								{__(
+									'Customize Dropdown Styles',
+									'priority-plus-navigation'
+								)}
+							</Button>
+						</ToolsPanelItem>
+					</ToolsPanel>
 				</InspectorControls>
+
+				{/* Render modal conditionally */}
+				{isDropdownCustomizerOpen && (
+					<DropdownCustomizerModal
+						attributes={attributes}
+						setAttributes={setAttributes}
+						onClose={() => setIsDropdownCustomizerOpen(false)}
+					/>
+				)}
 			</>
 		);
 	};

@@ -19,7 +19,8 @@ export function createMoreButton(list, moreLabel = DEFAULT_MORE_LABEL) {
 	// Create button
 	const moreButton = document.createElement('button');
 	moreButton.type = 'button';
-	moreButton.className = 'priority-plus-navigation-more-button wp-block-navigation-item';
+	moreButton.className =
+		'priority-plus-navigation-more-button wp-block-navigation-item';
 	moreButton.setAttribute('aria-expanded', 'false');
 	moreButton.setAttribute('aria-haspopup', 'true');
 	moreButton.setAttribute('aria-label', moreLabel);
