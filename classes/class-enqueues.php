@@ -320,17 +320,8 @@ class Enqueues extends Plugin_Module {
 		// Match the opening <nav> tag with wp-block-navigation class.
 		$pattern = '/(<nav[^>]*\bclass="[^"]*wp-block-navigation[^"]*")/i';
 
-		// Extract existing style attribute if present.
-		$existing_style = '';
-		if ( preg_match( '/<nav[^>]*\bclass="[^"]*wp-block-navigation[^"]*"[^>]*style="([^"]*)"/i', $block_content, $style_matches ) ) {
-			$existing_style = $style_matches[1];
-		}
-
-		// Build style attribute with CSS custom properties for colors.
+		// Build style attribute with CSS custom properties.
 		$style_parts = array();
-		if ( ! empty( $existing_style ) ) {
-			$style_parts[] = $existing_style;
-		}
 
 		// Add our CSS custom properties.
 		if ( ! empty( $more_background_color ) ) {
@@ -424,7 +415,13 @@ class Enqueues extends Plugin_Module {
 
 		// Add style attribute if we have any styles.
 		if ( ! empty( $style_parts ) ) {
-			$attributes .= ' style="' . implode( '; ', $style_parts ) . '"';
+			// Join with semicolons and ensure proper formatting
+			$style_attr = implode( '; ', $style_parts );
+
+			// Debug: Log the final style attribute to help diagnose issues
+			// error_log( 'Priority Plus Nav - Final style attribute: ' . $style_attr );
+
+			$attributes .= ' style="' . $style_attr . ';"';
 		}
 
 		// Remove existing style attribute from the nav tag if it exists, since we're adding it back.

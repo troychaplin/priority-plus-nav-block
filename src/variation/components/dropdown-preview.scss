@@ -20,16 +20,10 @@
 		max-width: 320px;
 		width: 100%;
 
-		// Ensure buttons inherit typography from the dropdown
+		// Ensure buttons inherit font family and size from the dropdown
 		button {
 			font-family: inherit;
 			font-size: inherit;
-			font-style: inherit;
-			font-weight: inherit;
-			line-height: inherit;
-			letter-spacing: inherit;
-			text-decoration: inherit;
-			text-transform: inherit;
 		}
 	}
 

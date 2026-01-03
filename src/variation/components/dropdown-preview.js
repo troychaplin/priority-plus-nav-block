@@ -119,12 +119,11 @@ function getItemSpacingCSS(spacing) {
  * Displays a live preview of the dropdown menu using the exact same classes
  * and structure as the frontend to ensure 100% accuracy.
  *
- * @param {Object} props                      - Component props
- * @param {Object} props.dropdownStyles       - Dropdown style settings
- * @param {Object} props.navigationAttributes - Navigation block attributes for inheriting styles
+ * @param {Object} props                - Component props
+ * @param {Object} props.dropdownStyles - Dropdown style settings
  * @return {JSX.Element} Preview component
  */
-export function DropdownPreview({ dropdownStyles, navigationAttributes }) {
+export function DropdownPreview({ dropdownStyles }) {
 	const {
 		backgroundColor = '#ffffff',
 		borderColor = '#dddddd',
@@ -140,21 +139,9 @@ export function DropdownPreview({ dropdownStyles, navigationAttributes }) {
 	// State for accordion open/closed
 	const [isAccordionOpen, setIsAccordionOpen] = useState(true);
 
-	// Extract navigation block typography/appearance styles
-	const navStyles = navigationAttributes?.style || {};
-	const navFontSizePreset = navigationAttributes?.fontSize; // Preset slug like "x-large"
-	const navFontFamilyPreset = navigationAttributes?.fontFamily; // Preset slug like "fira-code"
-	const navFontStyle = navStyles?.typography?.fontStyle; // "normal" or "italic"
-	const navFontWeight = navStyles?.typography?.fontWeight;
-	const navLineHeight = navStyles?.typography?.lineHeight;
-	const navLetterSpacing = navStyles?.typography?.letterSpacing;
-	const navTextDecoration = navStyles?.typography?.textDecoration; // "none", "underline", etc.
-	const navTextTransform = navStyles?.typography?.textTransform; // "none", "uppercase", "lowercase", "capitalize"
-	const navCustomFontSize = navStyles?.typography?.fontSize; // Custom size like "20px"
-
 	// Memoize the inline styles using the same CSS custom property names as the frontend
 	const previewStyles = useMemo(() => {
-		const styles = {
+		return {
 			'--wp--custom--priority-plus-navigation--dropdown--background-color':
 				backgroundColor,
 			'--wp--custom--priority-plus-navigation--dropdown--border-color':
@@ -174,44 +161,6 @@ export function DropdownPreview({ dropdownStyles, navigationAttributes }) {
 			'--wp--custom--priority-plus-navigation--dropdown--multi-level-indent':
 				multiLevelIndent,
 		};
-
-		// Add navigation typography styles if present
-		// Font family - convert preset slug to CSS custom property
-		if (navFontFamilyPreset) {
-			styles.fontFamily = `var(--wp--preset--font-family--${navFontFamilyPreset})`;
-		}
-
-		// Font size - use custom first, then preset
-		if (navCustomFontSize) {
-			styles.fontSize = navCustomFontSize;
-		} else if (navFontSizePreset) {
-			styles.fontSize = `var(--wp--preset--font-size--${navFontSizePreset})`;
-		}
-
-		// Typography styles from navigation
-		if (navFontStyle) {
-			styles.fontStyle = navFontStyle;
-		}
-		if (navFontWeight) {
-			styles.fontWeight = navFontWeight;
-		}
-		if (navLineHeight) {
-			styles.lineHeight = navLineHeight;
-		}
-		if (navLetterSpacing) {
-			styles.letterSpacing = navLetterSpacing;
-		}
-		if (navTextDecoration) {
-			styles.textDecoration = navTextDecoration;
-		}
-		if (navTextTransform) {
-			styles.textTransform = navTextTransform;
-		}
-
-		// NOTE: Text color is NOT inherited from navigation
-		// User will add separate dropdown text color option in modal later
-
-		return styles;
 	}, [
 		backgroundColor,
 		borderColor,
@@ -222,15 +171,6 @@ export function DropdownPreview({ dropdownStyles, navigationAttributes }) {
 		itemHoverBackgroundColor,
 		itemHoverTextColor,
 		multiLevelIndent,
-		navFontFamilyPreset,
-		navFontSizePreset,
-		navCustomFontSize,
-		navFontStyle,
-		navFontWeight,
-		navLineHeight,
-		navLetterSpacing,
-		navTextDecoration,
-		navTextTransform,
 	]);
 
 	// Build class names - just use base classes, styles applied via inline styles
