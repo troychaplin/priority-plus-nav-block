@@ -270,11 +270,6 @@
 			transition: background 0.2s ease, color 0.2s ease;
 			outline: none;
 
-			// .priority-plus-navigation-accordion-arrow {
-			// 	transition: transform 0.2s ease;
-			// 	display: inline-block;
-			// }
-
 			&:hover {
 				background: var(--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color);
 				color: var(--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color);
