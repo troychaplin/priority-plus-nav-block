@@ -3,7 +3,8 @@
  */
 import {
 	TextControl,
-	__experimentalBorderBoxControl as BorderBoxControl,
+	__experimentalBorderControl as BorderControl,
+	__experimentalUnitControl as UnitControl,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
@@ -33,31 +34,37 @@ export function MenuStylesPanel({
 	// Get color palette from theme settings
 	const colors = useSetting('color.palette') || [];
 
-	// Convert individual border properties to BorderBoxControl format
+	// Convert individual border properties to BorderControl format
 	const borderValue = {
 		color: styles.borderColor,
-		style: 'solid',
+		style: styles.borderStyle || 'solid',
 		width: styles.borderWidth,
 	};
 
-	// Handle border changes from BorderBoxControl
+	// Handle border changes from BorderControl
 	const handleBorderChange = (newBorder) => {
-		// BorderBoxControl passes the complete border object
-		// We need to update both color and width in a single update to avoid race conditions
-		if (newBorder !== undefined) {
-			const updates = {};
+		const updates = {};
 
+		// Handle undefined/cleared border
+		if (newBorder === undefined) {
+			updates.borderColor = undefined;
+			updates.borderWidth = undefined;
+			updates.borderStyle = undefined;
+		} else {
 			if (newBorder.color !== undefined) {
 				updates.borderColor = newBorder.color;
 			}
 			if (newBorder.width !== undefined) {
 				updates.borderWidth = newBorder.width;
 			}
-
-			// Update all border properties at once
-			if (Object.keys(updates).length > 0) {
-				updateStyle('border', updates);
+			if (newBorder.style !== undefined) {
+				updates.borderStyle = newBorder.style;
 			}
+		}
+
+		// Update all border properties at once
+		if (Object.keys(updates).length > 0) {
+			updateStyle('border', updates);
 		}
 	};
 
@@ -78,19 +85,19 @@ export function MenuStylesPanel({
 				onDeselect={() => {
 					resetToDefault('borderColor', '#dddddd');
 					resetToDefault('borderWidth', '1px');
+					resetToDefault('borderStyle', 'solid');
 				}}
 				isShownByDefault
 			>
-				<BorderBoxControl
+				<BorderControl
 					label={__('Border', 'priority-plus-navigation')}
 					colors={colors}
 					value={borderValue}
 					onChange={handleBorderChange}
 					enableAlpha={true}
-					enableStyle={false}
+					enableStyle={true}
 					size="__unstable-large"
-					__experimentalHasMultipleOrigins={true}
-					__experimentalIsRenderedInSidebar={true}
+					withSlider={true}
 				/>
 			</ToolsPanelItem>
 
@@ -101,12 +108,16 @@ export function MenuStylesPanel({
 				onDeselect={() => resetToDefault('borderRadius', '4px')}
 				isShownByDefault
 			>
-				<BorderBoxControl
+				<UnitControl
 					label={__('Border Radius', 'priority-plus-navigation')}
-					value={styles.borderRadius}
+					value={styles.borderRadius || '4px'}
 					onChange={(value) => updateStyle('borderRadius', value)}
-					enableAlpha={false}
-					enableStyle={false}
+					units={[
+						{ value: 'px', label: 'px' },
+						{ value: 'rem', label: 'rem' },
+						{ value: 'em', label: 'em' },
+						{ value: '%', label: '%' },
+					]}
 					size="__unstable-large"
 				/>
 			</ToolsPanelItem>
