@@ -88,6 +88,18 @@ addFilter(
 					type: 'object',
 					default: DEFAULT_DROPDOWN_STYLES,
 				},
+				priorityNavTypographyFontFamily: {
+					type: 'string',
+				},
+				priorityNavTypographyFontSize: {
+					type: 'string',
+				},
+				priorityNavTypographyFontWeight: {
+					type: 'string',
+				},
+				priorityNavTypographyFontStyle: {
+					type: 'string',
+				},
 			},
 		};
 	}

@@ -124,6 +124,59 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 			}
 		}, [isPriorityNavVariation, overlayMenu, setAttributes]);
 
+		// Store typography attribute values for preview
+		useEffect(() => {
+			if (!isPriorityNavVariation) {
+				return;
+			}
+
+			// Store fontSize and fontFamily slug values directly from attributes
+			// Also get fontWeight and fontStyle from style object
+			const fontWeight = attributes.style?.typography?.fontWeight;
+			const fontStyle = attributes.style?.typography?.fontStyle;
+
+			console.log('Typography Capture - All Attributes:', attributes);
+			console.log('Typography Capture - Source values:', {
+				fontSize: attributes.fontSize,
+				fontFamily: attributes.fontFamily,
+				fontWeight,
+				fontStyle,
+			});
+			console.log('Typography Capture - Currently stored values:', {
+				priorityNavTypographyFontFamily: attributes.priorityNavTypographyFontFamily,
+				priorityNavTypographyFontSize: attributes.priorityNavTypographyFontSize,
+				priorityNavTypographyFontWeight: attributes.priorityNavTypographyFontWeight,
+				priorityNavTypographyFontStyle: attributes.priorityNavTypographyFontStyle,
+			});
+
+			// Only update if values have changed to avoid infinite loops
+			if (
+				attributes.fontSize !== attributes.priorityNavTypographyFontSize ||
+				attributes.fontFamily !== attributes.priorityNavTypographyFontFamily ||
+				fontWeight !== attributes.priorityNavTypographyFontWeight ||
+				fontStyle !== attributes.priorityNavTypographyFontStyle
+			) {
+				console.log('Typography Capture - Updating stored values');
+				setAttributes({
+					priorityNavTypographyFontFamily: attributes.fontFamily,
+					priorityNavTypographyFontSize: attributes.fontSize,
+					priorityNavTypographyFontWeight: fontWeight,
+					priorityNavTypographyFontStyle: fontStyle,
+				});
+			}
+		}, [
+			isPriorityNavVariation,
+			attributes.fontSize,
+			attributes.fontFamily,
+			attributes.style?.typography?.fontWeight,
+			attributes.style?.typography?.fontStyle,
+			attributes.priorityNavTypographyFontFamily,
+			attributes.priorityNavTypographyFontSize,
+			attributes.priorityNavTypographyFontWeight,
+			attributes.priorityNavTypographyFontStyle,
+			setAttributes,
+		]);
+
 		// Get spacing sizes from theme.
 		const spacingSizes = useSetting('spacing.spacingSizes') || [];
 

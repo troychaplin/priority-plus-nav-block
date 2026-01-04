@@ -119,11 +119,12 @@ function getItemSpacingCSS(spacing) {
  * Displays a live preview of the dropdown menu using the exact same classes
  * and structure as the frontend to ensure 100% accuracy.
  *
- * @param {Object} props                - Component props
- * @param {Object} props.dropdownStyles - Dropdown style settings
+ * @param {Object} props                   - Component props
+ * @param {Object} props.dropdownStyles    - Dropdown style settings
+ * @param {Object} props.typographyStyles  - Typography values from navigation block
  * @return {JSX.Element} Preview component
  */
-export function DropdownPreview({ dropdownStyles }) {
+export function DropdownPreview({ dropdownStyles, typographyStyles = {} }) {
 	const {
 		backgroundColor = '#ffffff',
 		borderColor = '#dddddd',
@@ -141,7 +142,7 @@ export function DropdownPreview({ dropdownStyles }) {
 
 	// Memoize the inline styles using the same CSS custom property names as the frontend
 	const previewStyles = useMemo(() => {
-		return {
+		const styles = {
 			'--wp--custom--priority-plus-navigation--dropdown--background-color':
 				backgroundColor,
 			'--wp--custom--priority-plus-navigation--dropdown--border-color':
@@ -161,6 +162,22 @@ export function DropdownPreview({ dropdownStyles }) {
 			'--wp--custom--priority-plus-navigation--dropdown--multi-level-indent':
 				multiLevelIndent,
 		};
+
+		// Add typography styles from navigation block
+		if (typographyStyles.fontFamily) {
+			styles.fontFamily = typographyStyles.fontFamily;
+		}
+		if (typographyStyles.fontSize) {
+			styles.fontSize = typographyStyles.fontSize;
+		}
+		if (typographyStyles.fontWeight) {
+			styles.fontWeight = typographyStyles.fontWeight;
+		}
+		if (typographyStyles.fontStyle) {
+			styles.fontStyle = typographyStyles.fontStyle;
+		}
+
+		return styles;
 	}, [
 		backgroundColor,
 		borderColor,
@@ -171,9 +188,10 @@ export function DropdownPreview({ dropdownStyles }) {
 		itemHoverBackgroundColor,
 		itemHoverTextColor,
 		multiLevelIndent,
+		typographyStyles,
 	]);
 
-	// Build class names - just use base classes, styles applied via inline styles
+	// Build class names
 	const dropdownClasses = 'priority-plus-navigation-dropdown is-open';
 
 	return (
