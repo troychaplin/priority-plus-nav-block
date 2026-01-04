@@ -89,11 +89,15 @@ function getBorderCSSProperties(border) {
 
 		sides.forEach((side) => {
 			const sideBorder = border[side];
-			if (sideBorder && (sideBorder.color || sideBorder.width || sideBorder.style)) {
+			if (
+				sideBorder &&
+				(sideBorder.color || sideBorder.width || sideBorder.style)
+			) {
 				const width = sideBorder.width || defaults.width;
 				const style = sideBorder.style || defaults.style;
 				const color = sideBorder.color || defaults.color;
-				result[`${cssVarPrefix}border-${side}`] = `${width} ${style} ${color}`;
+				result[`${cssVarPrefix}border-${side}`] =
+					`${width} ${style} ${color}`;
 			}
 		});
 

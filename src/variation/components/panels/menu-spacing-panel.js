@@ -37,7 +37,10 @@ export function MenuSpacingPanel({
 }) {
 	return (
 		<ToolsPanel
-			label={__('Dropdown Menu Spacing', 'priority-plus-navigation')}
+			label={__(
+				'Priority Plus Nav Item Spacing',
+				'priority-plus-navigation'
+			)}
 			resetAll={() => {
 				updateStyle('itemSpacing', DEFAULT_DROPDOWN_STYLES.itemSpacing);
 				updateStyle(
@@ -48,7 +51,7 @@ export function MenuSpacingPanel({
 		>
 			<ToolsPanelItem
 				hasValue={hasItemSpacingValue}
-				label={__('Item Spacing', 'priority-plus-navigation')}
+				label={__('Padding', 'priority-plus-navigation')}
 				onDeselect={() =>
 					updateStyle(
 						'itemSpacing',
@@ -62,7 +65,7 @@ export function MenuSpacingPanel({
 						values={styles.itemSpacing}
 						onChange={(value) => updateStyle('itemSpacing', value)}
 						label={__(
-							'Item Spacing (Padding)',
+							'Nav Item Spacing',
 							'priority-plus-navigation'
 						)}
 						sides={['top', 'right', 'bottom', 'left']}
@@ -71,7 +74,7 @@ export function MenuSpacingPanel({
 				) : (
 					<BoxControl
 						label={__(
-							'Item Spacing (Padding)',
+							'Nav Item Spacing',
 							'priority-plus-navigation'
 						)}
 						values={styles.itemSpacing}
@@ -84,12 +87,15 @@ export function MenuSpacingPanel({
 			</ToolsPanelItem>
 			<ToolsPanelItem
 				hasValue={() => hasValue('multiLevelIndent')}
-				label={__('Multi-level Indent', 'priority-plus-navigation')}
+				label={__('Submenu Indentation', 'priority-plus-navigation')}
 				onDeselect={() => updateStyle('multiLevelIndent', '1.25rem')}
 				isShownByDefault
 			>
 				<UnitControl
-					label={__('Multi-level Indent', 'priority-plus-navigation')}
+					label={__(
+						'Submenu Indentation',
+						'priority-plus-navigation'
+					)}
 					value={styles.multiLevelIndent || '1.25rem'}
 					onChange={(value) => updateStyle('multiLevelIndent', value)}
 					help={__(

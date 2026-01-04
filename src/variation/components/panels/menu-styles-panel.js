@@ -2,12 +2,7 @@
  * WordPress dependencies
  */
 import {
-	BaseControl,
-	Button,
-	Dropdown,
-	FlexItem,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
+	ComboboxControl,
 	__experimentalBorderBoxControl as BorderBoxControl,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
@@ -17,7 +12,7 @@ import {
 	__experimentalBorderRadiusControl as BorderRadiusControl,
 } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import { useMemo } from '@wordpress/element';
+import { useMemo, useState } from '@wordpress/element';
 
 /**
  * Check if border has a value (handles both flat and per-side formats)
@@ -77,7 +72,7 @@ const DEFAULT_SHADOW = '0 4px 12px rgba(0, 0, 0, 0.15)';
 /**
  * ShadowPresetPicker Component
  *
- * A dropdown picker for selecting shadow presets from the theme.
+ * A combobox picker for selecting shadow presets from the theme.
  * Falls back to a "None" option and a default shadow if no theme presets exist.
  *
  * @param {Object}   props          - Component props
@@ -90,18 +85,16 @@ function ShadowPresetPicker({ value, onChange }) {
 	const themeShadows = useSetting('shadow.presets.theme') || [];
 	const defaultShadows = useSetting('shadow.presets.default') || [];
 
-	// Combine shadow presets with built-in options
+	// Build options for ComboboxControl (requires value/label format)
 	const shadowOptions = useMemo(() => {
 		const options = [
 			{
-				name: __('None', 'priority-plus-navigation'),
-				slug: 'none',
-				shadow: 'none',
+				value: 'none',
+				label: __('None', 'priority-plus-navigation'),
 			},
 			{
-				name: __('Default', 'priority-plus-navigation'),
-				slug: 'default',
-				shadow: DEFAULT_SHADOW,
+				value: DEFAULT_SHADOW,
+				label: __('Default', 'priority-plus-navigation'),
 			},
 		];
 
@@ -109,9 +102,8 @@ function ShadowPresetPicker({ value, onChange }) {
 		if (themeShadows.length > 0) {
 			themeShadows.forEach((preset) => {
 				options.push({
-					name: preset.name,
-					slug: preset.slug,
-					shadow: preset.shadow,
+					value: preset.shadow,
+					label: preset.name,
 				});
 			});
 		}
@@ -120,9 +112,8 @@ function ShadowPresetPicker({ value, onChange }) {
 		if (defaultShadows.length > 0) {
 			defaultShadows.forEach((preset) => {
 				options.push({
-					name: preset.name,
-					slug: preset.slug,
-					shadow: preset.shadow,
+					value: preset.shadow,
+					label: preset.name,
 				});
 			});
 		}
@@ -130,85 +121,38 @@ function ShadowPresetPicker({ value, onChange }) {
 		return options;
 	}, [themeShadows, defaultShadows]);
 
-	// Find the currently selected option
-	const selectedOption = useMemo(() => {
-		if (!value || value === 'none') {
-			return shadowOptions.find((opt) => opt.slug === 'none');
+	// State for filtering options
+	const [filteredOptions, setFilteredOptions] = useState(shadowOptions);
+
+	// Handle filter changes for search functionality
+	const handleFilterChange = (inputValue) => {
+		if (!inputValue) {
+			setFilteredOptions(shadowOptions);
+			return;
 		}
-		// Try to find by exact shadow value match
-		const match = shadowOptions.find((opt) => opt.shadow === value);
-		if (match) {
-			return match;
-		}
-		// If no match, it's a custom value - show as "Custom"
-		return {
-			name: __('Custom', 'priority-plus-navigation'),
-			slug: 'custom',
-			shadow: value,
-		};
-	}, [value, shadowOptions]);
+		const lowerInput = inputValue.toLowerCase();
+		setFilteredOptions(
+			shadowOptions.filter((option) =>
+				option.label.toLowerCase().includes(lowerInput)
+			)
+		);
+	};
+
+	// Handle selection - ComboboxControl passes the value directly
+	const handleChange = (newValue) => {
+		onChange(newValue);
+	};
 
 	return (
-		<BaseControl
-			label={__('Shadow', 'priority-plus-navigation')}
+		<ComboboxControl
+			__next40pxDefaultSize
 			__nextHasNoMarginBottom
-		>
-			<Dropdown
-				className="priority-plus-shadow-picker"
-				contentClassName="priority-plus-shadow-picker__popover"
-				popoverProps={{ placement: 'left-start', offset: 36 }}
-				renderToggle={({ isOpen, onToggle }) => (
-					<Button
-						onClick={onToggle}
-						aria-expanded={isOpen}
-						className="priority-plus-shadow-picker__toggle"
-					>
-						<HStack justify="flex-start">
-							<FlexItem
-								className="priority-plus-shadow-picker__preview"
-								style={{
-									boxShadow:
-										selectedOption?.shadow || 'none',
-								}}
-							/>
-							<FlexItem>
-								{selectedOption?.name ||
-									__('Select shadow', 'priority-plus-navigation')}
-							</FlexItem>
-						</HStack>
-					</Button>
-				)}
-				renderContent={({ onClose }) => (
-					<VStack
-						spacing={2}
-						className="priority-plus-shadow-picker__options"
-					>
-						{shadowOptions.map((option) => (
-							<Button
-								key={option.slug}
-								onClick={() => {
-									onChange(option.shadow);
-									onClose();
-								}}
-								className={`priority-plus-shadow-picker__option ${
-									selectedOption?.slug === option.slug
-										? 'is-selected'
-										: ''
-								}`}
-							>
-								<HStack justify="flex-start">
-									<FlexItem
-										className="priority-plus-shadow-picker__preview"
-										style={{ boxShadow: option.shadow }}
-									/>
-									<FlexItem>{option.name}</FlexItem>
-								</HStack>
-							</Button>
-						))}
-					</VStack>
-				)}
-			/>
-		</BaseControl>
+			label={__('Shadow', 'priority-plus-navigation')}
+			value={value}
+			onChange={handleChange}
+			options={filteredOptions}
+			onFilterValueChange={handleFilterChange}
+		/>
 	);
 }
 
@@ -245,7 +189,7 @@ export function MenuStylesPanel({
 
 	return (
 		<ToolsPanel
-			label={__('Dropdown Menu Styles', 'priority-plus-navigation')}
+			label={__('Priority Plus Menu Styles', 'priority-plus-navigation')}
 			resetAll={() => {
 				updateStyle('border', undefined);
 				updateStyle('borderRadius', undefined);
