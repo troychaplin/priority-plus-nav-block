@@ -2,7 +2,12 @@
  * WordPress dependencies
  */
 import {
-	TextControl,
+	BaseControl,
+	Button,
+	Dropdown,
+	FlexItem,
+	__experimentalHStack as HStack,
+	__experimentalVStack as VStack,
 	__experimentalBorderBoxControl as BorderBoxControl,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
@@ -12,6 +17,7 @@ import {
 	__experimentalBorderRadiusControl as BorderRadiusControl,
 } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
+import { useMemo } from '@wordpress/element';
 
 /**
  * Check if border has a value (handles both flat and per-side formats)
@@ -64,6 +70,149 @@ function hasBorderRadiusValue(borderRadius) {
 }
 
 /**
+ * Default shadow value used when no shadow is selected
+ */
+const DEFAULT_SHADOW = '0 4px 12px rgba(0, 0, 0, 0.15)';
+
+/**
+ * ShadowPresetPicker Component
+ *
+ * A dropdown picker for selecting shadow presets from the theme.
+ * Falls back to a "None" option and a default shadow if no theme presets exist.
+ *
+ * @param {Object}   props          - Component props
+ * @param {string}   props.value    - Current shadow value
+ * @param {Function} props.onChange - Callback when shadow changes
+ * @return {JSX.Element} Shadow preset picker component
+ */
+function ShadowPresetPicker({ value, onChange }) {
+	// Get shadow presets from theme settings
+	const themeShadows = useSetting('shadow.presets.theme') || [];
+	const defaultShadows = useSetting('shadow.presets.default') || [];
+
+	// Combine shadow presets with built-in options
+	const shadowOptions = useMemo(() => {
+		const options = [
+			{
+				name: __('None', 'priority-plus-navigation'),
+				slug: 'none',
+				shadow: 'none',
+			},
+			{
+				name: __('Default', 'priority-plus-navigation'),
+				slug: 'default',
+				shadow: DEFAULT_SHADOW,
+			},
+		];
+
+		// Add theme shadows first (they take priority)
+		if (themeShadows.length > 0) {
+			themeShadows.forEach((preset) => {
+				options.push({
+					name: preset.name,
+					slug: preset.slug,
+					shadow: preset.shadow,
+				});
+			});
+		}
+
+		// Add default WordPress shadows
+		if (defaultShadows.length > 0) {
+			defaultShadows.forEach((preset) => {
+				options.push({
+					name: preset.name,
+					slug: preset.slug,
+					shadow: preset.shadow,
+				});
+			});
+		}
+
+		return options;
+	}, [themeShadows, defaultShadows]);
+
+	// Find the currently selected option
+	const selectedOption = useMemo(() => {
+		if (!value || value === 'none') {
+			return shadowOptions.find((opt) => opt.slug === 'none');
+		}
+		// Try to find by exact shadow value match
+		const match = shadowOptions.find((opt) => opt.shadow === value);
+		if (match) {
+			return match;
+		}
+		// If no match, it's a custom value - show as "Custom"
+		return {
+			name: __('Custom', 'priority-plus-navigation'),
+			slug: 'custom',
+			shadow: value,
+		};
+	}, [value, shadowOptions]);
+
+	return (
+		<BaseControl
+			label={__('Shadow', 'priority-plus-navigation')}
+			__nextHasNoMarginBottom
+		>
+			<Dropdown
+				className="priority-plus-shadow-picker"
+				contentClassName="priority-plus-shadow-picker__popover"
+				popoverProps={{ placement: 'left-start', offset: 36 }}
+				renderToggle={({ isOpen, onToggle }) => (
+					<Button
+						onClick={onToggle}
+						aria-expanded={isOpen}
+						className="priority-plus-shadow-picker__toggle"
+					>
+						<HStack justify="flex-start">
+							<FlexItem
+								className="priority-plus-shadow-picker__preview"
+								style={{
+									boxShadow:
+										selectedOption?.shadow || 'none',
+								}}
+							/>
+							<FlexItem>
+								{selectedOption?.name ||
+									__('Select shadow', 'priority-plus-navigation')}
+							</FlexItem>
+						</HStack>
+					</Button>
+				)}
+				renderContent={({ onClose }) => (
+					<VStack
+						spacing={2}
+						className="priority-plus-shadow-picker__options"
+					>
+						{shadowOptions.map((option) => (
+							<Button
+								key={option.slug}
+								onClick={() => {
+									onChange(option.shadow);
+									onClose();
+								}}
+								className={`priority-plus-shadow-picker__option ${
+									selectedOption?.slug === option.slug
+										? 'is-selected'
+										: ''
+								}`}
+							>
+								<HStack justify="flex-start">
+									<FlexItem
+										className="priority-plus-shadow-picker__preview"
+										style={{ boxShadow: option.shadow }}
+									/>
+									<FlexItem>{option.name}</FlexItem>
+								</HStack>
+							</Button>
+						))}
+					</VStack>
+				)}
+			/>
+		</BaseControl>
+	);
+}
+
+/**
  * MenuStylesPanel Component
  *
  * Provides controls for dropdown container styles (border, radius, shadow).
@@ -100,7 +249,7 @@ export function MenuStylesPanel({
 			resetAll={() => {
 				updateStyle('border', undefined);
 				updateStyle('borderRadius', undefined);
-				updateStyle('boxShadow', '0 4px 12px rgba(0, 0, 0, 0.15)');
+				updateStyle('boxShadow', DEFAULT_SHADOW);
 			}}
 		>
 			{/* Border */}
@@ -139,23 +288,13 @@ export function MenuStylesPanel({
 			{/* Box Shadow */}
 			<ToolsPanelItem
 				hasValue={() => hasValue('boxShadow')}
-				label={__('Box Shadow', 'priority-plus-navigation')}
-				onDeselect={() =>
-					resetToDefault(
-						'boxShadow',
-						'0 4px 12px rgba(0, 0, 0, 0.15)'
-					)
-				}
+				label={__('Shadow', 'priority-plus-navigation')}
+				onDeselect={() => resetToDefault('boxShadow', DEFAULT_SHADOW)}
 				isShownByDefault
 			>
-				<TextControl
-					label={__('Box Shadow', 'priority-plus-navigation')}
-					value={styles.boxShadow || '0 4px 12px rgba(0, 0, 0, 0.15)'}
+				<ShadowPresetPicker
+					value={styles.boxShadow || DEFAULT_SHADOW}
 					onChange={(value) => updateStyle('boxShadow', value)}
-					help={__(
-						'CSS box-shadow property',
-						'priority-plus-navigation'
-					)}
 				/>
 			</ToolsPanelItem>
 		</ToolsPanel>
