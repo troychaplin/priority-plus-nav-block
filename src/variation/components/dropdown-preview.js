@@ -43,6 +43,49 @@ function convertPresetValue(value) {
 }
 
 /**
+ * Convert borderRadius to CSS string (handles both string and per-corner object formats)
+ *
+ * @param {Object|string} borderRadius - The border radius value
+ * @return {string} CSS border-radius value
+ */
+function getBorderRadiusCSS(borderRadius) {
+	// Handle null, undefined, or empty values
+	if (!borderRadius) {
+		return '4px'; // Default
+	}
+
+	// If it's already a string, return as-is
+	if (typeof borderRadius === 'string') {
+		return borderRadius;
+	}
+
+	// If it's an object (per-corner values), convert to CSS
+	if (typeof borderRadius === 'object') {
+		const { topLeft, topRight, bottomRight, bottomLeft } = borderRadius;
+
+		// Check if all values are the same - use shorthand
+		if (
+			topLeft === topRight &&
+			topRight === bottomRight &&
+			bottomRight === bottomLeft &&
+			topLeft
+		) {
+			return topLeft;
+		}
+
+		// Build full border-radius: top-left top-right bottom-right bottom-left
+		const tl = topLeft || '0';
+		const tr = topRight || '0';
+		const br = bottomRight || '0';
+		const bl = bottomLeft || '0';
+
+		return `${tl} ${tr} ${br} ${bl}`;
+	}
+
+	return '4px'; // Fallback
+}
+
+/**
  * Convert itemSpacing to CSS string (handles both object and string formats)
  *
  * @param {Object|string} spacing - The spacing value (object or string)
@@ -129,7 +172,7 @@ export function DropdownPreview({ dropdownStyles, typographyStyles = {} }) {
 		backgroundColor = '#ffffff',
 		borderColor = '#dddddd',
 		borderWidth = '1px',
-		borderRadius = '4px',
+		borderRadius, // Can be string or object, handled by getBorderRadiusCSS
 		boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)',
 		itemSpacing,
 		itemHoverBackgroundColor = 'rgba(0, 0, 0, 0.05)',
@@ -150,7 +193,7 @@ export function DropdownPreview({ dropdownStyles, typographyStyles = {} }) {
 			'--wp--custom--priority-plus-navigation--dropdown--border-width':
 				borderWidth,
 			'--wp--custom--priority-plus-navigation--dropdown--border-radius':
-				borderRadius,
+				getBorderRadiusCSS(borderRadius),
 			'--wp--custom--priority-plus-navigation--dropdown--box-shadow':
 				boxShadow,
 			'--wp--custom--priority-plus-navigation--dropdown--item-spacing':

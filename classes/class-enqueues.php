@@ -250,6 +250,51 @@ class Enqueues extends Plugin_Module {
 	}
 
 	/**
+	 * Convert border radius value to CSS string.
+	 *
+	 * Handles both string format (e.g., '4px') and per-corner object format
+	 * (e.g., { topLeft: '4px', topRight: '0', bottomRight: '4px', bottomLeft: '0' }).
+	 *
+	 * @param string|array $border_radius The border radius value.
+	 * @return string CSS border-radius value string.
+	 */
+	private function border_radius_to_css( $border_radius ): string {
+		// Handle string format directly.
+		if ( is_string( $border_radius ) ) {
+			return $border_radius;
+		}
+
+		// Handle object format (per-corner values).
+		if ( is_array( $border_radius ) ) {
+			$top_left     = isset( $border_radius['topLeft'] ) ? (string) $border_radius['topLeft'] : '';
+			$top_right    = isset( $border_radius['topRight'] ) ? (string) $border_radius['topRight'] : '';
+			$bottom_right = isset( $border_radius['bottomRight'] ) ? (string) $border_radius['bottomRight'] : '';
+			$bottom_left  = isset( $border_radius['bottomLeft'] ) ? (string) $border_radius['bottomLeft'] : '';
+
+			// If all values are empty, return empty string.
+			if ( '' === $top_left && '' === $top_right && '' === $bottom_right && '' === $bottom_left ) {
+				return '';
+			}
+
+			// If all values are the same, use single value shorthand.
+			if ( '' !== $top_left && $top_left === $top_right && $top_right === $bottom_right && $bottom_right === $bottom_left ) {
+				return $top_left;
+			}
+
+			// Use '0' for empty corners.
+			$top_left     = '' !== $top_left ? $top_left : '0';
+			$top_right    = '' !== $top_right ? $top_right : '0';
+			$bottom_right = '' !== $bottom_right ? $bottom_right : '0';
+			$bottom_left  = '' !== $bottom_left ? $bottom_left : '0';
+
+			// Return full border-radius: top-left top-right bottom-right bottom-left.
+			return $top_left . ' ' . $top_right . ' ' . $bottom_right . ' ' . $bottom_left;
+		}
+
+		return '';
+	}
+
+	/**
 	 * Convert padding object to CSS value string.
 	 *
 	 * @param array $padding Padding object with top, right, bottom, left keys.
@@ -382,11 +427,11 @@ class Enqueues extends Plugin_Module {
 
 		// Add dropdown style CSS custom properties.
 		if ( ! empty( $dropdown_styles ) ) {
+			// Simple string properties that can be output directly.
 			$property_map = array(
 				'backgroundColor'          => '--wp--custom--priority-plus-navigation--dropdown--background-color',
 				'borderColor'              => '--wp--custom--priority-plus-navigation--dropdown--border-color',
 				'borderWidth'              => '--wp--custom--priority-plus-navigation--dropdown--border-width',
-				'borderRadius'             => '--wp--custom--priority-plus-navigation--dropdown--border-radius',
 				'boxShadow'                => '--wp--custom--priority-plus-navigation--dropdown--box-shadow',
 				'itemHoverBackgroundColor' => '--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color',
 				'itemHoverTextColor'       => '--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color',
@@ -399,6 +444,18 @@ class Enqueues extends Plugin_Module {
 						'%s: %s',
 						$css_var_name,
 						esc_attr( $dropdown_styles[ $attr_key ] )
+					);
+				}
+			}
+
+			// Handle borderRadius separately as it can be a string or per-corner object.
+			if ( isset( $dropdown_styles['borderRadius'] ) && ! empty( $dropdown_styles['borderRadius'] ) ) {
+				$border_radius_css = $this->border_radius_to_css( $dropdown_styles['borderRadius'] );
+
+				if ( '' !== $border_radius_css ) {
+					$style_parts[] = sprintf(
+						'--wp--custom--priority-plus-navigation--dropdown--border-radius: %s',
+						esc_attr( $border_radius_css )
 					);
 				}
 			}
