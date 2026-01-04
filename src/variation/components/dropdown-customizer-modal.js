@@ -189,7 +189,10 @@ export function DropdownCustomizerModal({
 
 	return (
 		<Modal
-			title={__('Customize Dropdown Styles', 'priority-plus-navigation')}
+			title={__(
+				'Customize Priority Plus Dropdown',
+				'priority-plus-navigation'
+			)}
 			onRequestClose={onClose}
 			className="priority-plus-dropdown-customizer"
 			size="large"
