@@ -282,7 +282,7 @@ class Enqueues extends Plugin_Module {
 			'style' => 'solid',
 		);
 
-		// Check if it's a flat border (has color, width, or style at top level)
+		// Check if it's a flat border (has color, width, or style at top level).
 		if ( isset( $border['color'] ) || isset( $border['width'] ) || isset( $border['style'] ) ) {
 			$color = isset( $border['color'] ) ? $border['color'] : $defaults['color'];
 			$width = isset( $border['width'] ) ? $border['width'] : $defaults['width'];
@@ -304,7 +304,7 @@ class Enqueues extends Plugin_Module {
 			return $style_parts;
 		}
 
-		// Check if it's per-side format (has top, right, bottom, left)
+		// Check if it's per-side format (has top, right, bottom, left).
 		$sides         = array( 'top', 'right', 'bottom', 'left' );
 		$side_css_vars = array(
 			'top'    => '--wp--custom--priority-plus-navigation--dropdown--border-top',
@@ -316,7 +316,7 @@ class Enqueues extends Plugin_Module {
 		foreach ( $sides as $side ) {
 			if ( isset( $border[ $side ] ) && is_array( $border[ $side ] ) ) {
 				$side_border = $border[ $side ];
-				// Only add CSS var if at least one property is set
+				// Only add CSS var if at least one property is set.
 				if ( isset( $side_border['color'] ) || isset( $side_border['width'] ) || isset( $side_border['style'] ) ) {
 					$width = isset( $side_border['width'] ) ? $side_border['width'] : $defaults['width'];
 					$style = isset( $side_border['style'] ) ? $side_border['style'] : $defaults['style'];
@@ -478,7 +478,7 @@ class Enqueues extends Plugin_Module {
 		$pattern = '/(<nav[^>]*\bclass="[^"]*wp-block-navigation[^"]*")/i';
 
 		// Extract existing style attribute if present (WordPress adds typography styles here).
-		// This pattern handles both attribute orders: style before class and class before style
+		// This pattern handles both attribute orders: style before class and class before style.
 		$existing_style = '';
 		if ( preg_match( '/<nav[^>]*\bstyle="([^"]*)"/i', $block_content, $style_matches ) ) {
 			$existing_style = $style_matches[1];
@@ -487,7 +487,7 @@ class Enqueues extends Plugin_Module {
 		// Build style attribute with CSS custom properties.
 		$style_parts = array();
 
-		// First, preserve WordPress's existing inline styles (typography, etc.)
+		// First, preserve WordPress's existing inline styles (typography, etc.).
 		if ( ! empty( $existing_style ) ) {
 			$style_declarations = explode( ';', $existing_style );
 			foreach ( $style_declarations as $declaration ) {
@@ -620,17 +620,17 @@ class Enqueues extends Plugin_Module {
 
 		// Add style attribute if we have any styles.
 		if ( ! empty( $style_parts ) ) {
-			// Join with semicolons and ensure proper formatting
+			// Join with semicolons and ensure proper formatting.
 			$style_attr = implode( '; ', $style_parts );
 
-			// Debug: Log the final style attribute to help diagnose issues
-			// error_log( 'Priority Plus Nav - Final style attribute: ' . $style_attr );
+			// Debug: Log the final style attribute to help diagnose issues.
+			// error_log( 'Priority Plus Nav - Final style attribute: ' . $style_attr );.
 
 			$attributes .= ' style="' . $style_attr . ';"';
 		}
 
 		// Remove existing style attribute from the nav tag if it exists, since we're adding it back.
-		// This pattern handles both attribute orders: style before class and class before style
+		// This pattern handles both attribute orders: style before class and class before style.
 		$block_content = preg_replace( '/(<nav[^>]*?)\s+style="[^"]*"([^>]*?>)/i', '$1$2', $block_content, 1 );
 
 		$replacement = $attributes;
