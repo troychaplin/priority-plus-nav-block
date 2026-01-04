@@ -3,7 +3,7 @@
  */
 import {
 	TextControl,
-	__experimentalBorderControl as BorderControl,
+	__experimentalBorderBoxControl as BorderBoxControl,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
@@ -12,6 +12,33 @@ import {
 	__experimentalBorderRadiusControl as BorderRadiusControl,
 } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
+
+/**
+ * Check if border has a value (handles both flat and per-side formats)
+ *
+ * @param {Object} border - The border value (flat or per-side)
+ * @return {boolean} Whether border has a value
+ */
+function hasBorderBoxValue(border) {
+	if (!border) {
+		return false;
+	}
+
+	// Check for flat border format (color, width, style at top level)
+	if (border.color || border.width || border.style) {
+		return true;
+	}
+
+	// Check for per-side format (top, right, bottom, left)
+	const sides = ['top', 'right', 'bottom', 'left'];
+	return sides.some((side) => {
+		const sideBorder = border[side];
+		return (
+			sideBorder &&
+			(sideBorder.color || sideBorder.width || sideBorder.style)
+		);
+	});
+}
 
 /**
  * Check if border radius has a value (handles both string and object formats)
@@ -59,70 +86,40 @@ export function MenuStylesPanel({
 	// Get color palette from theme settings
 	const colors = useSetting('color.palette') || [];
 
-	// Convert individual border properties to BorderControl format
-	const borderValue = {
-		color: styles.borderColor,
-		style: styles.borderStyle || 'solid',
-		width: styles.borderWidth,
-	};
-
-	// Handle border changes from BorderControl
+	// Handle border changes from BorderBoxControl
+	// The control passes either a flat border or per-side borders
 	const handleBorderChange = (newBorder) => {
-		const updates = {};
-
-		// Handle undefined/cleared border
-		if (newBorder === undefined) {
-			updates.borderColor = undefined;
-			updates.borderWidth = undefined;
-			updates.borderStyle = undefined;
-		} else {
-			if (newBorder.color !== undefined) {
-				updates.borderColor = newBorder.color;
-			}
-			if (newBorder.width !== undefined) {
-				updates.borderWidth = newBorder.width;
-			}
-			if (newBorder.style !== undefined) {
-				updates.borderStyle = newBorder.style;
-			}
-		}
-
-		// Update all border properties at once
-		if (Object.keys(updates).length > 0) {
-			updateStyle('border', updates);
-		}
+		// Store the entire border object directly
+		// It can be: undefined, flat { color, width, style }, or per-side { top, right, bottom, left }
+		updateStyle('border', newBorder);
 	};
 
 	return (
 		<ToolsPanel
 			label={__('Dropdown Menu Styles', 'priority-plus-navigation')}
 			resetAll={() => {
-				updateStyle('borderColor', '#dddddd');
-				updateStyle('borderWidth', '1px');
+				updateStyle('border', undefined);
 				updateStyle('borderRadius', undefined);
 				updateStyle('boxShadow', '0 4px 12px rgba(0, 0, 0, 0.15)');
 			}}
 		>
 			{/* Border */}
 			<ToolsPanelItem
-				hasValue={hasBorderValue}
+				hasValue={() => hasBorderBoxValue(styles.border)}
 				label={__('Border', 'priority-plus-navigation')}
 				onDeselect={() => {
-					resetToDefault('borderColor', '#dddddd');
-					resetToDefault('borderWidth', '1px');
-					resetToDefault('borderStyle', 'solid');
+					updateStyle('border', undefined);
 				}}
 				isShownByDefault
 			>
-				<BorderControl
+				<BorderBoxControl
 					label={__('Border', 'priority-plus-navigation')}
 					colors={colors}
-					value={borderValue}
+					value={styles.border}
 					onChange={handleBorderChange}
 					enableAlpha={true}
 					enableStyle={true}
 					size="__unstable-large"
-					withSlider={true}
 				/>
 			</ToolsPanelItem>
 

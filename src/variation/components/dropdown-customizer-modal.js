@@ -132,11 +132,8 @@ export function DropdownCustomizerModal({
 			...(attributes.priorityNavDropdownStyles || {}),
 		};
 
-		// Handle bulk updates (when value is an object and key is 'border' or similar)
-		const newStyles =
-			typeof value === 'object' && !Array.isArray(value) && key === 'border'
-				? { ...currentStyles, ...value }
-				: { ...currentStyles, [key]: value };
+		// Store the value directly under the key
+		const newStyles = { ...currentStyles, [key]: value };
 
 		setAttributes({
 			priorityNavDropdownStyles: newStyles,
@@ -167,12 +164,27 @@ export function DropdownCustomizerModal({
 		return !!priorityNavDropdownStyles.itemSpacing;
 	};
 
-	// Helper to check if border has values
+	// Helper to check if border has values (handles both flat and per-side formats)
 	const hasBorderValue = () => {
-		return (
-			!!priorityNavDropdownStyles.borderColor ||
-			!!priorityNavDropdownStyles.borderWidth
-		);
+		const border = priorityNavDropdownStyles.border;
+		if (!border) {
+			return false;
+		}
+
+		// Check for flat border format (color, width, style at top level)
+		if (border.color || border.width || border.style) {
+			return true;
+		}
+
+		// Check for per-side format (top, right, bottom, left)
+		const sides = ['top', 'right', 'bottom', 'left'];
+		return sides.some((side) => {
+			const sideBorder = border[side];
+			return (
+				sideBorder &&
+				(sideBorder.color || sideBorder.width || sideBorder.style)
+			);
+		});
 	};
 
 	return (

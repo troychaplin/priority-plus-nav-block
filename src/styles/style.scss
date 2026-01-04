@@ -60,14 +60,38 @@
 
 	.priority-plus-navigation-dropdown {
 		position: absolute;
-        overflow: hidden;
+		overflow: hidden;
 		top: 100%;
 		right: 0;
 		min-width: 200px;
 		background: var(--wp--custom--priority-plus-navigation--dropdown--background-color) !important;
-		border-width: var(--wp--custom--priority-plus-navigation--dropdown--border-width) !important;
-		border-style: solid !important;
-		border-color: var(--wp--custom--priority-plus-navigation--dropdown--border-color) !important;
+		// Border: Use per-side CSS custom properties when set, otherwise fall back to unified border
+		// The fallback chain: per-side var -> unified var -> default value
+		// Using !important to override WordPress core .wp-block-navigation__submenu-container styles
+		border-top: var(
+			--wp--custom--priority-plus-navigation--dropdown--border-top,
+			var(--wp--custom--priority-plus-navigation--dropdown--border-width, 1px)
+				var(--wp--custom--priority-plus-navigation--dropdown--border-style, solid)
+				var(--wp--custom--priority-plus-navigation--dropdown--border-color, #dddddd)
+		) !important;
+		border-right: var(
+			--wp--custom--priority-plus-navigation--dropdown--border-right,
+			var(--wp--custom--priority-plus-navigation--dropdown--border-width, 1px)
+				var(--wp--custom--priority-plus-navigation--dropdown--border-style, solid)
+				var(--wp--custom--priority-plus-navigation--dropdown--border-color, #dddddd)
+		) !important;
+		border-bottom: var(
+			--wp--custom--priority-plus-navigation--dropdown--border-bottom,
+			var(--wp--custom--priority-plus-navigation--dropdown--border-width, 1px)
+				var(--wp--custom--priority-plus-navigation--dropdown--border-style, solid)
+				var(--wp--custom--priority-plus-navigation--dropdown--border-color, #dddddd)
+		) !important;
+		border-left: var(
+			--wp--custom--priority-plus-navigation--dropdown--border-left,
+			var(--wp--custom--priority-plus-navigation--dropdown--border-width, 1px)
+				var(--wp--custom--priority-plus-navigation--dropdown--border-style, solid)
+				var(--wp--custom--priority-plus-navigation--dropdown--border-color, #dddddd)
+		) !important;
 		border-radius: var(--wp--custom--priority-plus-navigation--dropdown--border-radius);
 		box-shadow: var(--wp--custom--priority-plus-navigation--dropdown--box-shadow);
 		list-style: none;

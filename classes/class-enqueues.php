@@ -250,6 +250,77 @@ class Enqueues extends Plugin_Module {
 	}
 
 	/**
+	 * Convert border value to CSS style parts.
+	 *
+	 * Handles both flat format (e.g., { color: '#ddd', width: '1px', style: 'solid' })
+	 * and per-side format (e.g., { top: { color, width, style }, right: {...}, ... }).
+	 *
+	 * @param array $border The border value (flat or per-side).
+	 * @return array Array of CSS style declarations to add to style_parts.
+	 */
+	private function border_to_css( array $border ): array {
+		$style_parts = array();
+		$defaults    = array(
+			'color' => '#dddddd',
+			'width' => '1px',
+			'style' => 'solid',
+		);
+
+		// Check if it's a flat border (has color, width, or style at top level)
+		if ( isset( $border['color'] ) || isset( $border['width'] ) || isset( $border['style'] ) ) {
+			$color = isset( $border['color'] ) ? $border['color'] : $defaults['color'];
+			$width = isset( $border['width'] ) ? $border['width'] : $defaults['width'];
+			$style = isset( $border['style'] ) ? $border['style'] : $defaults['style'];
+
+			$style_parts[] = sprintf(
+				'--wp--custom--priority-plus-navigation--dropdown--border-color: %s',
+				esc_attr( $color )
+			);
+			$style_parts[] = sprintf(
+				'--wp--custom--priority-plus-navigation--dropdown--border-width: %s',
+				esc_attr( $width )
+			);
+			$style_parts[] = sprintf(
+				'--wp--custom--priority-plus-navigation--dropdown--border-style: %s',
+				esc_attr( $style )
+			);
+
+			return $style_parts;
+		}
+
+		// Check if it's per-side format (has top, right, bottom, left)
+		$sides         = array( 'top', 'right', 'bottom', 'left' );
+		$side_css_vars = array(
+			'top'    => '--wp--custom--priority-plus-navigation--dropdown--border-top',
+			'right'  => '--wp--custom--priority-plus-navigation--dropdown--border-right',
+			'bottom' => '--wp--custom--priority-plus-navigation--dropdown--border-bottom',
+			'left'   => '--wp--custom--priority-plus-navigation--dropdown--border-left',
+		);
+
+		foreach ( $sides as $side ) {
+			if ( isset( $border[ $side ] ) && is_array( $border[ $side ] ) ) {
+				$side_border = $border[ $side ];
+				// Only add CSS var if at least one property is set
+				if ( isset( $side_border['color'] ) || isset( $side_border['width'] ) || isset( $side_border['style'] ) ) {
+					$width = isset( $side_border['width'] ) ? $side_border['width'] : $defaults['width'];
+					$style = isset( $side_border['style'] ) ? $side_border['style'] : $defaults['style'];
+					$color = isset( $side_border['color'] ) ? $side_border['color'] : $defaults['color'];
+
+					$style_parts[] = sprintf(
+						'%s: %s %s %s',
+						$side_css_vars[ $side ],
+						esc_attr( $width ),
+						esc_attr( $style ),
+						esc_attr( $color )
+					);
+				}
+			}
+		}
+
+		return $style_parts;
+	}
+
+	/**
 	 * Convert border radius value to CSS string.
 	 *
 	 * Handles both string format (e.g., '4px') and per-corner object format
@@ -430,8 +501,6 @@ class Enqueues extends Plugin_Module {
 			// Simple string properties that can be output directly.
 			$property_map = array(
 				'backgroundColor'          => '--wp--custom--priority-plus-navigation--dropdown--background-color',
-				'borderColor'              => '--wp--custom--priority-plus-navigation--dropdown--border-color',
-				'borderWidth'              => '--wp--custom--priority-plus-navigation--dropdown--border-width',
 				'boxShadow'                => '--wp--custom--priority-plus-navigation--dropdown--box-shadow',
 				'itemHoverBackgroundColor' => '--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color',
 				'itemHoverTextColor'       => '--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color',
@@ -446,6 +515,12 @@ class Enqueues extends Plugin_Module {
 						esc_attr( $dropdown_styles[ $attr_key ] )
 					);
 				}
+			}
+
+			// Handle border separately as it can be flat or per-side object.
+			if ( isset( $dropdown_styles['border'] ) && is_array( $dropdown_styles['border'] ) && ! empty( $dropdown_styles['border'] ) ) {
+				$border_css_parts = $this->border_to_css( $dropdown_styles['border'] );
+				$style_parts      = array_merge( $style_parts, $border_css_parts );
 			}
 
 			// Handle borderRadius separately as it can be a string or per-corner object.

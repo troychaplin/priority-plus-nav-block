@@ -11,8 +11,11 @@
  */
 export const DEFAULT_DROPDOWN_STYLES = {
 	backgroundColor: '#ffffff',
-	borderColor: '#dddddd',
-	borderWidth: '1px',
+	border: {
+		color: '#dddddd',
+		width: '1px',
+		style: 'solid',
+	},
 	borderRadius: '4px',
 	boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
 	itemSpacing: {

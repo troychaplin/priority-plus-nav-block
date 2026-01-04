@@ -43,6 +43,76 @@ function convertPresetValue(value) {
 }
 
 /**
+ * Convert border to CSS custom properties (handles both flat and per-side object formats)
+ *
+ * Returns an object with CSS custom property names as keys that can be spread into inline styles.
+ * Uses the same CSS custom property names as the frontend SCSS.
+ *
+ * @param {Object} border - The border value (flat or per-side)
+ * @return {Object} Object with CSS custom properties for borders
+ */
+function getBorderCSSProperties(border) {
+	const defaults = {
+		color: '#dddddd',
+		width: '1px',
+		style: 'solid',
+	};
+
+	const cssVarPrefix = '--wp--custom--priority-plus-navigation--dropdown--';
+
+	// Handle null, undefined, or empty values - return unified border defaults
+	if (!border) {
+		return {
+			[`${cssVarPrefix}border-color`]: defaults.color,
+			[`${cssVarPrefix}border-width`]: defaults.width,
+			[`${cssVarPrefix}border-style`]: defaults.style,
+		};
+	}
+
+	// Check if it's a flat border (has color, width, or style at top level)
+	if (border.color || border.width || border.style) {
+		return {
+			[`${cssVarPrefix}border-color`]: border.color || defaults.color,
+			[`${cssVarPrefix}border-width`]: border.width || defaults.width,
+			[`${cssVarPrefix}border-style`]: border.style || defaults.style,
+		};
+	}
+
+	// Check if it's per-side format (has top, right, bottom, left)
+	const sides = ['top', 'right', 'bottom', 'left'];
+	const hasPerSide = sides.some((side) => border[side]);
+
+	if (hasPerSide) {
+		// Build CSS custom properties only for sides that have values
+		// Sides without values will use the SCSS fallback (unified border)
+		const result = {};
+
+		sides.forEach((side) => {
+			const sideBorder = border[side];
+			if (sideBorder && (sideBorder.color || sideBorder.width || sideBorder.style)) {
+				const width = sideBorder.width || defaults.width;
+				const style = sideBorder.style || defaults.style;
+				const color = sideBorder.color || defaults.color;
+				result[`${cssVarPrefix}border-${side}`] = `${width} ${style} ${color}`;
+			}
+		});
+
+		// If we have at least one per-side value, return the result
+		// The SCSS fallback will handle sides without explicit values
+		if (Object.keys(result).length > 0) {
+			return result;
+		}
+	}
+
+	// Fallback to defaults
+	return {
+		[`${cssVarPrefix}border-color`]: defaults.color,
+		[`${cssVarPrefix}border-width`]: defaults.width,
+		[`${cssVarPrefix}border-style`]: defaults.style,
+	};
+}
+
+/**
  * Convert borderRadius to CSS string (handles both string and per-corner object formats)
  *
  * @param {Object|string} borderRadius - The border radius value
@@ -170,8 +240,7 @@ function getItemSpacingCSS(spacing) {
 export function DropdownPreview({ dropdownStyles, typographyStyles = {} }) {
 	const {
 		backgroundColor = '#ffffff',
-		borderColor = '#dddddd',
-		borderWidth = '1px',
+		border, // New unified border object (flat or per-side)
 		borderRadius, // Can be string or object, handled by getBorderRadiusCSS
 		boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)',
 		itemSpacing,
@@ -185,13 +254,12 @@ export function DropdownPreview({ dropdownStyles, typographyStyles = {} }) {
 
 	// Memoize the inline styles using the same CSS custom property names as the frontend
 	const previewStyles = useMemo(() => {
+		// Get border CSS properties (handles both flat and per-side formats)
+		const borderCSSProperties = getBorderCSSProperties(border);
+
 		const styles = {
 			'--wp--custom--priority-plus-navigation--dropdown--background-color':
 				backgroundColor,
-			'--wp--custom--priority-plus-navigation--dropdown--border-color':
-				borderColor,
-			'--wp--custom--priority-plus-navigation--dropdown--border-width':
-				borderWidth,
 			'--wp--custom--priority-plus-navigation--dropdown--border-radius':
 				getBorderRadiusCSS(borderRadius),
 			'--wp--custom--priority-plus-navigation--dropdown--box-shadow':
@@ -204,6 +272,8 @@ export function DropdownPreview({ dropdownStyles, typographyStyles = {} }) {
 				itemHoverTextColor,
 			'--wp--custom--priority-plus-navigation--dropdown--multi-level-indent':
 				multiLevelIndent,
+			// Spread border CSS properties (either unified or per-side)
+			...borderCSSProperties,
 		};
 
 		// Add typography styles from navigation block
@@ -223,8 +293,7 @@ export function DropdownPreview({ dropdownStyles, typographyStyles = {} }) {
 		return styles;
 	}, [
 		backgroundColor,
-		borderColor,
-		borderWidth,
+		border,
 		borderRadius,
 		boxShadow,
 		itemSpacing,
