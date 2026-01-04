@@ -137,8 +137,6 @@ export function DropdownPreview({ dropdownStyles, typographyStyles = {} }) {
 		multiLevelIndent = '1.25rem',
 	} = dropdownStyles || {};
 
-	console.log('[DropdownPreview] borderColor:', borderColor, 'borderWidth:', borderWidth);
-
 	// State for accordion open/closed
 	const [isAccordionOpen, setIsAccordionOpen] = useState(true);
 

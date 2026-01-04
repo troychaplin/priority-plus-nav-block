@@ -138,8 +138,6 @@ export function DropdownCustomizerModal({
 				? { ...currentStyles, ...value }
 				: { ...currentStyles, [key]: value };
 
-		console.log('[updateStyle] Setting:', key, '=', value);
-		console.log('[updateStyle] Full new styles:', newStyles);
 		setAttributes({
 			priorityNavDropdownStyles: newStyles,
 		});
