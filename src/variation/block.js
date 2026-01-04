@@ -9,7 +9,16 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Internal dependencies
  */
-import { DEFAULT_DROPDOWN_STYLES } from './constants';
+import {
+	DEFAULT_DROPDOWN_BACKGROUND_COLOR,
+	DEFAULT_DROPDOWN_BORDER,
+	DEFAULT_DROPDOWN_BORDER_RADIUS,
+	DEFAULT_DROPDOWN_BOX_SHADOW,
+	DEFAULT_DROPDOWN_ITEM_SPACING,
+	DEFAULT_DROPDOWN_ITEM_HOVER_BACKGROUND_COLOR,
+	DEFAULT_DROPDOWN_ITEM_HOVER_TEXT_COLOR,
+	DEFAULT_DROPDOWN_MULTI_LEVEL_INDENT,
+} from './constants';
 
 /**
  * Register Priority Plus Navigation block variation
@@ -32,7 +41,6 @@ registerBlockVariation('core/navigation', {
 		priorityNavMoreBackgroundColorHover: undefined,
 		priorityNavMoreTextColor: undefined,
 		priorityNavMoreTextColorHover: undefined,
-		priorityNavDropdownStyles: DEFAULT_DROPDOWN_STYLES,
 	},
 	isActive: (blockAttributes, variationAttributes) => {
 		return blockAttributes.className?.includes(
@@ -56,10 +64,12 @@ addFilter(
 			...settings,
 			attributes: {
 				...settings.attributes,
+				// Priority+ enabled flag
 				priorityNavEnabled: {
 					type: 'boolean',
 					default: false,
 				},
+				// More button settings
 				priorityNavMoreLabel: {
 					type: 'string',
 					default: 'More',
@@ -84,10 +94,40 @@ addFilter(
 					type: 'object',
 					default: undefined,
 				},
-				priorityNavDropdownStyles: {
-					type: 'object',
-					default: DEFAULT_DROPDOWN_STYLES,
+				// Dropdown style attributes (separate for reliable updates)
+				priorityNavDropdownBackgroundColor: {
+					type: 'string',
+					default: DEFAULT_DROPDOWN_BACKGROUND_COLOR,
 				},
+				priorityNavDropdownBorder: {
+					type: 'object',
+					default: DEFAULT_DROPDOWN_BORDER,
+				},
+				priorityNavDropdownBorderRadius: {
+					type: ['string', 'object'],
+					default: DEFAULT_DROPDOWN_BORDER_RADIUS,
+				},
+				priorityNavDropdownBoxShadow: {
+					type: 'string',
+					default: DEFAULT_DROPDOWN_BOX_SHADOW,
+				},
+				priorityNavDropdownItemSpacing: {
+					type: 'object',
+					default: DEFAULT_DROPDOWN_ITEM_SPACING,
+				},
+				priorityNavDropdownItemHoverBackgroundColor: {
+					type: 'string',
+					default: DEFAULT_DROPDOWN_ITEM_HOVER_BACKGROUND_COLOR,
+				},
+				priorityNavDropdownItemHoverTextColor: {
+					type: 'string',
+					default: DEFAULT_DROPDOWN_ITEM_HOVER_TEXT_COLOR,
+				},
+				priorityNavDropdownMultiLevelIndent: {
+					type: 'string',
+					default: DEFAULT_DROPDOWN_MULTI_LEVEL_INDENT,
+				},
+				// Typography attributes (for preview)
 				priorityNavTypographyFontFamily: {
 					type: 'string',
 				},

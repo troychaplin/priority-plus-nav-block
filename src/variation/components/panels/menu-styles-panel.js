@@ -15,6 +15,15 @@ import { __ } from '@wordpress/i18n';
 import { useMemo, useState } from '@wordpress/element';
 
 /**
+ * Internal dependencies
+ */
+import {
+	DEFAULT_DROPDOWN_BORDER,
+	DEFAULT_DROPDOWN_BORDER_RADIUS,
+	DEFAULT_DROPDOWN_BOX_SHADOW,
+} from '../../constants';
+
+/**
  * Check if border has a value (handles both flat and per-side formats)
  *
  * @param {Object} border - The border value (flat or per-side)
@@ -65,11 +74,6 @@ function hasBorderRadiusValue(borderRadius) {
 }
 
 /**
- * Default shadow value used when no shadow is selected
- */
-const DEFAULT_SHADOW = '0 4px 12px rgba(0, 0, 0, 0.15)';
-
-/**
  * ShadowPresetPicker Component
  *
  * A combobox picker for selecting shadow presets from the theme.
@@ -93,7 +97,7 @@ function ShadowPresetPicker({ value, onChange }) {
 				label: __('None', 'priority-plus-navigation'),
 			},
 			{
-				value: DEFAULT_SHADOW,
+				value: DEFAULT_DROPDOWN_BOX_SHADOW,
 				label: __('Default', 'priority-plus-navigation'),
 			},
 		];
@@ -161,55 +165,51 @@ function ShadowPresetPicker({ value, onChange }) {
  *
  * Provides controls for dropdown container styles (border, radius, shadow).
  *
- * @param {Object}   props                - Component props
- * @param {Object}   props.styles         - Current dropdown styles
- * @param {Function} props.updateStyle    - Function to update a style property
- * @param {Function} props.hasBorderValue - Function to check if border has a value
- * @param {Function} props.hasValue       - Function to check if a property has a value
- * @param {Function} props.resetToDefault - Function to reset a property to default
+ * @param {Object}   props               - Component props
+ * @param {Object}   props.attributes    - Block attributes
+ * @param {Function} props.setAttributes - Function to update attributes
  * @return {JSX.Element} Menu styles panel component
  */
-export function MenuStylesPanel({
-	styles,
-	updateStyle,
-	hasBorderValue,
-	hasValue,
-	resetToDefault,
-}) {
+export function MenuStylesPanel({ attributes, setAttributes }) {
+	const {
+		priorityNavDropdownBorder,
+		priorityNavDropdownBorderRadius,
+		priorityNavDropdownBoxShadow,
+	} = attributes;
+
 	// Get color palette from theme settings
 	const colors = useSetting('color.palette') || [];
-
-	// Handle border changes from BorderBoxControl
-	// The control passes either a flat border or per-side borders
-	const handleBorderChange = (newBorder) => {
-		// Store the entire border object directly
-		// It can be: undefined, flat { color, width, style }, or per-side { top, right, bottom, left }
-		updateStyle('border', newBorder);
-	};
 
 	return (
 		<ToolsPanel
 			label={__('Priority Plus Menu Styles', 'priority-plus-navigation')}
 			resetAll={() => {
-				updateStyle('border', undefined);
-				updateStyle('borderRadius', undefined);
-				updateStyle('boxShadow', DEFAULT_SHADOW);
+				setAttributes({
+					priorityNavDropdownBorder: DEFAULT_DROPDOWN_BORDER,
+					priorityNavDropdownBorderRadius:
+						DEFAULT_DROPDOWN_BORDER_RADIUS,
+					priorityNavDropdownBoxShadow: DEFAULT_DROPDOWN_BOX_SHADOW,
+				});
 			}}
 		>
 			{/* Border */}
 			<ToolsPanelItem
-				hasValue={() => hasBorderBoxValue(styles.border)}
+				hasValue={() => hasBorderBoxValue(priorityNavDropdownBorder)}
 				label={__('Border', 'priority-plus-navigation')}
-				onDeselect={() => {
-					updateStyle('border', undefined);
-				}}
+				onDeselect={() =>
+					setAttributes({
+						priorityNavDropdownBorder: DEFAULT_DROPDOWN_BORDER,
+					})
+				}
 				isShownByDefault
 			>
 				<BorderBoxControl
 					label={__('Border', 'priority-plus-navigation')}
 					colors={colors}
-					value={styles.border}
-					onChange={handleBorderChange}
+					value={priorityNavDropdownBorder}
+					onChange={(newBorder) =>
+						setAttributes({ priorityNavDropdownBorder: newBorder })
+					}
 					enableAlpha={true}
 					enableStyle={true}
 					size="__unstable-large"
@@ -218,27 +218,42 @@ export function MenuStylesPanel({
 
 			{/* Border Radius */}
 			<ToolsPanelItem
-				hasValue={() => hasBorderRadiusValue(styles.borderRadius)}
+				hasValue={() =>
+					hasBorderRadiusValue(priorityNavDropdownBorderRadius)
+				}
 				label={__('Border Radius', 'priority-plus-navigation')}
-				onDeselect={() => resetToDefault('borderRadius', undefined)}
+				onDeselect={() =>
+					setAttributes({
+						priorityNavDropdownBorderRadius:
+							DEFAULT_DROPDOWN_BORDER_RADIUS,
+					})
+				}
 				isShownByDefault
 			>
 				<BorderRadiusControl
-					values={styles.borderRadius}
-					onChange={(value) => updateStyle('borderRadius', value)}
+					values={priorityNavDropdownBorderRadius}
+					onChange={(value) =>
+						setAttributes({ priorityNavDropdownBorderRadius: value })
+					}
 				/>
 			</ToolsPanelItem>
 
 			{/* Box Shadow */}
 			<ToolsPanelItem
-				hasValue={() => hasValue('boxShadow')}
+				hasValue={() => !!priorityNavDropdownBoxShadow}
 				label={__('Shadow', 'priority-plus-navigation')}
-				onDeselect={() => resetToDefault('boxShadow', DEFAULT_SHADOW)}
+				onDeselect={() =>
+					setAttributes({
+						priorityNavDropdownBoxShadow: DEFAULT_DROPDOWN_BOX_SHADOW,
+					})
+				}
 				isShownByDefault
 			>
 				<ShadowPresetPicker
-					value={styles.boxShadow || DEFAULT_SHADOW}
-					onChange={(value) => updateStyle('boxShadow', value)}
+					value={priorityNavDropdownBoxShadow || DEFAULT_DROPDOWN_BOX_SHADOW}
+					onChange={(value) =>
+						setAttributes({ priorityNavDropdownBoxShadow: value })
+					}
 				/>
 			</ToolsPanelItem>
 		</ToolsPanel>

@@ -5,6 +5,20 @@ import { __ } from '@wordpress/i18n';
 import { useMemo, useState } from '@wordpress/element';
 
 /**
+ * Internal dependencies
+ */
+import {
+	DEFAULT_DROPDOWN_BACKGROUND_COLOR,
+	DEFAULT_DROPDOWN_BORDER,
+	DEFAULT_DROPDOWN_BORDER_RADIUS,
+	DEFAULT_DROPDOWN_BOX_SHADOW,
+	DEFAULT_DROPDOWN_ITEM_SPACING,
+	DEFAULT_DROPDOWN_ITEM_HOVER_BACKGROUND_COLOR,
+	DEFAULT_DROPDOWN_ITEM_HOVER_TEXT_COLOR,
+	DEFAULT_DROPDOWN_MULTI_LEVEL_INDENT,
+} from '../constants';
+
+/**
  * Convert WordPress preset value format to CSS custom property format.
  *
  * WordPress stores preset values as "var:preset|spacing|30" which needs to be
@@ -47,11 +61,7 @@ function convertPresetValue(value) {
  * @return {Object} Object with CSS custom properties for borders
  */
 function getBorderCSSProperties(border) {
-	const defaults = {
-		color: '#dddddd',
-		width: '1px',
-		style: 'solid',
-	};
+	const defaults = DEFAULT_DROPDOWN_BORDER;
 
 	const cssVarPrefix = '--wp--custom--priority-plus-navigation--dropdown--';
 
@@ -120,7 +130,7 @@ function getBorderCSSProperties(border) {
 function getBorderRadiusCSS(borderRadius) {
 	// Handle null, undefined, or empty values
 	if (!borderRadius) {
-		return '4px'; // Default
+		return DEFAULT_DROPDOWN_BORDER_RADIUS;
 	}
 
 	// If it's already a string, return as-is
@@ -151,7 +161,7 @@ function getBorderRadiusCSS(borderRadius) {
 		return `${tl} ${tr} ${br} ${bl}`;
 	}
 
-	return '4px'; // Fallback
+	return DEFAULT_DROPDOWN_BORDER_RADIUS;
 }
 
 /**
@@ -161,9 +171,11 @@ function getBorderRadiusCSS(borderRadius) {
  * @return {string} CSS spacing value
  */
 function getItemSpacingCSS(spacing) {
+	const defaultSpacing = `${DEFAULT_DROPDOWN_ITEM_SPACING.top} ${DEFAULT_DROPDOWN_ITEM_SPACING.right} ${DEFAULT_DROPDOWN_ITEM_SPACING.bottom} ${DEFAULT_DROPDOWN_ITEM_SPACING.left}`;
+
 	// Handle null, undefined, or empty values
 	if (!spacing) {
-		return '0.75rem 1rem'; // Default
+		return defaultSpacing;
 	}
 
 	// If it's already a string, convert presets and return
@@ -175,7 +187,7 @@ function getItemSpacingCSS(spacing) {
 	if (typeof spacing === 'object') {
 		// Check if it's an empty object (after reset)
 		if (Object.keys(spacing).length === 0) {
-			return '0.75rem 1rem'; // Default for empty object
+			return defaultSpacing;
 		}
 
 		const { top, right, bottom, left } = spacing;
@@ -188,7 +200,7 @@ function getItemSpacingCSS(spacing) {
 			(left && left !== '' && left !== '0');
 
 		if (!hasValues) {
-			return '0.75rem 1rem'; // Default when no real values set
+			return defaultSpacing;
 		}
 
 		// Convert preset values to CSS custom properties
@@ -222,7 +234,7 @@ function getItemSpacingCSS(spacing) {
 		return `${topFinal} ${rightFinal} ${bottomFinal} ${leftFinal}`;
 	}
 
-	return '0.75rem 1rem'; // Fallback
+	return defaultSpacing;
 }
 
 /**
@@ -232,21 +244,40 @@ function getItemSpacingCSS(spacing) {
  * and structure as the frontend to ensure 100% accuracy.
  *
  * @param {Object} props                  - Component props
- * @param {Object} props.dropdownStyles   - Dropdown style settings
+ * @param {Object} props.attributes       - Block attributes
  * @param {Object} props.typographyStyles - Typography values from navigation block
  * @return {JSX.Element} Preview component
  */
-export function DropdownPreview({ dropdownStyles, typographyStyles = {} }) {
+export function DropdownPreview({ attributes, typographyStyles = {} }) {
 	const {
-		backgroundColor = '#ffffff',
-		border, // New unified border object (flat or per-side)
-		borderRadius, // Can be string or object, handled by getBorderRadiusCSS
-		boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)',
-		itemSpacing,
-		itemHoverBackgroundColor = 'rgba(0, 0, 0, 0.05)',
-		itemHoverTextColor = 'inherit',
-		multiLevelIndent = '1.25rem',
-	} = dropdownStyles || {};
+		priorityNavDropdownBackgroundColor,
+		priorityNavDropdownBorder,
+		priorityNavDropdownBorderRadius,
+		priorityNavDropdownBoxShadow,
+		priorityNavDropdownItemSpacing,
+		priorityNavDropdownItemHoverBackgroundColor,
+		priorityNavDropdownItemHoverTextColor,
+		priorityNavDropdownMultiLevelIndent,
+	} = attributes;
+
+	// Use defaults if attributes are undefined
+	const backgroundColor =
+		priorityNavDropdownBackgroundColor || DEFAULT_DROPDOWN_BACKGROUND_COLOR;
+	const border = priorityNavDropdownBorder || DEFAULT_DROPDOWN_BORDER;
+	const borderRadius =
+		priorityNavDropdownBorderRadius || DEFAULT_DROPDOWN_BORDER_RADIUS;
+	const boxShadow =
+		priorityNavDropdownBoxShadow || DEFAULT_DROPDOWN_BOX_SHADOW;
+	const itemSpacing =
+		priorityNavDropdownItemSpacing || DEFAULT_DROPDOWN_ITEM_SPACING;
+	const itemHoverBackgroundColor =
+		priorityNavDropdownItemHoverBackgroundColor ||
+		DEFAULT_DROPDOWN_ITEM_HOVER_BACKGROUND_COLOR;
+	const itemHoverTextColor =
+		priorityNavDropdownItemHoverTextColor ||
+		DEFAULT_DROPDOWN_ITEM_HOVER_TEXT_COLOR;
+	const multiLevelIndent =
+		priorityNavDropdownMultiLevelIndent || DEFAULT_DROPDOWN_MULTI_LEVEL_INDENT;
 
 	// State for accordion open/closed
 	const [isAccordionOpen, setIsAccordionOpen] = useState(true);
@@ -303,7 +334,10 @@ export function DropdownPreview({ dropdownStyles, typographyStyles = {} }) {
 	]);
 
 	return (
-		<ul className="priority-plus-navigation-dropdown is-open" style={previewStyles}>
+		<ul
+			className="priority-plus-navigation-dropdown is-open"
+			style={previewStyles}
+		>
 			<li>
 				<a href="#" onClick={(e) => e.preventDefault()}>
 					{__('Home', 'priority-plus-navigation')}

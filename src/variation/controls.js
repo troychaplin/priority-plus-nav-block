@@ -4,10 +4,6 @@
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 
-/**
- * Internal dependencies
- */
-import { DEFAULT_DROPDOWN_STYLES } from './constants';
 import {
 	InspectorControls,
 	PanelColorSettings,
@@ -30,6 +26,16 @@ import { useEffect, useRef, useState } from '@wordpress/element';
  * Internal dependencies
  */
 import { DropdownCustomizerModal } from './components/dropdown-customizer-modal';
+import {
+	DEFAULT_DROPDOWN_BACKGROUND_COLOR,
+	DEFAULT_DROPDOWN_BORDER,
+	DEFAULT_DROPDOWN_BORDER_RADIUS,
+	DEFAULT_DROPDOWN_BOX_SHADOW,
+	DEFAULT_DROPDOWN_ITEM_SPACING,
+	DEFAULT_DROPDOWN_ITEM_HOVER_BACKGROUND_COLOR,
+	DEFAULT_DROPDOWN_ITEM_HOVER_TEXT_COLOR,
+	DEFAULT_DROPDOWN_MULTI_LEVEL_INDENT,
+} from './constants';
 
 /**
  * Add DOM manipulation to disable 'always' overlay option when Priority+ is active
@@ -353,19 +359,46 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 						)}
 						resetAll={() => {
 							setAttributes({
-								priorityNavDropdownStyles:
-									DEFAULT_DROPDOWN_STYLES,
+								priorityNavDropdownBackgroundColor:
+									DEFAULT_DROPDOWN_BACKGROUND_COLOR,
+								priorityNavDropdownBorder:
+									DEFAULT_DROPDOWN_BORDER,
+								priorityNavDropdownBorderRadius:
+									DEFAULT_DROPDOWN_BORDER_RADIUS,
+								priorityNavDropdownBoxShadow:
+									DEFAULT_DROPDOWN_BOX_SHADOW,
+								priorityNavDropdownItemSpacing:
+									DEFAULT_DROPDOWN_ITEM_SPACING,
+								priorityNavDropdownItemHoverBackgroundColor:
+									DEFAULT_DROPDOWN_ITEM_HOVER_BACKGROUND_COLOR,
+								priorityNavDropdownItemHoverTextColor:
+									DEFAULT_DROPDOWN_ITEM_HOVER_TEXT_COLOR,
+								priorityNavDropdownMultiLevelIndent:
+									DEFAULT_DROPDOWN_MULTI_LEVEL_INDENT,
 							});
 						}}
 					>
 						<ToolsPanelItem
 							hasValue={() => {
-								const { priorityNavDropdownStyles } =
-									attributes;
+								const {
+									priorityNavDropdownBackgroundColor,
+									priorityNavDropdownBorder,
+									priorityNavDropdownBorderRadius,
+									priorityNavDropdownBoxShadow,
+									priorityNavDropdownItemSpacing,
+									priorityNavDropdownItemHoverBackgroundColor,
+									priorityNavDropdownItemHoverTextColor,
+									priorityNavDropdownMultiLevelIndent,
+								} = attributes;
 								return (
-									!!priorityNavDropdownStyles &&
-									Object.keys(priorityNavDropdownStyles)
-										.length > 0
+									!!priorityNavDropdownBackgroundColor ||
+									!!priorityNavDropdownBorder ||
+									!!priorityNavDropdownBorderRadius ||
+									!!priorityNavDropdownBoxShadow ||
+									!!priorityNavDropdownItemSpacing ||
+									!!priorityNavDropdownItemHoverBackgroundColor ||
+									!!priorityNavDropdownItemHoverTextColor ||
+									!!priorityNavDropdownMultiLevelIndent
 								);
 							}}
 							label={__(
@@ -374,7 +407,22 @@ const withPriorityNavControls = createHigherOrderComponent((BlockEdit) => {
 							)}
 							onDeselect={() =>
 								setAttributes({
-									priorityNavDropdownStyles: undefined,
+									priorityNavDropdownBackgroundColor:
+										DEFAULT_DROPDOWN_BACKGROUND_COLOR,
+									priorityNavDropdownBorder:
+										DEFAULT_DROPDOWN_BORDER,
+									priorityNavDropdownBorderRadius:
+										DEFAULT_DROPDOWN_BORDER_RADIUS,
+									priorityNavDropdownBoxShadow:
+										DEFAULT_DROPDOWN_BOX_SHADOW,
+									priorityNavDropdownItemSpacing:
+										DEFAULT_DROPDOWN_ITEM_SPACING,
+									priorityNavDropdownItemHoverBackgroundColor:
+										DEFAULT_DROPDOWN_ITEM_HOVER_BACKGROUND_COLOR,
+									priorityNavDropdownItemHoverTextColor:
+										DEFAULT_DROPDOWN_ITEM_HOVER_TEXT_COLOR,
+									priorityNavDropdownMultiLevelIndent:
+										DEFAULT_DROPDOWN_MULTI_LEVEL_INDENT,
 								})
 							}
 							isShownByDefault

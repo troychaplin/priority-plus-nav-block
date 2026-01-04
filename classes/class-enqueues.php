@@ -150,7 +150,16 @@ class Enqueues extends Plugin_Module {
 		$more_text_color_hover       = $this->get_priority_attr( $block, 'priorityNavMoreTextColorHover', '' );
 		$more_padding                = $this->get_priority_attr( $block, 'priorityNavMorePadding', array() );
 		$overlay_menu                = $this->get_priority_attr( $block, 'overlayMenu', 'never' );
-		$dropdown_styles             = $this->get_priority_attr( $block, 'priorityNavDropdownStyles', array() );
+
+		// Get dropdown style attributes (separate attributes for reliable updates).
+		$dropdown_background_color            = $this->get_priority_attr( $block, 'priorityNavDropdownBackgroundColor', '' );
+		$dropdown_border                      = $this->get_priority_attr( $block, 'priorityNavDropdownBorder', array() );
+		$dropdown_border_radius               = $this->get_priority_attr( $block, 'priorityNavDropdownBorderRadius', '' );
+		$dropdown_box_shadow                  = $this->get_priority_attr( $block, 'priorityNavDropdownBoxShadow', '' );
+		$dropdown_item_spacing                = $this->get_priority_attr( $block, 'priorityNavDropdownItemSpacing', array() );
+		$dropdown_item_hover_background_color = $this->get_priority_attr( $block, 'priorityNavDropdownItemHoverBackgroundColor', '' );
+		$dropdown_item_hover_text_color       = $this->get_priority_attr( $block, 'priorityNavDropdownItemHoverTextColor', '' );
+		$dropdown_multi_level_indent          = $this->get_priority_attr( $block, 'priorityNavDropdownMultiLevelIndent', '' );
 
 		// Inject data attributes into the navigation element.
 		return $this->inject_priority_attributes(
@@ -163,7 +172,14 @@ class Enqueues extends Plugin_Module {
 			$more_text_color_hover,
 			$more_padding,
 			$overlay_menu,
-			$dropdown_styles
+			$dropdown_background_color,
+			$dropdown_border,
+			$dropdown_border_radius,
+			$dropdown_box_shadow,
+			$dropdown_item_spacing,
+			$dropdown_item_hover_background_color,
+			$dropdown_item_hover_text_color,
+			$dropdown_multi_level_indent
 		);
 	}
 
@@ -416,19 +432,44 @@ class Enqueues extends Plugin_Module {
 	/**
 	 * Inject Priority+ data attributes into the navigation element.
 	 *
-	 * @param string $block_content              The block HTML content.
-	 * @param string $more_label                 The "more" button label.
-	 * @param string $more_icon                  The "more" button icon.
-	 * @param string $more_background_color       The "more" button background color.
-	 * @param string $more_background_color_hover The "more" button background hover color.
-	 * @param string $more_text_color            The "more" button text color.
-	 * @param string $more_text_color_hover      The "more" button text hover color.
-	 * @param array  $more_padding               The "more" button padding values.
-	 * @param string $overlay_menu               The overlay menu setting (never, mobile, always).
-	 * @param array  $dropdown_styles            The dropdown menu style settings.
+	 * @param string       $block_content                        The block HTML content.
+	 * @param string       $more_label                           The "more" button label.
+	 * @param string       $more_icon                            The "more" button icon.
+	 * @param string       $more_background_color                The "more" button background color.
+	 * @param string       $more_background_color_hover          The "more" button background hover color.
+	 * @param string       $more_text_color                      The "more" button text color.
+	 * @param string       $more_text_color_hover                The "more" button text hover color.
+	 * @param array        $more_padding                         The "more" button padding values.
+	 * @param string       $overlay_menu                         The overlay menu setting (never, mobile, always).
+	 * @param string       $dropdown_background_color            Dropdown background color.
+	 * @param array        $dropdown_border                      Dropdown border (flat or per-side).
+	 * @param string|array $dropdown_border_radius               Dropdown border radius.
+	 * @param string       $dropdown_box_shadow                  Dropdown box shadow.
+	 * @param array        $dropdown_item_spacing                Dropdown item spacing.
+	 * @param string       $dropdown_item_hover_background_color Dropdown item hover background color.
+	 * @param string       $dropdown_item_hover_text_color       Dropdown item hover text color.
+	 * @param string       $dropdown_multi_level_indent          Dropdown multi-level indent.
 	 * @return string Modified block content with data attributes.
 	 */
-	private function inject_priority_attributes( string $block_content, string $more_label, string $more_icon, string $more_background_color = '', string $more_background_color_hover = '', string $more_text_color = '', string $more_text_color_hover = '', array $more_padding = array(), string $overlay_menu = 'never', array $dropdown_styles = array() ): string {
+	private function inject_priority_attributes(
+		string $block_content,
+		string $more_label,
+		string $more_icon,
+		string $more_background_color = '',
+		string $more_background_color_hover = '',
+		string $more_text_color = '',
+		string $more_text_color_hover = '',
+		array $more_padding = array(),
+		string $overlay_menu = 'never',
+		string $dropdown_background_color = '',
+		array $dropdown_border = array(),
+		$dropdown_border_radius = '',
+		string $dropdown_box_shadow = '',
+		array $dropdown_item_spacing = array(),
+		string $dropdown_item_hover_background_color = '',
+		string $dropdown_item_hover_text_color = '',
+		string $dropdown_multi_level_indent = ''
+	): string {
 		if ( '' === $block_content ) {
 			return $block_content;
 		}
@@ -497,61 +538,75 @@ class Enqueues extends Plugin_Module {
 		}
 
 		// Add dropdown style CSS custom properties.
-		if ( ! empty( $dropdown_styles ) ) {
-			// Simple string properties that can be output directly.
-			$property_map = array(
-				'backgroundColor'          => '--wp--custom--priority-plus-navigation--dropdown--background-color',
-				'boxShadow'                => '--wp--custom--priority-plus-navigation--dropdown--box-shadow',
-				'itemHoverBackgroundColor' => '--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color',
-				'itemHoverTextColor'       => '--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color',
-				'multiLevelIndent'         => '--wp--custom--priority-plus-navigation--dropdown--multi-level-indent',
+		if ( ! empty( $dropdown_background_color ) ) {
+			$style_parts[] = sprintf(
+				'--wp--custom--priority-plus-navigation--dropdown--background-color: %s',
+				esc_attr( $dropdown_background_color )
 			);
+		}
 
-			foreach ( $property_map as $attr_key => $css_var_name ) {
-				if ( isset( $dropdown_styles[ $attr_key ] ) && '' !== $dropdown_styles[ $attr_key ] ) {
-					$style_parts[] = sprintf(
-						'%s: %s',
-						$css_var_name,
-						esc_attr( $dropdown_styles[ $attr_key ] )
-					);
-				}
+		if ( ! empty( $dropdown_box_shadow ) ) {
+			$style_parts[] = sprintf(
+				'--wp--custom--priority-plus-navigation--dropdown--box-shadow: %s',
+				esc_attr( $dropdown_box_shadow )
+			);
+		}
+
+		if ( ! empty( $dropdown_item_hover_background_color ) ) {
+			$style_parts[] = sprintf(
+				'--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color: %s',
+				esc_attr( $dropdown_item_hover_background_color )
+			);
+		}
+
+		if ( ! empty( $dropdown_item_hover_text_color ) ) {
+			$style_parts[] = sprintf(
+				'--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color: %s',
+				esc_attr( $dropdown_item_hover_text_color )
+			);
+		}
+
+		if ( ! empty( $dropdown_multi_level_indent ) ) {
+			$style_parts[] = sprintf(
+				'--wp--custom--priority-plus-navigation--dropdown--multi-level-indent: %s',
+				esc_attr( $dropdown_multi_level_indent )
+			);
+		}
+
+		// Handle border separately as it can be flat or per-side object.
+		if ( is_array( $dropdown_border ) && ! empty( $dropdown_border ) ) {
+			$border_css_parts = $this->border_to_css( $dropdown_border );
+			$style_parts      = array_merge( $style_parts, $border_css_parts );
+		}
+
+		// Handle borderRadius separately as it can be a string or per-corner object.
+		if ( ! empty( $dropdown_border_radius ) ) {
+			$border_radius_css = $this->border_radius_to_css( $dropdown_border_radius );
+
+			if ( '' !== $border_radius_css ) {
+				$style_parts[] = sprintf(
+					'--wp--custom--priority-plus-navigation--dropdown--border-radius: %s',
+					esc_attr( $border_radius_css )
+				);
+			}
+		}
+
+		// Handle itemSpacing separately as it can be an object (SpacingSizesControl) or string.
+		if ( ! empty( $dropdown_item_spacing ) ) {
+			$item_spacing_css = '';
+			if ( is_array( $dropdown_item_spacing ) ) {
+				// Convert spacing object to CSS value (same logic as padding_to_css).
+				$item_spacing_css = $this->padding_to_css( $dropdown_item_spacing );
+			} elseif ( is_string( $dropdown_item_spacing ) ) {
+				// Use string value directly (backward compatibility).
+				$item_spacing_css = $dropdown_item_spacing;
 			}
 
-			// Handle border separately as it can be flat or per-side object.
-			if ( isset( $dropdown_styles['border'] ) && is_array( $dropdown_styles['border'] ) && ! empty( $dropdown_styles['border'] ) ) {
-				$border_css_parts = $this->border_to_css( $dropdown_styles['border'] );
-				$style_parts      = array_merge( $style_parts, $border_css_parts );
-			}
-
-			// Handle borderRadius separately as it can be a string or per-corner object.
-			if ( isset( $dropdown_styles['borderRadius'] ) && ! empty( $dropdown_styles['borderRadius'] ) ) {
-				$border_radius_css = $this->border_radius_to_css( $dropdown_styles['borderRadius'] );
-
-				if ( '' !== $border_radius_css ) {
-					$style_parts[] = sprintf(
-						'--wp--custom--priority-plus-navigation--dropdown--border-radius: %s',
-						esc_attr( $border_radius_css )
-					);
-				}
-			}
-
-			// Handle itemSpacing separately as it can be an object (SpacingSizesControl) or string.
-			if ( isset( $dropdown_styles['itemSpacing'] ) && ! empty( $dropdown_styles['itemSpacing'] ) ) {
-				$item_spacing_css = '';
-				if ( is_array( $dropdown_styles['itemSpacing'] ) ) {
-					// Convert spacing object to CSS value (same logic as padding_to_css).
-					$item_spacing_css = $this->padding_to_css( $dropdown_styles['itemSpacing'] );
-				} elseif ( is_string( $dropdown_styles['itemSpacing'] ) ) {
-					// Use string value directly (backward compatibility).
-					$item_spacing_css = $dropdown_styles['itemSpacing'];
-				}
-
-				if ( '' !== $item_spacing_css ) {
-					$style_parts[] = sprintf(
-						'--wp--custom--priority-plus-navigation--dropdown--item-spacing: %s',
-						esc_attr( $item_spacing_css )
-					);
-				}
+			if ( '' !== $item_spacing_css ) {
+				$style_parts[] = sprintf(
+					'--wp--custom--priority-plus-navigation--dropdown--item-spacing: %s',
+					esc_attr( $item_spacing_css )
+				);
 			}
 		}
 
