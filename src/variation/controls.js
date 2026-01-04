@@ -367,8 +367,9 @@ const withPriorityPlusControls = createHigherOrderComponent((BlockEdit) => {
 									DEFAULT_MENU_ITEM_HOVER_BACKGROUND,
 								priorityPlusMenuItemHoverTextColor:
 									DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
-								priorityPlusMenuSubmenuIndent:
-									DEFAULT_MENU_SUBMENU_INDENT,
+								priorityPlusMenuSubmenuIndent: {
+									left: DEFAULT_MENU_SUBMENU_INDENT,
+								},
 							});
 						}}
 					>
@@ -414,8 +415,9 @@ const withPriorityPlusControls = createHigherOrderComponent((BlockEdit) => {
 										DEFAULT_MENU_ITEM_HOVER_BACKGROUND,
 									priorityPlusMenuItemHoverTextColor:
 										DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
-									priorityPlusMenuSubmenuIndent:
-										DEFAULT_MENU_SUBMENU_INDENT,
+									priorityPlusMenuSubmenuIndent: {
+										left: DEFAULT_MENU_SUBMENU_INDENT,
+									},
 								})
 							}
 							isShownByDefault

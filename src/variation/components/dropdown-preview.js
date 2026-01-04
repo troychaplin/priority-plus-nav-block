@@ -165,6 +165,31 @@ function getBorderRadiusCSS(borderRadius) {
 }
 
 /**
+ * Normalize submenu indent value to CSS string
+ * Handles both new object format ({ left: '1.25rem' }) and legacy string format ('1.25rem')
+ *
+ * @param {Object|string} indent - The submenu indent value
+ * @return {string} CSS indent value
+ */
+function getSubmenuIndentCSS(indent) {
+	if (!indent) {
+		return DEFAULT_MENU_SUBMENU_INDENT;
+	}
+
+	// Handle object format from SpacingSizesControl (e.g., { left: '1.25rem' })
+	if (typeof indent === 'object' && indent.left) {
+		return convertPresetValue(indent.left);
+	}
+
+	// Handle legacy string format (e.g., '1.25rem')
+	if (typeof indent === 'string') {
+		return convertPresetValue(indent);
+	}
+
+	return DEFAULT_MENU_SUBMENU_INDENT;
+}
+
+/**
  * Convert itemPadding to CSS string (handles both object and string formats)
  *
  * @param {Object|string} padding - The padding value (object or string)
@@ -275,9 +300,6 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 	const itemHoverTextColor =
 		priorityPlusMenuItemHoverTextColor ||
 		DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR;
-	const submenuIndent =
-		priorityPlusMenuSubmenuIndent || DEFAULT_MENU_SUBMENU_INDENT;
-
 	// State for accordion open/closed
 	const [isAccordionOpen, setIsAccordionOpen] = useState(true);
 
@@ -300,7 +322,7 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 			'--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color':
 				itemHoverTextColor,
 			'--wp--custom--priority-plus-navigation--dropdown--multi-level-indent':
-				submenuIndent,
+				getSubmenuIndentCSS(priorityPlusMenuSubmenuIndent),
 			// Spread border CSS properties (either unified or per-side)
 			...borderCSSProperties,
 		};
@@ -328,7 +350,7 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 		itemPadding,
 		itemHoverBackground,
 		itemHoverTextColor,
-		submenuIndent,
+		priorityPlusMenuSubmenuIndent,
 		typographyStyles,
 	]);
 

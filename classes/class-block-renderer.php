@@ -335,10 +335,21 @@ class Block_Renderer extends Plugin_Module {
 		}
 
 		if ( ! empty( $attributes['menu_submenu_indent'] ) ) {
-			$style_parts[] = sprintf(
-				'--wp--custom--priority-plus-navigation--dropdown--multi-level-indent: %s',
-				esc_attr( $attributes['menu_submenu_indent'] )
-			);
+			$submenu_indent_css = '';
+			// Handle new object format (e.g., { left: '1.25rem' }).
+			if ( is_array( $attributes['menu_submenu_indent'] ) && ! empty( $attributes['menu_submenu_indent']['left'] ) ) {
+				$submenu_indent_css = $this->css_converter->convert_preset_value( $attributes['menu_submenu_indent']['left'] );
+			} elseif ( is_string( $attributes['menu_submenu_indent'] ) ) {
+				// Handle legacy string format.
+				$submenu_indent_css = $this->css_converter->convert_preset_value( $attributes['menu_submenu_indent'] );
+			}
+
+			if ( '' !== $submenu_indent_css ) {
+				$style_parts[] = sprintf(
+					'--wp--custom--priority-plus-navigation--dropdown--multi-level-indent: %s',
+					esc_attr( $submenu_indent_css )
+				);
+			}
 		}
 
 		// Handle border.
