@@ -21,14 +21,15 @@ export function DropdownCustomizerModal({
 	setAttributes,
 	onClose,
 }) {
-	// Merge defaults with existing attributes (deep merge for nested objects)
-	const existingStyles = attributes.priorityNavDropdownStyles || {};
+	// Always get the latest dropdown styles from attributes
+	// This ensures the preview updates immediately when styles change
 	const priorityNavDropdownStyles = {
 		...DEFAULT_DROPDOWN_STYLES,
-		...existingStyles,
+		...(attributes.priorityNavDropdownStyles || {}),
 		// If itemSpacing exists but is empty/undefined, use default
 		itemSpacing:
-			existingStyles.itemSpacing || DEFAULT_DROPDOWN_STYLES.itemSpacing,
+			attributes.priorityNavDropdownStyles?.itemSpacing ||
+			DEFAULT_DROPDOWN_STYLES.itemSpacing,
 	};
 
 	// Get typography settings from theme to convert slugs to values
@@ -112,26 +113,35 @@ export function DropdownCustomizerModal({
 
 	// Initialize defaults on mount if missing
 	useEffect(() => {
-		const existingStyles = attributes.priorityNavDropdownStyles || {};
-
 		// Check if we need to set defaults
-		if (!existingStyles.itemSpacing) {
+		if (!attributes.priorityNavDropdownStyles?.itemSpacing) {
 			setAttributes({
 				priorityNavDropdownStyles: {
 					...DEFAULT_DROPDOWN_STYLES,
-					...existingStyles,
+					...(attributes.priorityNavDropdownStyles || {}),
 				},
 			});
 		}
 	}, []); // Only run on mount
 
-	// Helper to update a single style property
+	// Helper to update style properties (single or multiple)
 	const updateStyle = (key, value) => {
+		// Always get the latest styles from attributes to avoid stale closure
+		const currentStyles = {
+			...DEFAULT_DROPDOWN_STYLES,
+			...(attributes.priorityNavDropdownStyles || {}),
+		};
+
+		// Handle bulk updates (when value is an object and key is 'border' or similar)
+		const newStyles =
+			typeof value === 'object' && !Array.isArray(value) && key === 'border'
+				? { ...currentStyles, ...value }
+				: { ...currentStyles, [key]: value };
+
+		console.log('[updateStyle] Setting:', key, '=', value);
+		console.log('[updateStyle] Full new styles:', newStyles);
 		setAttributes({
-			priorityNavDropdownStyles: {
-				...priorityNavDropdownStyles,
-				[key]: value,
-			},
+			priorityNavDropdownStyles: newStyles,
 		});
 	};
 
@@ -159,6 +169,14 @@ export function DropdownCustomizerModal({
 		return !!priorityNavDropdownStyles.itemSpacing;
 	};
 
+	// Helper to check if border has values
+	const hasBorderValue = () => {
+		return (
+			!!priorityNavDropdownStyles.borderColor ||
+			!!priorityNavDropdownStyles.borderWidth
+		);
+	};
+
 	return (
 		<Modal
 			title={__('Customize Dropdown Styles', 'priority-plus-navigation')}
@@ -177,6 +195,7 @@ export function DropdownCustomizerModal({
 					<MenuStylesPanel
 						styles={priorityNavDropdownStyles}
 						updateStyle={updateStyle}
+						hasBorderValue={hasBorderValue}
 						hasValue={hasValue}
 						resetToDefault={resetToDefault}
 					/>

@@ -27,13 +27,6 @@ export function ColorPanel({ styles, updateStyle }) {
 					clearable: true,
 				},
 				{
-					label: __('Border Color', 'priority-plus-navigation'),
-					value: styles.borderColor,
-					onChange: (color) =>
-						updateStyle('borderColor', color || '#dddddd'),
-					clearable: true,
-				},
-				{
 					label: __(
 						'Hover Background Color',
 						'priority-plus-navigation'
