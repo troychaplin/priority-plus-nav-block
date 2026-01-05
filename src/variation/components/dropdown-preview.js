@@ -16,6 +16,7 @@ import {
 	DEFAULT_MENU_ITEM_HOVER_BACKGROUND,
 	DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
 	DEFAULT_MENU_SUBMENU_INDENT,
+	DEFAULT_MENU_ITEM_SEPARATOR,
 } from '../constants';
 
 /**
@@ -283,6 +284,7 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 		priorityPlusMenuItemHoverBackground,
 		priorityPlusMenuItemHoverTextColor,
 		priorityPlusMenuSubmenuIndent,
+		priorityPlusMenuItemSeparator,
 	} = attributes;
 
 	// Use defaults if attributes are undefined
@@ -300,6 +302,8 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 	const itemHoverTextColor =
 		priorityPlusMenuItemHoverTextColor ||
 		DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR;
+	const itemSeparator =
+		priorityPlusMenuItemSeparator || DEFAULT_MENU_ITEM_SEPARATOR;
 	// State for accordion open/closed
 	const [isAccordionOpen, setIsAccordionOpen] = useState(true);
 
@@ -323,6 +327,12 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 				itemHoverTextColor,
 			'--wp--custom--priority-plus-navigation--dropdown--multi-level-indent':
 				getSubmenuIndentCSS(priorityPlusMenuSubmenuIndent),
+			'--wp--custom--priority-plus-navigation--dropdown--item-separator-color':
+				itemSeparator?.color || 'transparent',
+			'--wp--custom--priority-plus-navigation--dropdown--item-separator-width':
+				itemSeparator?.width || '0',
+			'--wp--custom--priority-plus-navigation--dropdown--item-separator-style':
+				itemSeparator?.style || 'solid',
 			// Spread border CSS properties (either unified or per-side)
 			...borderCSSProperties,
 		};
@@ -351,6 +361,7 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 		itemHoverBackground,
 		itemHoverTextColor,
 		priorityPlusMenuSubmenuIndent,
+		itemSeparator,
 		typographyStyles,
 	]);
 

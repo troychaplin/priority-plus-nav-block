@@ -33,3 +33,9 @@ export const DEFAULT_MENU_ITEM_HOVER_BACKGROUND = 'rgba(0, 0, 0, 0.05)';
 export const DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR = '#191919';
 
 export const DEFAULT_MENU_SUBMENU_INDENT = '1.25rem';
+
+export const DEFAULT_MENU_ITEM_SEPARATOR = {
+	color: '#dddddd',
+	width: '1px',
+	style: 'solid',
+};

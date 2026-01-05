@@ -18,6 +18,7 @@ import {
 	DEFAULT_MENU_ITEM_HOVER_BACKGROUND,
 	DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
 	DEFAULT_MENU_SUBMENU_INDENT,
+	DEFAULT_MENU_ITEM_SEPARATOR,
 } from './constants';
 
 /**
@@ -126,6 +127,10 @@ addFilter(
 				priorityPlusMenuSubmenuIndent: {
 					type: 'string',
 					default: DEFAULT_MENU_SUBMENU_INDENT,
+				},
+				priorityPlusMenuItemSeparator: {
+					type: 'object',
+					default: DEFAULT_MENU_ITEM_SEPARATOR,
 				},
 				// Typography attributes (for preview)
 				priorityPlusTypographyFontFamily: {

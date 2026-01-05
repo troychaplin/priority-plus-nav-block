@@ -109,6 +109,19 @@
 			transform: translateY(0);
 		}
 
+		// Top-level list items with separator border
+		> li {
+			margin: 0;
+			padding: 0;
+
+			// Item separator - top border on all items except first
+			&:not(:first-child) {
+				border-top-color: var(--wp--custom--priority-plus-navigation--dropdown--item-separator-color, transparent);
+				border-top-width: var(--wp--custom--priority-plus-navigation--dropdown--item-separator-width, 0);
+				border-top-style: var(--wp--custom--priority-plus-navigation--dropdown--item-separator-style, solid);
+			}
+		}
+
 		li {
 			margin: 0;
 			padding: 0;

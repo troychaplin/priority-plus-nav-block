@@ -34,6 +34,7 @@ import {
 	DEFAULT_MENU_ITEM_HOVER_BACKGROUND,
 	DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
 	DEFAULT_MENU_SUBMENU_INDENT,
+	DEFAULT_MENU_ITEM_SEPARATOR,
 } from './constants';
 
 /**
@@ -217,6 +218,8 @@ const withPriorityPlusControls = createHigherOrderComponent((BlockEdit) => {
 								priorityPlusMenuSubmenuIndent: {
 									left: DEFAULT_MENU_SUBMENU_INDENT,
 								},
+								priorityPlusMenuItemSeparator:
+									DEFAULT_MENU_ITEM_SEPARATOR,
 							})
 						}
 					>
@@ -274,7 +277,7 @@ const withPriorityPlusControls = createHigherOrderComponent((BlockEdit) => {
 								);
 							}}
 							label={__(
-								'Customize DropdownMenu',
+								'Custom Dropdown',
 								'priority-plus-navigation'
 							)}
 							onDeselect={() =>
@@ -386,7 +389,10 @@ const withPriorityPlusControls = createHigherOrderComponent((BlockEdit) => {
 					>
 						<ToolsPanelItem
 							hasValue={hasPaddingValue}
-							label={__('Button Padding', 'priority-plus-navigation')}
+							label={__(
+								'Button Padding',
+								'priority-plus-navigation'
+							)}
 							onDeselect={() =>
 								setAttributes({
 									priorityPlusTogglePadding: undefined,

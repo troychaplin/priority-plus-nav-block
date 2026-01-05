@@ -167,6 +167,7 @@ class Block_Renderer extends Plugin_Module {
 			'menu_item_hover_background'    => $this->get_priority_attr( $block, 'priorityPlusMenuItemHoverBackground', '' ),
 			'menu_item_hover_text_color'    => $this->get_priority_attr( $block, 'priorityPlusMenuItemHoverTextColor', '' ),
 			'menu_submenu_indent'           => $this->get_priority_attr( $block, 'priorityPlusMenuSubmenuIndent', '' ),
+			'menu_item_separator'           => $this->get_priority_attr( $block, 'priorityPlusMenuItemSeparator', array() ),
 		);
 	}
 
@@ -385,6 +386,30 @@ class Block_Renderer extends Plugin_Module {
 				);
 			}
 		}
+
+		// Handle item separator (top border on each li).
+		// Use defaults if not set to ensure separator is visible on first load.
+		$separator_defaults = array(
+			'color' => '#dddddd',
+			'width' => '1px',
+			'style' => 'solid',
+		);
+		$separator          = is_array( $attributes['menu_item_separator'] ) && ! empty( $attributes['menu_item_separator'] )
+			? $attributes['menu_item_separator']
+			: $separator_defaults;
+
+		$style_parts[] = sprintf(
+			'--wp--custom--priority-plus-navigation--dropdown--item-separator-color: %s',
+			esc_attr( ! empty( $separator['color'] ) ? $separator['color'] : $separator_defaults['color'] )
+		);
+		$style_parts[] = sprintf(
+			'--wp--custom--priority-plus-navigation--dropdown--item-separator-width: %s',
+			esc_attr( ! empty( $separator['width'] ) ? $separator['width'] : $separator_defaults['width'] )
+		);
+		$style_parts[] = sprintf(
+			'--wp--custom--priority-plus-navigation--dropdown--item-separator-style: %s',
+			esc_attr( ! empty( $separator['style'] ) ? $separator['style'] : $separator_defaults['style'] )
+		);
 
 		return $style_parts;
 	}

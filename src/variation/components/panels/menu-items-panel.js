@@ -5,8 +5,12 @@ import {
 	BoxControl,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
+	__experimentalBorderControl as BorderControl,
 } from '@wordpress/components';
-import { __experimentalSpacingSizesControl as SpacingSizesControl } from '@wordpress/block-editor';
+import {
+	useSetting,
+	__experimentalSpacingSizesControl as SpacingSizesControl,
+} from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -15,6 +19,7 @@ import { __ } from '@wordpress/i18n';
 import {
 	DEFAULT_MENU_ITEM_PADDING,
 	DEFAULT_MENU_SUBMENU_INDENT,
+	DEFAULT_MENU_ITEM_SEPARATOR,
 } from '../../constants';
 
 /**
@@ -76,19 +81,38 @@ function normalizeIndentValue(indent) {
 }
 
 /**
+ * Check if item separator has a value
+ *
+ * @param {Object} separator - The separator border value
+ * @return {boolean} Whether separator has a value
+ */
+function hasItemSeparatorValue(separator) {
+	if (!separator) {
+		return false;
+	}
+	return !!(separator.color || separator.width || separator.style);
+}
+
+/**
  * MenuItemsPanel Component
  *
- * Provides controls for menu spacing (item padding and submenu indent).
+ * Provides controls for menu item styles (padding, indent, separator).
  *
  * @param {Object}   props               - Component props
  * @param {Object}   props.attributes    - Block attributes
  * @param {Function} props.setAttributes - Function to update attributes
  * @param {Array}    props.spacingSizes  - Available spacing sizes from theme
- * @return {JSX.Element} Menu spacing panel component
+ * @return {JSX.Element} Menu items panel component
  */
 export function MenuItemsPanel({ attributes, setAttributes, spacingSizes }) {
-	const { priorityPlusMenuItemPadding, priorityPlusMenuSubmenuIndent } =
-		attributes;
+	const {
+		priorityPlusMenuItemPadding,
+		priorityPlusMenuSubmenuIndent,
+		priorityPlusMenuItemSeparator,
+	} = attributes;
+
+	// Get color palette from theme settings
+	const colors = useSetting('color.palette') || [];
 
 	return (
 		<ToolsPanel
@@ -97,9 +121,41 @@ export function MenuItemsPanel({ attributes, setAttributes, spacingSizes }) {
 				setAttributes({
 					priorityPlusMenuItemPadding: DEFAULT_MENU_ITEM_PADDING,
 					priorityPlusMenuSubmenuIndent: DEFAULT_MENU_SUBMENU_INDENT,
+					priorityPlusMenuItemSeparator: DEFAULT_MENU_ITEM_SEPARATOR,
 				});
 			}}
 		>
+			<ToolsPanelItem
+				hasValue={() =>
+					hasItemSeparatorValue(priorityPlusMenuItemSeparator)
+				}
+				label={__('Menu Item Divider', 'priority-plus-navigation')}
+				onDeselect={() =>
+					setAttributes({
+						priorityPlusMenuItemSeparator:
+							DEFAULT_MENU_ITEM_SEPARATOR,
+					})
+				}
+				isShownByDefault
+			>
+				<BorderControl
+					__next40pxDefaultSize
+					label={__('Menu Item Divider', 'priority-plus-navigation')}
+					colors={colors}
+					value={
+						priorityPlusMenuItemSeparator ||
+						DEFAULT_MENU_ITEM_SEPARATOR
+					}
+					onChange={(newBorder) =>
+						setAttributes({
+							priorityPlusMenuItemSeparator: newBorder,
+						})
+					}
+					enableAlpha={true}
+					enableStyle={true}
+					withSlider={true}
+				/>
+			</ToolsPanelItem>
 			<ToolsPanelItem
 				hasValue={() =>
 					hasItemPaddingValue(priorityPlusMenuItemPadding)

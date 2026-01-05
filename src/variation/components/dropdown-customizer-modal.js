@@ -22,6 +22,7 @@ import {
 	DEFAULT_MENU_ITEM_HOVER_BACKGROUND,
 	DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
 	DEFAULT_MENU_SUBMENU_INDENT,
+	DEFAULT_MENU_ITEM_SEPARATOR,
 } from '../constants';
 
 export function DropdownCustomizerModal({
@@ -123,6 +124,7 @@ export function DropdownCustomizerModal({
 			priorityPlusMenuSubmenuIndent: {
 				left: DEFAULT_MENU_SUBMENU_INDENT,
 			},
+			priorityPlusMenuItemSeparator: DEFAULT_MENU_ITEM_SEPARATOR,
 		});
 	};
 
