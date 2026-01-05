@@ -6,6 +6,10 @@ logs
 # Dependency directories
 node_modules/
 
+# Claude Code
+.claude
+CLAUDE.md
+
 # Optional npm cache directory
 .npm
 
