@@ -10,6 +10,7 @@ import { __ } from '@wordpress/i18n';
 import {
 	DEFAULT_SUBMENU_BACKGROUND_COLOR,
 	DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+	DEFAULT_SUBMENU_ITEM_TEXT_COLOR,
 	DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 } from '../../constants';
 
@@ -28,6 +29,7 @@ export function SubmenuColorPanel({ attributes, setAttributes }) {
 	const {
 		priorityPlusSubmenuBackgroundColor,
 		priorityPlusSubmenuItemHoverBackground,
+		priorityPlusSubmenuItemTextColor,
 		priorityPlusSubmenuItemHoverTextColor,
 	} = attributes;
 
@@ -59,6 +61,18 @@ export function SubmenuColorPanel({ attributes, setAttributes }) {
 						setAttributes({
 							priorityPlusSubmenuItemHoverBackground:
 								color || DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+						}),
+					enableAlpha: true,
+				},
+				{
+					label: __('Item Text Color', 'priority-plus-navigation'),
+					value:
+						priorityPlusSubmenuItemTextColor ||
+						DEFAULT_SUBMENU_ITEM_TEXT_COLOR,
+					onChange: (color) =>
+						setAttributes({
+							priorityPlusSubmenuItemTextColor:
+								color || DEFAULT_SUBMENU_ITEM_TEXT_COLOR,
 						}),
 					enableAlpha: true,
 				},

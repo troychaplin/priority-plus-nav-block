@@ -165,6 +165,7 @@ class Block_Renderer extends Plugin_Module {
 			'menu_box_shadow'               => $this->get_priority_attr( $block, 'priorityPlusMenuBoxShadow', '' ),
 			'menu_item_padding'             => $this->get_priority_attr( $block, 'priorityPlusMenuItemPadding', array() ),
 			'menu_item_hover_background'    => $this->get_priority_attr( $block, 'priorityPlusMenuItemHoverBackground', '' ),
+			'menu_item_text_color'          => $this->get_priority_attr( $block, 'priorityPlusMenuItemTextColor', '' ),
 			'menu_item_hover_text_color'    => $this->get_priority_attr( $block, 'priorityPlusMenuItemHoverTextColor', '' ),
 			'menu_submenu_indent'           => $this->get_priority_attr( $block, 'priorityPlusMenuSubmenuIndent', '' ),
 			'menu_item_separator'           => $this->get_priority_attr( $block, 'priorityPlusMenuItemSeparator', array() ),
@@ -172,6 +173,7 @@ class Block_Renderer extends Plugin_Module {
 			// Submenu color attributes.
 			'submenu_background_color'       => $this->get_priority_attr( $block, 'priorityPlusSubmenuBackgroundColor', '' ),
 			'submenu_item_hover_background'  => $this->get_priority_attr( $block, 'priorityPlusSubmenuItemHoverBackground', '' ),
+			'submenu_item_text_color'        => $this->get_priority_attr( $block, 'priorityPlusSubmenuItemTextColor', '' ),
 			'submenu_item_hover_text_color'  => $this->get_priority_attr( $block, 'priorityPlusSubmenuItemHoverTextColor', '' ),
 		);
 	}
@@ -333,6 +335,13 @@ class Block_Renderer extends Plugin_Module {
 			);
 		}
 
+		if ( ! empty( $attributes['menu_item_text_color'] ) ) {
+			$style_parts[] = sprintf(
+				'--wp--custom--priority-plus-navigation--dropdown--item-text-color: %s',
+				esc_attr( $attributes['menu_item_text_color'] )
+			);
+		}
+
 		if ( ! empty( $attributes['menu_item_hover_text_color'] ) ) {
 			$style_parts[] = sprintf(
 				'--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color: %s',
@@ -420,6 +429,7 @@ class Block_Renderer extends Plugin_Module {
 		$submenu_defaults = array(
 			'background_color'      => '#ffffff',
 			'item_hover_background' => 'rgba(0, 0, 0, 0.05)',
+			'item_text_color'       => '#191919',
 			'item_hover_text_color' => '#191919',
 		);
 
@@ -430,6 +440,10 @@ class Block_Renderer extends Plugin_Module {
 		$style_parts[] = sprintf(
 			'--wp--custom--priority-plus-navigation--dropdown--submenu-item-hover-background-color: %s',
 			esc_attr( ! empty( $attributes['submenu_item_hover_background'] ) ? $attributes['submenu_item_hover_background'] : $submenu_defaults['item_hover_background'] )
+		);
+		$style_parts[] = sprintf(
+			'--wp--custom--priority-plus-navigation--dropdown--submenu-item-text-color: %s',
+			esc_attr( ! empty( $attributes['submenu_item_text_color'] ) ? $attributes['submenu_item_text_color'] : $submenu_defaults['item_text_color'] )
 		);
 		$style_parts[] = sprintf(
 			'--wp--custom--priority-plus-navigation--dropdown--submenu-item-hover-text-color: %s',

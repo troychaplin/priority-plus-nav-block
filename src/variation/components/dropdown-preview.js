@@ -14,11 +14,13 @@ import {
 	DEFAULT_MENU_BOX_SHADOW,
 	DEFAULT_MENU_ITEM_PADDING,
 	DEFAULT_MENU_ITEM_HOVER_BACKGROUND,
+	DEFAULT_MENU_ITEM_TEXT_COLOR,
 	DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
 	DEFAULT_MENU_SUBMENU_INDENT,
 	DEFAULT_MENU_ITEM_SEPARATOR,
 	DEFAULT_SUBMENU_BACKGROUND_COLOR,
 	DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+	DEFAULT_SUBMENU_ITEM_TEXT_COLOR,
 	DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 } from '../constants';
 
@@ -285,11 +287,13 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 		priorityPlusMenuBoxShadow,
 		priorityPlusMenuItemPadding,
 		priorityPlusMenuItemHoverBackground,
+		priorityPlusMenuItemTextColor,
 		priorityPlusMenuItemHoverTextColor,
 		priorityPlusMenuSubmenuIndent,
 		priorityPlusMenuItemSeparator,
 		priorityPlusSubmenuBackgroundColor,
 		priorityPlusSubmenuItemHoverBackground,
+		priorityPlusSubmenuItemTextColor,
 		priorityPlusSubmenuItemHoverTextColor,
 	} = attributes;
 
@@ -305,6 +309,8 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 	const itemHoverBackground =
 		priorityPlusMenuItemHoverBackground ||
 		DEFAULT_MENU_ITEM_HOVER_BACKGROUND;
+	const itemTextColor =
+		priorityPlusMenuItemTextColor || DEFAULT_MENU_ITEM_TEXT_COLOR;
 	const itemHoverTextColor =
 		priorityPlusMenuItemHoverTextColor ||
 		DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR;
@@ -315,6 +321,8 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 	const submenuItemHoverBackground =
 		priorityPlusSubmenuItemHoverBackground ||
 		DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND;
+	const submenuItemTextColor =
+		priorityPlusSubmenuItemTextColor || DEFAULT_SUBMENU_ITEM_TEXT_COLOR;
 	const submenuItemHoverTextColor =
 		priorityPlusSubmenuItemHoverTextColor ||
 		DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR;
@@ -337,6 +345,8 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 				getItemPaddingCSS(itemPadding),
 			'--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color':
 				itemHoverBackground,
+			'--wp--custom--priority-plus-navigation--dropdown--item-text-color':
+				itemTextColor,
 			'--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color':
 				itemHoverTextColor,
 			'--wp--custom--priority-plus-navigation--dropdown--multi-level-indent':
@@ -352,6 +362,8 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 				submenuBackgroundColor,
 			'--wp--custom--priority-plus-navigation--dropdown--submenu-item-hover-background-color':
 				submenuItemHoverBackground,
+			'--wp--custom--priority-plus-navigation--dropdown--submenu-item-text-color':
+				submenuItemTextColor,
 			'--wp--custom--priority-plus-navigation--dropdown--submenu-item-hover-text-color':
 				submenuItemHoverTextColor,
 			// Spread border CSS properties (either unified or per-side)
@@ -380,11 +392,13 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 		boxShadow,
 		itemPadding,
 		itemHoverBackground,
+		itemTextColor,
 		itemHoverTextColor,
 		priorityPlusMenuSubmenuIndent,
 		itemSeparator,
 		submenuBackgroundColor,
 		submenuItemHoverBackground,
+		submenuItemTextColor,
 		submenuItemHoverTextColor,
 		typographyStyles,
 	]);

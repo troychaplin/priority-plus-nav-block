@@ -129,7 +129,7 @@
 			a {
 				display: block;
 				padding: var(--wp--custom--priority-plus-navigation--dropdown--item-spacing);
-				color: inherit;
+				color: var(--wp--custom--priority-plus-navigation--dropdown--item-text-color, #191919);
 				font-weight: inherit;
 				font-style: inherit;
 				text-decoration: none;
@@ -161,7 +161,7 @@
 			font-family: inherit;
 			font-weight: inherit;
 			font-style: inherit;
-			color: inherit;
+			color: var(--wp--custom--priority-plus-navigation--dropdown--item-text-color, #191919);
 			text-align: left;
 			transition: background 0.2s ease, color 0.2s ease;
 			outline: none;
@@ -224,6 +224,23 @@
 
 			&.is-open {
 				display: block !important;
+			}
+
+			// Submenu item text colors (non-hover state)
+			> li > a {
+				color: var(--wp--custom--priority-plus-navigation--dropdown--submenu-item-text-color, #191919);
+			}
+
+			> li > .priority-plus-navigation-accordion-toggle-full {
+				color: var(--wp--custom--priority-plus-navigation--dropdown--submenu-item-text-color, #191919);
+			}
+
+			> li > .priority-plus-navigation-accordion-wrapper > .priority-plus-navigation-accordion-link {
+				color: var(--wp--custom--priority-plus-navigation--dropdown--submenu-item-text-color, #191919);
+			}
+
+			> li > .priority-plus-navigation-accordion-wrapper > .priority-plus-navigation-accordion-toggle-arrow {
+				color: var(--wp--custom--priority-plus-navigation--dropdown--submenu-item-text-color, #191919);
 			}
 
 			// Submenu item hover colors (only for items within accordion content)
@@ -298,6 +315,7 @@
 		.priority-plus-navigation-accordion-link {
 			flex: 1;
 			padding: var(--wp--custom--priority-plus-navigation--dropdown--item-spacing);
+			color: var(--wp--custom--priority-plus-navigation--dropdown--item-text-color, #191919);
 			transition: background 0.2s ease, color 0.2s ease;
 
 			&:hover {
@@ -313,7 +331,7 @@
 			cursor: pointer;
 			font-size: inherit;
 			font-family: inherit;
-			color: inherit;
+			color: var(--wp--custom--priority-plus-navigation--dropdown--item-text-color, #191919);
 			flex-shrink: 0;
 			transition: background 0.2s ease, color 0.2s ease;
 			outline: none;

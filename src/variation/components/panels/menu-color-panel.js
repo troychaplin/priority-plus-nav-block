@@ -10,6 +10,7 @@ import { __ } from '@wordpress/i18n';
 import {
 	DEFAULT_MENU_BACKGROUND_COLOR,
 	DEFAULT_MENU_ITEM_HOVER_BACKGROUND,
+	DEFAULT_MENU_ITEM_TEXT_COLOR,
 	DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
 } from '../../constants';
 
@@ -28,6 +29,7 @@ export function ColorPanel({ attributes, setAttributes }) {
 	const {
 		priorityPlusMenuBackgroundColor,
 		priorityPlusMenuItemHoverBackground,
+		priorityPlusMenuItemTextColor,
 		priorityPlusMenuItemHoverTextColor,
 	} = attributes;
 
@@ -45,7 +47,7 @@ export function ColorPanel({ attributes, setAttributes }) {
 							priorityPlusMenuBackgroundColor:
 								color || DEFAULT_MENU_BACKGROUND_COLOR,
 						}),
-                        enableAlpha: true,
+					enableAlpha: true,
 				},
 				{
 					label: __(
@@ -63,6 +65,18 @@ export function ColorPanel({ attributes, setAttributes }) {
 					enableAlpha: true,
 				},
 				{
+					label: __('Item Text Color', 'priority-plus-navigation'),
+					value:
+						priorityPlusMenuItemTextColor ||
+						DEFAULT_MENU_ITEM_TEXT_COLOR,
+					onChange: (color) =>
+						setAttributes({
+							priorityPlusMenuItemTextColor:
+								color || DEFAULT_MENU_ITEM_TEXT_COLOR,
+						}),
+					enableAlpha: true,
+				},
+				{
 					label: __(
 						'Item Hover Text Color',
 						'priority-plus-navigation'
@@ -75,7 +89,7 @@ export function ColorPanel({ attributes, setAttributes }) {
 							priorityPlusMenuItemHoverTextColor:
 								color || DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
 						}),
-                        enableAlpha: true,
+					enableAlpha: true,
 				},
 			]}
 		/>
