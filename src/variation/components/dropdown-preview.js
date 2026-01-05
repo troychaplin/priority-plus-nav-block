@@ -17,6 +17,9 @@ import {
 	DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
 	DEFAULT_MENU_SUBMENU_INDENT,
 	DEFAULT_MENU_ITEM_SEPARATOR,
+	DEFAULT_SUBMENU_BACKGROUND_COLOR,
+	DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+	DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 } from '../constants';
 
 /**
@@ -285,6 +288,9 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 		priorityPlusMenuItemHoverTextColor,
 		priorityPlusMenuSubmenuIndent,
 		priorityPlusMenuItemSeparator,
+		priorityPlusSubmenuBackgroundColor,
+		priorityPlusSubmenuItemHoverBackground,
+		priorityPlusSubmenuItemHoverTextColor,
 	} = attributes;
 
 	// Use defaults if attributes are undefined
@@ -304,6 +310,14 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 		DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR;
 	const itemSeparator =
 		priorityPlusMenuItemSeparator || DEFAULT_MENU_ITEM_SEPARATOR;
+	const submenuBackgroundColor =
+		priorityPlusSubmenuBackgroundColor || DEFAULT_SUBMENU_BACKGROUND_COLOR;
+	const submenuItemHoverBackground =
+		priorityPlusSubmenuItemHoverBackground ||
+		DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND;
+	const submenuItemHoverTextColor =
+		priorityPlusSubmenuItemHoverTextColor ||
+		DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR;
 	// State for accordion open/closed
 	const [isAccordionOpen, setIsAccordionOpen] = useState(true);
 
@@ -333,6 +347,13 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 				itemSeparator?.width || '0',
 			'--wp--custom--priority-plus-navigation--dropdown--item-separator-style':
 				itemSeparator?.style || 'solid',
+			// Submenu colors
+			'--wp--custom--priority-plus-navigation--dropdown--submenu-background-color':
+				submenuBackgroundColor,
+			'--wp--custom--priority-plus-navigation--dropdown--submenu-item-hover-background-color':
+				submenuItemHoverBackground,
+			'--wp--custom--priority-plus-navigation--dropdown--submenu-item-hover-text-color':
+				submenuItemHoverTextColor,
 			// Spread border CSS properties (either unified or per-side)
 			...borderCSSProperties,
 		};
@@ -362,6 +383,9 @@ export function DropdownPreview({ attributes, typographyStyles = {} }) {
 		itemHoverTextColor,
 		priorityPlusMenuSubmenuIndent,
 		itemSeparator,
+		submenuBackgroundColor,
+		submenuItemHoverBackground,
+		submenuItemHoverTextColor,
 		typographyStyles,
 	]);
 

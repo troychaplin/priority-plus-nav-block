@@ -39,3 +39,8 @@ export const DEFAULT_MENU_ITEM_SEPARATOR = {
 	width: '1px',
 	style: 'solid',
 };
+
+// Submenu colors (same defaults as menu colors)
+export const DEFAULT_SUBMENU_BACKGROUND_COLOR = '#ffffff';
+export const DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND = 'rgba(0, 0, 0, 0.05)';
+export const DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR = '#191919';

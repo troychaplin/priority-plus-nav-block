@@ -11,6 +11,7 @@ import { __ } from '@wordpress/i18n';
 import './modal.scss';
 import { DropdownPreview } from './dropdown-preview';
 import { ColorPanel } from './panels/menu-color-panel';
+import { SubmenuColorPanel } from './panels/submenu-color-panel';
 import { MenuStylesPanel } from './panels/menu-styles-panel';
 import { MenuItemsPanel } from './panels/menu-items-panel';
 import {
@@ -23,6 +24,9 @@ import {
 	DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
 	DEFAULT_MENU_SUBMENU_INDENT,
 	DEFAULT_MENU_ITEM_SEPARATOR,
+	DEFAULT_SUBMENU_BACKGROUND_COLOR,
+	DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+	DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 } from '../constants';
 
 export function DropdownCustomizerModal({
@@ -125,6 +129,12 @@ export function DropdownCustomizerModal({
 				left: DEFAULT_MENU_SUBMENU_INDENT,
 			},
 			priorityPlusMenuItemSeparator: DEFAULT_MENU_ITEM_SEPARATOR,
+			priorityPlusSubmenuBackgroundColor:
+				DEFAULT_SUBMENU_BACKGROUND_COLOR,
+			priorityPlusSubmenuItemHoverBackground:
+				DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+			priorityPlusSubmenuItemHoverTextColor:
+				DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 		});
 	};
 
@@ -146,6 +156,10 @@ export function DropdownCustomizerModal({
 						setAttributes={setAttributes}
 					/>
 					<MenuStylesPanel
+						attributes={attributes}
+						setAttributes={setAttributes}
+					/>
+					<SubmenuColorPanel
 						attributes={attributes}
 						setAttributes={setAttributes}
 					/>

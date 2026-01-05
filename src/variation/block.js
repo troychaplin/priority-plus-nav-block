@@ -19,6 +19,9 @@ import {
 	DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
 	DEFAULT_MENU_SUBMENU_INDENT,
 	DEFAULT_MENU_ITEM_SEPARATOR,
+	DEFAULT_SUBMENU_BACKGROUND_COLOR,
+	DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+	DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 } from './constants';
 
 /**
@@ -131,6 +134,19 @@ addFilter(
 				priorityPlusMenuItemSeparator: {
 					type: 'object',
 					default: DEFAULT_MENU_ITEM_SEPARATOR,
+				},
+				// Submenu color attributes
+				priorityPlusSubmenuBackgroundColor: {
+					type: 'string',
+					default: DEFAULT_SUBMENU_BACKGROUND_COLOR,
+				},
+				priorityPlusSubmenuItemHoverBackground: {
+					type: 'string',
+					default: DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+				},
+				priorityPlusSubmenuItemHoverTextColor: {
+					type: 'string',
+					default: DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 				},
 				// Typography attributes (for preview)
 				priorityPlusTypographyFontFamily: {

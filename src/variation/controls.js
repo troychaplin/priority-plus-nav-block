@@ -35,6 +35,9 @@ import {
 	DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
 	DEFAULT_MENU_SUBMENU_INDENT,
 	DEFAULT_MENU_ITEM_SEPARATOR,
+	DEFAULT_SUBMENU_BACKGROUND_COLOR,
+	DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+	DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 } from './constants';
 
 /**
@@ -220,6 +223,12 @@ const withPriorityPlusControls = createHigherOrderComponent((BlockEdit) => {
 								},
 								priorityPlusMenuItemSeparator:
 									DEFAULT_MENU_ITEM_SEPARATOR,
+								priorityPlusSubmenuBackgroundColor:
+									DEFAULT_SUBMENU_BACKGROUND_COLOR,
+								priorityPlusSubmenuItemHoverBackground:
+									DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+								priorityPlusSubmenuItemHoverTextColor:
+									DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 							})
 						}
 					>
@@ -298,6 +307,14 @@ const withPriorityPlusControls = createHigherOrderComponent((BlockEdit) => {
 									priorityPlusMenuSubmenuIndent: {
 										left: DEFAULT_MENU_SUBMENU_INDENT,
 									},
+									priorityPlusMenuItemSeparator:
+										DEFAULT_MENU_ITEM_SEPARATOR,
+									priorityPlusSubmenuBackgroundColor:
+										DEFAULT_SUBMENU_BACKGROUND_COLOR,
+									priorityPlusSubmenuItemHoverBackground:
+										DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+									priorityPlusSubmenuItemHoverTextColor:
+										DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 								})
 							}
 							isShownByDefault

@@ -8,42 +8,42 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import {
-	DEFAULT_MENU_BACKGROUND_COLOR,
-	DEFAULT_MENU_ITEM_HOVER_BACKGROUND,
-	DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
+	DEFAULT_SUBMENU_BACKGROUND_COLOR,
+	DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
+	DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 } from '../../constants';
 
 /**
- * ColorPanel Component
+ * SubmenuColorPanel Component
  *
- * Provides color controls for menu styling.
+ * Provides color controls for submenu styling (nested accordion items).
  * Colors always show their value (or default) and reset to defaults when cleared.
  *
  * @param {Object}   props               - Component props
  * @param {Object}   props.attributes    - Block attributes
  * @param {Function} props.setAttributes - Function to update attributes
- * @return {JSX.Element} Color panel component
+ * @return {JSX.Element} Submenu color panel component
  */
-export function ColorPanel({ attributes, setAttributes }) {
+export function SubmenuColorPanel({ attributes, setAttributes }) {
 	const {
-		priorityPlusMenuBackgroundColor,
-		priorityPlusMenuItemHoverBackground,
-		priorityPlusMenuItemHoverTextColor,
+		priorityPlusSubmenuBackgroundColor,
+		priorityPlusSubmenuItemHoverBackground,
+		priorityPlusSubmenuItemHoverTextColor,
 	} = attributes;
 
 	return (
 		<PanelColorSettings
-			title={__('Priority Plus Menu Colors', 'priority-plus-navigation')}
+			title={__('Priority Plus Submenu Colors', 'priority-plus-navigation')}
 			colorSettings={[
 				{
 					label: __('Background Color', 'priority-plus-navigation'),
 					value:
-						priorityPlusMenuBackgroundColor ||
-						DEFAULT_MENU_BACKGROUND_COLOR,
+						priorityPlusSubmenuBackgroundColor ||
+						DEFAULT_SUBMENU_BACKGROUND_COLOR,
 					onChange: (color) =>
 						setAttributes({
-							priorityPlusMenuBackgroundColor:
-								color || DEFAULT_MENU_BACKGROUND_COLOR,
+							priorityPlusSubmenuBackgroundColor:
+								color || DEFAULT_SUBMENU_BACKGROUND_COLOR,
 						}),
                         enableAlpha: true,
 				},
@@ -53,12 +53,12 @@ export function ColorPanel({ attributes, setAttributes }) {
 						'priority-plus-navigation'
 					),
 					value:
-						priorityPlusMenuItemHoverBackground ||
-						DEFAULT_MENU_ITEM_HOVER_BACKGROUND,
+						priorityPlusSubmenuItemHoverBackground ||
+						DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
 					onChange: (color) =>
 						setAttributes({
-							priorityPlusMenuItemHoverBackground:
-								color || DEFAULT_MENU_ITEM_HOVER_BACKGROUND,
+							priorityPlusSubmenuItemHoverBackground:
+								color || DEFAULT_SUBMENU_ITEM_HOVER_BACKGROUND,
 						}),
 					enableAlpha: true,
 				},
@@ -68,12 +68,12 @@ export function ColorPanel({ attributes, setAttributes }) {
 						'priority-plus-navigation'
 					),
 					value:
-						priorityPlusMenuItemHoverTextColor ||
-						DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
+						priorityPlusSubmenuItemHoverTextColor ||
+						DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 					onChange: (color) =>
 						setAttributes({
-							priorityPlusMenuItemHoverTextColor:
-								color || DEFAULT_MENU_ITEM_HOVER_TEXT_COLOR,
+							priorityPlusSubmenuItemHoverTextColor:
+								color || DEFAULT_SUBMENU_ITEM_HOVER_TEXT_COLOR,
 						}),
                         enableAlpha: true,
 				},

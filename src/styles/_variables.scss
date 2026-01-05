@@ -14,6 +14,11 @@
 	--wp--custom--priority-plus-navigation--dropdown--item-hover-background-color: rgba(0, 0, 0, 0.05);
 	--wp--custom--priority-plus-navigation--dropdown--item-hover-text-color: #191919;
 	--wp--custom--priority-plus-navigation--dropdown--multi-level-indent: 1.25rem;
+
+	// Submenu colors (for accordion content / nested items)
+	--wp--custom--priority-plus-navigation--dropdown--submenu-background-color: #fff;
+	--wp--custom--priority-plus-navigation--dropdown--submenu-item-hover-background-color: rgba(0, 0, 0, 0.05);
+	--wp--custom--priority-plus-navigation--dropdown--submenu-item-hover-text-color: #191919;
 }
 
 // More button styles (controlled via block attributes, not theme.json)

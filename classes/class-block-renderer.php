@@ -168,6 +168,11 @@ class Block_Renderer extends Plugin_Module {
 			'menu_item_hover_text_color'    => $this->get_priority_attr( $block, 'priorityPlusMenuItemHoverTextColor', '' ),
 			'menu_submenu_indent'           => $this->get_priority_attr( $block, 'priorityPlusMenuSubmenuIndent', '' ),
 			'menu_item_separator'           => $this->get_priority_attr( $block, 'priorityPlusMenuItemSeparator', array() ),
+
+			// Submenu color attributes.
+			'submenu_background_color'       => $this->get_priority_attr( $block, 'priorityPlusSubmenuBackgroundColor', '' ),
+			'submenu_item_hover_background'  => $this->get_priority_attr( $block, 'priorityPlusSubmenuItemHoverBackground', '' ),
+			'submenu_item_hover_text_color'  => $this->get_priority_attr( $block, 'priorityPlusSubmenuItemHoverTextColor', '' ),
 		);
 	}
 
@@ -409,6 +414,26 @@ class Block_Renderer extends Plugin_Module {
 		$style_parts[] = sprintf(
 			'--wp--custom--priority-plus-navigation--dropdown--item-separator-style: %s',
 			esc_attr( ! empty( $separator['style'] ) ? $separator['style'] : $separator_defaults['style'] )
+		);
+
+		// Handle submenu colors (always output with defaults to ensure they're available on first load).
+		$submenu_defaults = array(
+			'background_color'      => '#ffffff',
+			'item_hover_background' => 'rgba(0, 0, 0, 0.05)',
+			'item_hover_text_color' => '#191919',
+		);
+
+		$style_parts[] = sprintf(
+			'--wp--custom--priority-plus-navigation--dropdown--submenu-background-color: %s',
+			esc_attr( ! empty( $attributes['submenu_background_color'] ) ? $attributes['submenu_background_color'] : $submenu_defaults['background_color'] )
+		);
+		$style_parts[] = sprintf(
+			'--wp--custom--priority-plus-navigation--dropdown--submenu-item-hover-background-color: %s',
+			esc_attr( ! empty( $attributes['submenu_item_hover_background'] ) ? $attributes['submenu_item_hover_background'] : $submenu_defaults['item_hover_background'] )
+		);
+		$style_parts[] = sprintf(
+			'--wp--custom--priority-plus-navigation--dropdown--submenu-item-hover-text-color: %s',
+			esc_attr( ! empty( $attributes['submenu_item_hover_text_color'] ) ? $attributes['submenu_item_hover_text_color'] : $submenu_defaults['item_hover_text_color'] )
 		);
 
 		return $style_parts;
